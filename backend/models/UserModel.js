@@ -22,7 +22,7 @@ const Users = db.define('users',
 // alter check si les champs existent déjà et les changes si necéssaire
 await Users.sync({ alter: true });
 
-// Users.hasMany(Posts, { onDelete: 'CASCADE' });
+Users.hasMany(Posts, { onDelete: 'CASCADE' });
 // Posts.belongsTo(Users);
 
 export default Users;
