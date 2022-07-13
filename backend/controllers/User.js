@@ -39,7 +39,7 @@ export const Register = async (req, res) => {
 // //login
 export const Login = async (req, res) => {
     try {
-        const user = await Users.findAll({
+        const user = await Users.findOne({
             where: {
                 email: req.body.email
             }
@@ -91,15 +91,15 @@ export const Logout = async (req, res) => {
     }
 };
 
-// export function remove(req, res) {
-//     Users.destroy({ where: { id: req.params.id } })
-//         .then(() => {
-//             res.status(200).send('Removed Successfully');
-//         }).catch((err) => {
-//             console.log(err);
-//             res.status(500).send('We failed to delete for some reason');
-//         });
-// }
+export function DeleteUser(req, res) {
+    Users.destroy({ where: { id: req.params.id } })
+        .then(() => {
+            res.status(200).send('Removed Successfully');
+        }).catch((err) => {
+            console.log(err);
+            res.status(500).send('We failed to delete for some reason');
+        });
+}
 
 // export const Logout = async (req, res) => {
 //     req.session.destroy(() => {
