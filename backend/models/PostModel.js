@@ -1,11 +1,13 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
-//import Users from "./UserModel.js";
+import Users from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 const Posts = db.define('posts',
     {
-
+        userId: {
+            type: DataTypes.INTEGER,
+        },
         postMessage: {
             type: DataTypes.STRING, required: true, maxlength: 500
         },
@@ -28,14 +30,13 @@ const Posts = db.define('posts',
         },
     },
     {
-        timestamps: false,
     });
 
 //await Posts.sync({ alter: true });
 await Posts.sync({ force: true });
 
 // Users.hasMany(Posts, { onDelete: 'CASCADE' });
-// Posts.belongsTo(Users);
+
 
 
 export default Posts;

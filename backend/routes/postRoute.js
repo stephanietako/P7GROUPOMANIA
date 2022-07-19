@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 // Route get all products
-router.get('/posts', getPosts);//read
+router.get('/', getPosts);//read
 // Route get product by id
 router.get('/:id', getPostById,);
 // Route create a new product

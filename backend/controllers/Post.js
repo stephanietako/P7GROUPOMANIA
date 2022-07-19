@@ -1,15 +1,35 @@
 import Posts from "../models/PostModel.js";
+import Users from "../models/UserModel.js";
 //const fs = require("fs");
 
 
 // Get all Posts
 export const getPosts = async (req, res) => {
+
     try {
-        const post = await Posts.findAll();
-        res.send(post);
+        let post = await Posts.findAll({
+            raw: true,
+            include: [{
+                model: Users,
+                required: false,
+                as: 'user',
+                attributes: []
+            }],
+        });
+        return res.json(post);
     } catch (err) {
-        console.log(err);
+        return res.status(500).send({ msg: err.message });
     }
+    ////////////
+    // let getData = await findAll({})
+    // res.json({"Status":200, "Message":getData})
+    ////////////::
+    // try {
+    //     const post = await Posts.findAll();
+    //     res.send(post);
+    // } catch (err) {
+    //     console.log(err);
+    // }
 }
 
 // Get post by id
@@ -29,20 +49,6 @@ export const getPostById = async (req, res) => {
 // Create a new post
 export const createPost = async (req, res) => {
     // const postObject = JSON.stringify(req.body);
-    // const post = new Posts({
-    //     ...postObject,
-    //     // host (le nom d'hôte)
-    //     //imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename
-    //     //}`,
-    //     likes: [],
-    //     usersLiked: [],
-    // });
-
-    // console.log(req.body);
-    // //res.send(req.body)
-    // res.send(postObject)
-
-    //return res.status(201).json(post);
     let savePost = await Posts.create({
         postMessage: req.body.postMessage,
         imageUrl: req.body.imageUrl,

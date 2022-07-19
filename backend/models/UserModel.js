@@ -8,6 +8,13 @@ const { DataTypes } = Sequelize;
 
 const Users = db.define('users',
     {
+        // userId: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: 'Users', //users reference au nom de la table
+        //         key: 'id', //id reference au nom de la colonne dans la table users
+        //     }
+        // },
         firstName: { type: DataTypes.STRING, allowNull: true },
         lastName: { type: DataTypes.STRING, allowNull: true },
         email: { type: DataTypes.STRING, allowNull: false },
@@ -33,6 +40,9 @@ await Users.sync({ force: true });
 
 Users.hasMany(Posts, { onDelete: 'CASCADE' });
 Posts.belongsTo(Users);
+// Posts.belongsTo(Users, {
+//     foreignKey: 'userId'
+// });
 
 export default Users;
 
