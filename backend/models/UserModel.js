@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
-//import Posts from "./PostModel.js";
+import Posts from "./PostModel.js";
 //import Users from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
@@ -31,8 +31,8 @@ const Users = db.define('users',
 //await Users.sync({ alter: true });
 await Users.sync({ force: true });
 
-// Users.hasMany(Posts, { onDelete: 'CASCADE' });
-// Posts.belongsTo(Users);
+Users.hasMany(Posts, { onDelete: 'CASCADE' });
+Posts.belongsTo(Users);
 
 export default Users;
 
