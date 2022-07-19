@@ -1,4 +1,6 @@
 import Posts from "../models/PostModel.js";
+//const fs = require("fs");
+
 
 // Get all Posts
 export const getPosts = async (req, res) => {
@@ -26,17 +28,26 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
-    try {
-        await Posts.create(req.body);
-        res.json({
-            "message": "Product Created"
-        });
-    } catch (err) {
-        console.log(err);
-    }
-}
+    const postObject = JSON.stringify(req.body);
+    console.log(req.body);
+    //res.send(req.body)
+    res.send(postObject)
 
-// Update post by id
+    const post = new Posts({
+        ...postObject,
+        // host (le nom d'hôte)
+        //imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename
+        //}`,
+        likes: [],
+        usersLiked: [],
+    });
+
+    //return res.status(201).json(post);
+};
+
+
+
+//Update post by id
 export const updatePost = async (req, res) => {
     try {
         await Posts.update(req.body, {

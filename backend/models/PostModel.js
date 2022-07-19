@@ -6,7 +6,7 @@ const { DataTypes } = Sequelize;
 const Posts = db.define('posts',
     {
 
-        message: {
+        postMessage: {
             type: DataTypes.STRING, required: true, maxlength: 500
         },
         imageUrl: {
@@ -26,7 +26,9 @@ const Posts = db.define('posts',
                 return this.setDataValue('usersLiked', JSON.stringify(val));
             }
         },
-
+    },
+    {
+        timestamps: false,
     });
 
 //await Posts.sync({ alter: true });

@@ -48,11 +48,6 @@ export const Login = async (req, res) => {
 
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) return res.status(400).json({ msg: "Mot de passe erroné" });
-    //const userId = user.id;
-    // const firstName = user.firstName;
-    // const lastName = user.lastName;
-    // const avatar = user.avatar;
-    // const email = user.email;
     const { id, firstName, lastName, avatar, email } = user;
     const accessToken = jwt.sign({ id, firstName, lastName, email, avatar }, process.env.ACCESS_TOKEN_SECRET, {
 
