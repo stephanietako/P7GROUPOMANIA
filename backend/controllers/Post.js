@@ -11,25 +11,15 @@ export const getPosts = async (req, res) => {
             raw: true,
             include: [{
                 model: Users,
-                required: false,
-                as: 'user',
-                attributes: []
+                //required: false,
+                //as: 'user',
+                //attributes: []
             }],
         });
         return res.json(post);
     } catch (err) {
         return res.status(500).send({ msg: err.message });
     }
-    ////////////
-    // let getData = await findAll({})
-    // res.json({"Status":200, "Message":getData})
-    ////////////::
-    // try {
-    //     const post = await Posts.findAll();
-    //     res.send(post);
-    // } catch (err) {
-    //     console.log(err);
-    // }
 }
 
 // Get post by id

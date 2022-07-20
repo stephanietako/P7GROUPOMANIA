@@ -8,15 +8,9 @@ const { DataTypes } = Sequelize;
 
 const Users = db.define('users',
     {
-        // userId: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: 'Users', //users reference au nom de la table
-        //         key: 'id', //id reference au nom de la colonne dans la table users
-        //     }
-        // },
-        firstName: { type: DataTypes.STRING, allowNull: true },
-        lastName: { type: DataTypes.STRING, allowNull: true },
+
+        firstName: { type: DataTypes.STRING },
+        lastName: { type: DataTypes.STRING },
         email: { type: DataTypes.STRING, allowNull: false },
         avatar: { type: DataTypes.STRING, defaultValue: "https://img.myloview.fr/papiers-peints/humain-homme-personne-avatar-profil-utilisateur-vector-icon-illustration-700-80657983.jpg" },
         role: { type: DataTypes.BOOLEAN, defaultValue: 0 },
@@ -36,13 +30,11 @@ const Users = db.define('users',
 //await Users.sync();
 // alter check si les champs existent déjà et les changes si necéssaire
 //await Users.sync({ alter: true });
-await Users.sync({ force: true });
 
-Users.hasMany(Posts, { onDelete: 'CASCADE' });
-Posts.belongsTo(Users);
-// Posts.belongsTo(Users, {
-//     foreignKey: 'userId'
-// });
+Users.hasMany(Posts, { foreignKey: 'userId', onDelete: 'CASCADE' })
+Posts.belongsTo(Users, { foreignKey: 'userId' });
+
+await Users.sync({ alter: true });
 
 export default Users;
 

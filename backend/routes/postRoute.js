@@ -15,7 +15,7 @@ router.get('/', getPosts);//read
 // Route get product by id
 router.get('/:id', getPostById,);
 // Route create a new product
-router.post('/createPost', createPost);
+router.post('/', createPost);
 // Route update Post by id
 router.put('/:id', updatePost);
 // Route delete Post by id

@@ -4,7 +4,6 @@ const db = new Sequelize('groupomania_db', 'tako', 'tako22', {
     host: 'localhost',
     dialect: 'mysql',
     port: 8889,
-
 });
 
 try {

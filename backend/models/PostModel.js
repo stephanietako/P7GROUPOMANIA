@@ -1,12 +1,16 @@
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
-import Users from "./UserModel.js";
+//import Users from "./UserModel.js";
 
 const { DataTypes } = Sequelize;
 const Posts = db.define('posts',
     {
         userId: {
             type: DataTypes.INTEGER,
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
         postMessage: {
             type: DataTypes.STRING, required: true, maxlength: 500
@@ -32,11 +36,6 @@ const Posts = db.define('posts',
     {
     });
 
-//await Posts.sync({ alter: true });
-await Posts.sync({ force: true });
-
-// Users.hasMany(Posts, { onDelete: 'CASCADE' });
-
-
+await Posts.sync({ alter: true });
 
 export default Posts;

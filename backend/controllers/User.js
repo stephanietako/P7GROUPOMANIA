@@ -1,5 +1,5 @@
 import Users from "../models/UserModel.js";
-//import Posts from "../models/PostModel.js";
+import Posts from "../models/PostModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -8,6 +8,12 @@ import jwt from "jsonwebtoken";
 export const AllUsers = async (req, res) => {
     const allUsers = await Users.findAll();
     res.send(allUsers);
+}
+
+// one user
+export const getUserById = async (req, res) => {
+    const user = await Users.findOne({ where: { id: req.params.id }, include: [{ model: Posts }] });
+    res.send(user);
 }
 
 //sign up const Register
@@ -26,6 +32,7 @@ export const Register = async (req, res) => {
                 avatar: avatar,
                 email: email,
                 password: hashPassword
+
             });
             res.json({ msg: "Inscription réussie" });
         } catch (error) {
@@ -82,12 +89,22 @@ export const Logout = async (req, res) => {
     }
 };
 
+//delete
 export const DeleteUser = async (req, res) => {
-    Users.destroy({ where: { id: req.params.id } })
+    const user = await Users.findOne({ where: { id: req.params.id }, include: [{ model: Posts }] });
+
+    user.posts.map(post => {
+        Posts.destroy({
+            where: { id: post.id }
+                .catch((err) => {
+                    return res.status(500).send('We failed to delete posts for some reason');
+                })
+        })
+    })
+    user.destroy()
         .then(() => {
             res.status(200).send('Removed Successfully');
         }).catch((err) => {
-            console.log(err);
             res.status(500).send('We failed to delete for some reason');
         });
 }
