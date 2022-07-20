@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize('groupomania_db', 'tako', 'tako22', {
+const db = new Sequelize('groupomania_db', process.env.DB_ACCESS_NAME, process.env.DB_ACCESS_PSWD, {
     host: 'localhost',
     dialect: 'mysql',
     port: 8889,
