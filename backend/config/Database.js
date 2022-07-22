@@ -2,8 +2,6 @@ import { Sequelize } from "sequelize";
 import dotenv from 'dotenv';
 dotenv.config()
 
-
-//const db = new Sequelize('groupomania_db', 'tako', 'tako22', {
 const db = new Sequelize(process.env.DATABASE_ACCESS_NAME, process.env.DATABASE_ACCESS_USER, process.env.DATABASE_ACCESS_PASSWORD,
     {
         host: 'localhost',
