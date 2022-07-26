@@ -22,31 +22,16 @@ const Posts = db.define('posts',
         likes: {
             type: DataTypes.INTEGER, defaultValue: 0
         },
-        dislikes: {
-            type: DataTypes.INTEGER, defaultValue: 0
-
-        },
         usersLiked: {
             //type: DataTypes.ARRAY(DataTypes.STRING)
             // avec mysql on ne peut pas juste utiliser type: DataTypes.ARRAY(DataTypes.STRING) c'est faisable qu'avec postgrl
             type: DataTypes.STRING,
+            defaultValue: "[]",
             get: function () {
                 return JSON.parse(this.getDataValue('usersLiked'));
             },
             set: function (val) {
                 return this.setDataValue('usersLiked', JSON.stringify(val));
-            }
-        },
-
-        usersDisliked: {
-            //type: DataTypes.ARRAY(DataTypes.STRING)
-            // avec mysql on ne peut pas juste utiliser type: DataTypes.ARRAY(DataTypes.STRING) c'est faisable qu'avec postgrl
-            type: DataTypes.STRING,
-            get: function () {
-                return JSON.parse(this.getDataValue('usersDisliked'));
-            },
-            set: function (val) {
-                return this.setDataValue('usersDisliked', JSON.stringify(val));
             }
         },
     },

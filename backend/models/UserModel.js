@@ -31,8 +31,8 @@ const Users = db.define('users',
 
 Users.hasMany(Posts, { foreignKey: 'userId', onDelete: 'CASCADE' })
 Posts.belongsTo(Users, { foreignKey: 'userId' });
-// Likes.belongsTo(Users, { foreignKey: 'messageId', as: 'messageId' });
-// Likes.belongsTo(Users, { foreignKey: 'userId', as: 'users' });
+// Likes.belongsTo(Users, { foreignKey: 'userId'});
+//Post.hasMany(posts, { foreignKey: 'userId'});
 await Users.sync({ alter: true });
 
 export default Users;

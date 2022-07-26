@@ -96,66 +96,32 @@ export const deletePostById = async (req, res) => {
 }
 /////////////////// LIKES ///////////////////////////////////
 
-export const likePost = (req, res) => {
-    if (!req.body.id) {
-        res.json({ "Status": 400, "Message": 'We failed to find id for some reason' });
-    } else {
-        // search the database with id
-        Posts.findOne({ id: req.body.id }, (err, post) => {
-            if (err) {
-                res.json({ "Status": 400, "Message": 'Invalid Post id' });
-            } else {
-                if (!post) {
-                    res.json({ "Status": 400, "Message": 'That post was not found' });
-                } else {
-                    Users.findOne({ id: req.body.userId }, (err, user) => {
-                        if (err) {
-                            res.json({ "Status": 400, "Message": 'Something went wrong' });
-                        } else {
-                            if (!user) {
-                                res.json({ "Status": 400, "Message": 'Could not authenticate user' });
-                            } else {
-                                if (user.id === post.userId) {
-                                    res.status(404).json({ "Status": 400, "Message": "Cannot like your own post" });
-                                } else {
-                                    if (post.usersLiked.includes(user.firstName && user.lastName)) {
-                                        res.status(404).json({ "Status": 400, "Message": "You're already liked this post" });
-                                    } else {
-                                        if (post.usersDisliked.includes(user.firstName && user.lastName)) {
-                                            post.likes--;
-                                            const arrayIndex = post.usersDisliked.indexOf(user.firstName && user.lastName)
-                                            post.usersDisliked.splice(arrayIndex, 1);
-                                            post.likes++;
-                                            post.usersLiked.push(user.firstName && user.lastName);
-                                            post.save((err) => {
-                                                if (err) {
-                                                    res.json({ "Status": 400, "Message": "Something went wrong" })
+export const likePost = async (req, res) => {
+    const postId = req.params.id;
+    const refreshToken = req.headers.cookie.split('=')[1];
+    const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-                                                } else {
-                                                    res.json({ "Status": 200, "Message": "Post disliked ! " });
-                                                }
-                                            });
-                                        } else {
-                                            post.likes++;
-                                            post.usersLiked.push(user.firstName && user.lastName);
-                                            post.save((err) => {
-                                                if (err) {
-                                                    res.json({ "Status": 400, "Message": "Something went wrong" });
-                                                } else {
-                                                    res.json({ "Status": 200, "Message": "Post liked ! " });
-                                                }
+    // search the database with id (post & currentUser)
+    const post = await Posts.findOne({ where: { id: req.params.id } })
+        .catch(res.status(404).json({ "Message": `The post with the id: ${postId} was not found` }))
+    const user = await Users.findOne({ where: { id: dataUser.id } })
+        .catch(res.status(404).json({ "Message": "The user who made the request was not found" }))
 
-                                            })
-                                        }
-                                    }
-                                }
+    // check if user is owner
+    if (user.id === post.userId) return res.status(400).json({ "Message": "Cannot like your own post" });
 
-                            }
-                        }
-                    })
-                };
-            }
-        })
-    }
+    // check if user have already liked
+    if (post.usersLiked.includes(user.id)) {
+        // remove it from the array and decrement likes
+        post.usersLiked = post.usersLiked.filter(userId => userId != user.id);
+        await post.decrement("likes");  //https://sequelize.org/docs/v6/core-concepts/model-instances/#incrementing-and-decrementing-integer-values
+        await post.save();
+        res.status(200).json({ "Message": `You have disliked the post: #${post.id}` })
+    } else { //if not...
+        // add it to the array and increment likes
+        post.usersLiked = [...post.usersLiked, user.id]
+        await post.increment("likes");
+        await post.save();
+        res.status(200).json({ "Message": `You have liked the post: #${post.id}` })
+    };
 }
-
