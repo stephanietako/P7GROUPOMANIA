@@ -1,5 +1,9 @@
+import db from "../config/Database.js";
+//import likes from "../models/LikeModel.js";
 import Posts from "../models/PostModel.js";
 import Users from "../models/UserModel.js";
+import jwt from "jsonwebtoken";
+
 //const fs = require("fs");
 
 
@@ -43,12 +47,13 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
-    // const postObject = JSON.stringify(req.body);
     let savePost = await Posts.create({
         postMessage: req.body.postMessage,
         imageUrl: req.body.imageUrl,
         likes: req.body.likes,
-        usersLiked: []
+        dislikes: req.body.dislikes,
+        usersLiked: [],
+        usersDisliked: [],
 
     });
     if (savePost) {
@@ -89,3 +94,68 @@ export const deletePostById = async (req, res) => {
         return res.status(500).send('We failed to delete post for some reason');
     }
 }
+/////////////////// LIKES ///////////////////////////////////
+
+export const likePost = (req, res) => {
+    if (!req.body.id) {
+        res.json({ "Status": 400, "Message": 'We failed to find id for some reason' });
+    } else {
+        // search the database with id
+        Posts.findOne({ id: req.body.id }, (err, post) => {
+            if (err) {
+                res.json({ "Status": 400, "Message": 'Invalid Post id' });
+            } else {
+                if (!post) {
+                    res.json({ "Status": 400, "Message": 'That post was not found' });
+                } else {
+                    Users.findOne({ id: req.body.userId }, (err, user) => {
+                        if (err) {
+                            res.json({ "Status": 400, "Message": 'Something went wrong' });
+                        } else {
+                            if (!user) {
+                                res.json({ "Status": 400, "Message": 'Could not authenticate user' });
+                            } else {
+                                if (user.id === post.userId) {
+                                    res.status(404).json({ "Status": 400, "Message": "Cannot like your own post" });
+                                } else {
+                                    if (post.usersLiked.includes(user.firstName && user.lastName)) {
+                                        res.status(404).json({ "Status": 400, "Message": "You're already liked this post" });
+                                    } else {
+                                        if (post.usersDisliked.includes(user.firstName && user.lastName)) {
+                                            post.likes--;
+                                            const arrayIndex = post.usersDisliked.indexOf(user.firstName && user.lastName)
+                                            post.usersDisliked.splice(arrayIndex, 1);
+                                            post.likes++;
+                                            post.usersLiked.push(user.firstName && user.lastName);
+                                            post.save((err) => {
+                                                if (err) {
+                                                    res.json({ "Status": 400, "Message": "Something went wrong" })
+
+                                                } else {
+                                                    res.json({ "Status": 200, "Message": "Post disliked ! " });
+                                                }
+                                            });
+                                        } else {
+                                            post.likes++;
+                                            post.usersLiked.push(user.firstName && user.lastName);
+                                            post.save((err) => {
+                                                if (err) {
+                                                    res.json({ "Status": 400, "Message": "Something went wrong" });
+                                                } else {
+                                                    res.json({ "Status": 200, "Message": "Post liked ! " });
+                                                }
+
+                                            })
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    })
+                };
+            }
+        })
+    }
+}
+

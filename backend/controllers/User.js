@@ -114,6 +114,3 @@ export const deleteUser = async (req, res) => {
             res.status(500).send('We failed to delete for some reason');
         });
 }
-
-
-
