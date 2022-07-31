@@ -77,7 +77,7 @@ export const updatePostById = async (req, res) => {
     } catch (err) {
         return res.status(500).send('We failed to update post for some reason');
     }
-}
+};
 
 // Delete post by id
 export const deletePostById = async (req, res) => {
@@ -124,4 +124,4 @@ export const likePost = async (req, res) => {
         await post.save();
         res.status(200).json({ "Message": `You have liked the post: #${post.id}` })
     };
-}
+};

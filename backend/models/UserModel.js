@@ -10,7 +10,7 @@ const Users = db.define('users',
         firstName: { type: DataTypes.STRING },
         lastName: { type: DataTypes.STRING },
         email: { type: DataTypes.STRING, allowNull: false },
-        avatar: { type: DataTypes.STRING, defaultValue: "https://img.myloview.fr/papiers-peints/humain-homme-personne-avatar-profil-utilisateur-vector-icon-illustration-700-80657983.jpg" },
+        avatar: { type: DataTypes.STRING, defaultValue: "./uploads/profil/random-user.png" },
         role: { type: DataTypes.BOOLEAN, defaultValue: 0 },
         password: { type: DataTypes.STRING, allowNull: false },
         bio: {
@@ -36,6 +36,3 @@ Posts.belongsTo(Users, { foreignKey: 'userId' });
 await Users.sync({ alter: true });
 
 export default Users;
-
-
-

@@ -2,16 +2,20 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import jwt from "jsonwebtoken";
+//import path from "path";
+import helmet from "helmet";
+import multer from "multer";
 import userRouter from "./routes/userRoute.js";
 import postRouter from "./routes/postRoute.js";
+
+
 dotenv.config();
 
 const app = express();
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(cookieParser());
+app.use(helmet());
 app.use(express.json());
-//app.use(jwt);
 
 /* Mise en place reponses headers */
 app.use((req, res, next) => {
@@ -27,13 +31,13 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 
-app.use(express.static('public'));
+//  app.use(multer({dest:'./tmp',limits: {fileSize: 4*1024*1024}}).single('upload'));
+
+//app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(process.env.PORT, () => {
     console.log('Server running ! Enjoy !');
 });
-

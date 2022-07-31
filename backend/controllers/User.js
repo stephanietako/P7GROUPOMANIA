@@ -4,6 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 
+
+
+
 // all users
 export const allUsers = async (req, res) => {
     const allUsers = await Users.findAll();
@@ -83,12 +86,33 @@ export const logout = async (req, res) => {
     try {
         req.session = null;
         res.clearCookie("jwt");
-        //res.status(200).json("OUT");
         return res.status(200).send({
             message: "You've been logout!"
         });
     } catch (err) {
         this.next(err);
+    }
+};
+
+//update
+export const updateUserById = async (req, res) => {
+
+    try {
+        if (req.file == null);
+        //if (isAdmin === true && id) {
+        //if (isAdmin === true) {
+        // je vérifie si isAdmine(role) et l'id sont présents
+        await Users.update(req.body, {
+            where: {
+                id: req.params.id
+            }
+        })
+        res.json({
+            "message": "User update"
+        });
+
+    } catch (err) {
+        return res.status(500).send('We failed to update user for some reason');
     }
 };
 
@@ -102,9 +126,6 @@ export const deleteUser = async (req, res) => {
     user.posts.map(post => {
         Posts.destroy({
             where: { id: post.id }
-            // .catch((err) => {
-            //     return res.status(500).send('We failed to delete posts for some reason');
-            // })
         })
     })
     user.destroy()
@@ -113,4 +134,9 @@ export const deleteUser = async (req, res) => {
         }).catch((err) => {
             res.status(500).send('We failed to delete for some reason');
         });
-}
+};
+
+//////////// upload ////////////
+// export const upload = (req, res) => {
+//     res.json({ status: "succes" });
+// }
