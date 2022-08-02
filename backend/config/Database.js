@@ -7,6 +7,7 @@ const db = new Sequelize(process.env.DATABASE_ACCESS_NAME, process.env.DATABASE_
         host: 'localhost',
         dialect: 'mysql',
         port: 8889,
+        logging: false
     });
 
 try {

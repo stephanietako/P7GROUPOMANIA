@@ -2,15 +2,15 @@ import Users from "../models/UserModel.js";
 import Posts from "../models/PostModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-
-
+import path from "path";
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
 // all users
 export const allUsers = async (req, res) => {
     const allUsers = await Users.findAll();
     res.send(allUsers);
+    console.log(allUsers);
 }
 
 // one user
@@ -22,9 +22,17 @@ export const getUserById = async (req, res) => {
     res.send(user);
 }
 
+//profil image
+export const getImg = async (req, res) => {
+    const filePath = path.resolve(`client/public/uploads/profil/${req.params.fileName}`);
+    console.log(filePath);
+    res.sendFile(filePath);
+}
+
 //sign up const Register
 export const register = async (req, res) => {
-    const { firstName, lastName, email, password, confPassword, avatar } = req.body;
+    const { firstName, lastName, email, password, confPassword } = req.body;
+    const avatar = req.file;
     if (password !== confPassword) return res.status(400).json({ msg: "Please confirm your password" });
     const emailExists = await Users.findOne({ where: { email: req.body.email } });
     if (!emailExists) {
@@ -34,7 +42,6 @@ export const register = async (req, res) => {
             await Users.create({
                 firstName: firstName,
                 lastName: lastName,
-                //userImg: "128x128.png",
                 avatar: avatar,
                 email: email,
                 password: hashPassword
@@ -135,8 +142,3 @@ export const deleteUser = async (req, res) => {
             res.status(500).send('We failed to delete for some reason');
         });
 };
-
-//////////// upload ////////////
-// export const upload = (req, res) => {
-//     res.json({ status: "succes" });
-// }

@@ -10,7 +10,8 @@ const Users = db.define('users',
         firstName: { type: DataTypes.STRING },
         lastName: { type: DataTypes.STRING },
         email: { type: DataTypes.STRING, allowNull: false },
-        avatar: { type: DataTypes.STRING, defaultValue: "./uploads/profil/random-user.png" },
+        avatar: { type: DataTypes.STRING, defaultValue: "./../client/public/uplods/profil/random-user.jpg" },
+
         role: { type: DataTypes.BOOLEAN, defaultValue: 0 },
         password: { type: DataTypes.STRING, allowNull: false },
         bio: {

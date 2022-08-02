@@ -34,9 +34,7 @@ app.use((req, res, next) => {
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
 
-//  app.use(multer({dest:'./tmp',limits: {fileSize: 4*1024*1024}}).single('upload'));
-
-//app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/uploads', express.static('uploads'));
 
 app.listen(process.env.PORT, () => {
     console.log('Server running ! Enjoy !');
