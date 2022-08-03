@@ -23,7 +23,8 @@ export const uploadProfil = async (req, res) => {
     }
     let file = req.file;
     console.log("req.file", file)
-    const fileName = uuidv4() + ".jpg";
+    // uuid signifie "Universally Unique IDentifier"et désigne un standard d'identifiant généré aléatoirement et globalement unique.
+    const fileName = "avatar" + "-" + uuidv4() + ".jpg";
     //const fileName = name + Math.floor(Math.random() * 1000) * file.detectedFileExtension;
 
     await pipeline(
@@ -31,7 +32,8 @@ export const uploadProfil = async (req, res) => {
         fs.createWriteStream(
             `${__dirname}/../client/public/uploads/profil/${fileName}`)
     );
-    res.send("file uploaded as" + fileName);
+
+    res.send("file uploaded as" + " " + fileName);
     Users.findOne({
         where: {
             id: req.params.id,
@@ -43,31 +45,19 @@ export const uploadProfil = async (req, res) => {
             //condition
             //user.avatar = `${req.protocol}://${req.get("host")}/client/public/uploads/profil/${fileName}`,
             user.avatar = fileName;
-
-            // Users.findOneAndUpdate({
-            //     where: {
-            //         file: req.file
-            //     }
-            // },
-
-            //     //{ _d: req.body.userId },
-
-            //     {
-            //         $set: {
-            //             avatar: `${req.protocol}:/${req.get("host")}./client/public/uploads/profil/${req.file.originalName
-
-            //                 }`,
-            //         },
-            //     }
-            // )
             user.save()
             console.log(user.avatar)
-            //res.status(200).json({ message: "success" })
-            // .catch((err) =>
-            //     res.satus(400).json({ error: err, message: "error" })
-            // );
-            //else fs unlik
-
-
+            //res.status(200).send('Avatar upload successfully');
         });
-}
+    // A voir si ça fonctionne correctement 
+    if (req.body.email === "" || req.body.password === "") {
+        // en fait là l'mage a été uploadée malgré tout donc il faut la remove
+        let avatarPath = fileName;
+        fs.unlinkSync(avatarPath, (err) => {
+            if (err) {
+                console.log(`Error deleting ${fileName}`);
+            }
+        });
+        res.status(403).render("./register", { err: "Please fill all the form elements" });
+    }
+};

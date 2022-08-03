@@ -1,11 +1,15 @@
 import db from "../config/Database.js";
-//import likes from "../models/LikeModel.js";
 import Posts from "../models/PostModel.js";
 import Users from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
-
+import fs from "fs";
+import { promisify } from "util";
+import stream from "stream";
+const pipeline = promisify(stream.pipeline);
+import path from "path";
+import { v4 as uuidv4 } from 'uuid';
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 //const fs = require("fs");
-
 
 // Get all Posts
 export const getPosts = async (req, res) => {
@@ -47,20 +51,53 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
+    //let fileName;
+    //console.log(req.file)
+    //if (!req.file == null) {
+
+    try {
+        console.log(__dirname);
+        if (
+            !req.file.detectedMimeType == "image/jpg" ||
+            !req.file.detectedMimeType == "image/png" ||
+            !req.file.detectedMimeType == "image/jpeg"
+        )
+            throw Error("invalid file");
+        if (req.file.size > 2818128) throw Error("max size");
+    } catch (error) {
+        console.log(error);
+    }
+
+    let file = req.file;
+    const fileName = "cover" + "-" + uuidv4() + '.jpg';
+    //fileName = req.params.id + Date.now() + '.jpg';
+    console.log(fileName);
+
+    await pipeline(
+        file.stream,
+        fs.createWriteStream(
+            `${__dirname}/../client/public/uploads/posts/${fileName}`
+        )
+    );
+
     let savePost = await Posts.create({
+        userId: req.body.userId,
         postMessage: req.body.postMessage,
-        imageUrl: req.body.imageUrl,
+        // donc on dit si le fichier n'est pas null alors? tu vas chercher sur ce chemin sinon: string vide
+        imageUrl: req.file !== null ? fileName : "",
         likes: req.body.likes,
         dislikes: req.body.dislikes,
         usersLiked: [],
         usersDisliked: [],
 
     });
+
     if (savePost) {
         res.json({ "Status": 200, "Message": savePost });
     } else {
         res.json({ "Status": 400, "Message": 'We failed to save post for some reason' });
     }
+    //};
 };
 
 //Update post by id
@@ -93,9 +130,10 @@ export const deletePostById = async (req, res) => {
     } catch (err) {
         return res.status(500).send('We failed to delete post for some reason');
     }
-}
-/////////////////// LIKES ///////////////////////////////////
+};
 
+
+/////////////////// LIKES ///////////////////////////////////
 export const likePost = async (req, res) => {
     const postId = req.params.id;
     const refreshToken = req.headers.cookie.split('=')[1];

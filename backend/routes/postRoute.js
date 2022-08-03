@@ -1,4 +1,7 @@
 import express from "express";
+import multer from "multer";
+const upload = multer();
+
 import {
     getPosts,
     getPostById,
@@ -6,8 +9,6 @@ import {
     updatePostById,
     deletePostById,
     likePost
-
-
 } from "../controllers/Post.js";
 
 // Init express router
@@ -19,7 +20,10 @@ router.get('/', getPosts);// du plus récent au plus ancien)
 // Route get product by id
 router.get('/:id', getPostById,);
 // Route create a new product
-router.post('/', createPost);
+router.post('/', upload.single("file"), createPost);
+// router.post('/', upload.single('file'), function (req, res) {
+//     console.log("HEYYYYYYYYYYYYYYYYYYYYYYYYYYY"); //multer fonctionne
+// });
 // Route update Post by id
 router.put('/:id', updatePostById);
 // Route delete Post by id
