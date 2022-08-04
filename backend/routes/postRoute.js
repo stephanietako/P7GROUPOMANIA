@@ -8,7 +8,8 @@ import {
     createPost,
     updatePostById,
     deletePostById,
-    likePost
+    likePost,
+    getImgById
 } from "../controllers/Post.js";
 
 // Init express router
@@ -28,6 +29,8 @@ router.post('/', upload.single("file"), createPost);
 router.put('/:id', updatePostById);
 // Route delete Post by id
 router.delete('/:id', deletePostById);
+// router get image by filename parametre
+router.get('/image/:fileName', getImgById);
 
 
 //Route like

@@ -100,6 +100,15 @@ export const createPost = async (req, res) => {
     //};
 };
 
+//profil image recuperation 
+export const getImgById = async (req, res) => {
+    const filePath = path.resolve(`client/public/uploads/posts/${req.params.fileName}`);
+    //console.log(filePath);
+    console.log("je suis dans get img c est ok")
+    res.sendFile(filePath);
+
+};
+
 //Update post by id
 export const updatePostById = async (req, res) => {
     try {
