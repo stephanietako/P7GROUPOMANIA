@@ -105,13 +105,16 @@ export const createPost = async (req, res) => {
         res.json({ "Status": 400, "Message": 'We failed to save post for some reason' });
     }
     if (req.file.fileName)
-        fs.unlink(' ./public/uploads/posts/' + fileName, (err) => {
+        fs.unlink("./client/public/uploads/posts/" + req.file.filename, (err) => {
             if (err) {
-                console.log("failed to delete local image:" + err);
+                console.log(req.filename);
+                res.sendFile(req.filename);
             } else {
                 console.log('successfully deleted local image');
+                res.status(200).send('successfully deleted local image');
             }
         });
+
 };
 
 //update new image post
@@ -163,13 +166,15 @@ export const updateImg = async (req, res) => {
     if (req.file);
 
     Posts.update(req.body.imageUrl, { where: { id: req.params.id } });
-
+    const filePath = path.join(__dirname, '/client/public/uploads/posts/' + fileName);
     fs.unlink("./public/uploads/posts/" + req.file.filename, (err) => {
         if (err) {
             console.log(req.filename);
             console.log("failed to delete local image:" + err);
+
         } else {
             console.log('successfully deleted local image');
+            res.sendFile(filePath);
         }
     });
 
