@@ -20,12 +20,16 @@ export const allUsers = async (req, res) => {
 
 // one user
 export const getUserById = async (req, res) => {
+
     const user = await Users.findOne({
+
         where: { id: req.params.id },
         include: [{ model: Posts }]
     });
+
     res.send(user);
-};
+}
+
 
 //profil image recuperation 
 export const getImgById = async (req, res) => {
@@ -36,9 +40,9 @@ export const getImgById = async (req, res) => {
 
 };
 
-//sign up const Register
+//Register
 export const register = async (req, res) => {
-    const { firstName, lastName, email, password, confPassword } = req.body;
+    const { firstName, lastName, email, password, confPassword, role } = req.body;
     const avatar = req.file;
     if (password !== confPassword) return res.status(400).json({ msg: "Please confirm your password" });
     const emailExists = await Users.findOne({ where: { email: req.body.email } });
@@ -51,7 +55,8 @@ export const register = async (req, res) => {
                 lastName: lastName,
                 avatar: avatar,
                 email: email,
-                password: hashPassword
+                password: hashPassword,
+                role: role,
             });
             res.json({ msg: "Inscription réussie" });
         } catch (error) {
@@ -75,12 +80,12 @@ export const login = async (req, res) => {
 
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) return res.status(400).json({ msg: "Mot de passe erroné" });
-    const { id, firstName, lastName, avatar, email } = user;
-    const accessToken = jwt.sign({ id, firstName, lastName, email, avatar }, process.env.ACCESS_TOKEN_SECRET, {
+    const { id, firstName, lastName, avatar, email, role } = user;
+    const accessToken = jwt.sign({ id, firstName, lastName, email, avatar, role }, process.env.ACCESS_TOKEN_SECRET, {
 
         expiresIn: '15s'
     });
-    const refreshToken = jwt.sign({ id, firstName, lastName, email, avatar }, process.env.REFRESH_TOKEN_SECRET, {
+    const refreshToken = jwt.sign({ id, firstName, lastName, email, avatar, role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1d'
     });
     await Users.update({ refresh_token: refreshToken }, {
@@ -112,10 +117,7 @@ export const logout = async (req, res) => {
 export const updateUserById = async (req, res) => {
 
     try {
-        if (req.file == null);
-        //if (isAdmin === true && id) {
-        //if (isAdmin === true) {
-        // je vérifie si isAdmine(role) et l'id sont présents
+        if (!req.body.role && req.body.userId == req.params.id) return res.status(403).send('Access denied.');
         await Users.update(req.body, {
             where: {
                 id: req.params.id
@@ -126,12 +128,13 @@ export const updateUserById = async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).send('We failed to update user for some reason');
+        return res.status(500).send('You are not allowed to update user');
     }
 };
 
 //delete
 export const deleteUserById = async (req, res) => {
+    if (!req.body.role) return res.status(403).send('Access denied.');
     const user = await Users.findOne({
         where: { id: req.params.id },
         include: [{ model: Posts }]

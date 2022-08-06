@@ -9,7 +9,8 @@ import {
     updatePostById,
     deletePostById,
     likePost,
-    getImgById
+    getImgById,
+    updateImg
 } from "../controllers/Post.js";
 
 // Init express router
@@ -31,6 +32,8 @@ router.put('/:id', updatePostById);
 router.delete('/:id', deletePostById);
 // router get image by filename parametre
 router.get('/image/:fileName', getImgById);
+///////////
+router.put('/image/:id', upload.single("file"), updateImg);
 
 
 //Route like

@@ -51,9 +51,6 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
-    //let fileName;
-    //console.log(req.file)
-    //if (!req.file == null) {
 
     try {
         console.log(__dirname);
@@ -80,6 +77,7 @@ export const createPost = async (req, res) => {
         )
     );
 
+
     let savePost = await Posts.create({
         userId: req.body.userId,
         postMessage: req.body.postMessage,
@@ -91,14 +89,94 @@ export const createPost = async (req, res) => {
         usersDisliked: [],
 
     });
-
+    ///////////////////////// a tester
+    // if (req.fileName)
+    //     fs.unlink(' ./public/uploads/posts/' + fileName, (err) => {
+    //         if (err) {
+    //             console.log("failed to delete local image:" + err);
+    //         } else {
+    //             console.log('successfully deleted local image');
+    //         }
+    //     });
+    /////////////////////////////
     if (savePost) {
         res.json({ "Status": 200, "Message": savePost });
     } else {
         res.json({ "Status": 400, "Message": 'We failed to save post for some reason' });
     }
-    //};
+    if (req.file.fileName)
+        fs.unlink(' ./public/uploads/posts/' + fileName, (err) => {
+            if (err) {
+                console.log("failed to delete local image:" + err);
+            } else {
+                console.log('successfully deleted local image');
+            }
+        });
 };
+
+//update new image post
+
+
+export const updateImg = async (req, res) => {
+    try {
+        console.log(__dirname);
+        if (
+            !req.file.detectedMimeType == "image/jpg" ||
+            !req.file.detectedMimeType == "image/png" ||
+            !req.file.detectedMimeType == "image/jpeg"
+        )
+            throw Error("invalid file");
+        if (req.file.size > 2818128) throw Error("max size");
+    } catch (error) {
+        console.log(error);
+    }
+    let file = req.file;
+    console.log("req.file", file)
+    // uuid signifie "Universally Unique IDentifier"et désigne un standard d'identifiant généré aléatoirement et globalement unique.
+    const fileName = "cover" + "-" + uuidv4() + ".jpg";
+    //const fileName = name + Math.floor(Math.random() * 1000) * file.detectedFileExtension;
+
+    await pipeline(
+        file.stream,
+        fs.createWriteStream(
+            `${__dirname}/../client/public/uploads/posts/${fileName}`)
+    );
+
+    res.send("file uploaded as" + " " + fileName);
+    Posts.findOne({
+        where: {
+            id: req.params.id,
+        }
+    })
+
+        .then((post) => {
+            //condition
+            //user.avatar = `${req.protocol}://${req.get("host")}/client/public/uploads/profil/${fileName}`,
+            post.imageUrl = fileName;
+            post.save()
+            console.log(post.fileName)
+            //res.status(200).send('Avatar upload successfully');
+        });
+
+    // const newCover = await Posts.findOne(req.body, { where: { id: req.params.id } })
+
+    if (req.file);
+
+    Posts.update(req.body.imageUrl, { where: { id: req.params.id } });
+
+    fs.unlink("./public/uploads/posts/" + req.file.filename, (err) => {
+        if (err) {
+            console.log(req.filename);
+            console.log("failed to delete local image:" + err);
+        } else {
+            console.log('successfully deleted local image');
+        }
+    });
+
+
+
+};
+
 
 //profil image recuperation 
 export const getImgById = async (req, res) => {
@@ -111,12 +189,9 @@ export const getImgById = async (req, res) => {
 
 //Update post by id
 export const updatePostById = async (req, res) => {
+
     try {
-        await Posts.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        });
+        await Posts.update(req.body, { where: { id: req.params.id } });
         res.json({
             "message": "Post Updated"
         });
@@ -124,6 +199,7 @@ export const updatePostById = async (req, res) => {
         return res.status(500).send('We failed to update post for some reason');
     }
 };
+
 
 // Delete post by id
 export const deletePostById = async (req, res) => {

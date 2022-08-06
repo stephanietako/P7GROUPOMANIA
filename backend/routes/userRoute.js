@@ -11,7 +11,8 @@ import {
     deleteUserById,
     getUserById,
     updateUserById,
-    getImgById
+    getImgById,
+    //isAdmin
 
 } from "../controllers/User.js";
 
@@ -22,16 +23,18 @@ import {
 const router = express.Router();
 
 router.get('/', allUsers);
-router.get('/:id', getUserById)
+router.get('/:id', getUserById);
+
 router.post('/register', register);
 router.post('/login', login);
 router.post('/logout', logout);
 router.delete('/:id', deleteUserById);
 router.put("/:id", updateUserById);
-////////upload
-
-router.post('/upload/:id', upload.single('file'), uploadProfil);
 router.get('/image/:fileName', getImgById);
+
+////////upload
+router.post('/upload/:id', upload.single('file'), uploadProfil);
+
 
 // router.post('/upload', upload.single('file'), function (req, res) {
 //     console.log("HEYYYYYYYYYYYYYYYYYYYYYYYYYYY"); //multer fonctionne
