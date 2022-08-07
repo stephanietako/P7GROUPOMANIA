@@ -154,15 +154,15 @@ export const updateImg = async (req, res) => {
                 //suppression de l'image dans le serveur
                 //const filePath = path.join(__dirname, `posts/ ${fileName}`);
 
-                // const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
-                // fs.unlink(filePath, (err) => {
-                //     if (err) {
-                //         console.log("failed to delete local image:" + err);
+                const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.log("failed to delete local image:" + err);
 
-                //     } else {
-                //         console.info(`Successfully removed file with the path of ${filePath}`);
-                //     }
-                // });
+                    } else {
+                        console.info(`Successfully removed file with the path of ${filePath}`);
+                    }
+                });
 
             })
     }
