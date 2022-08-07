@@ -42,16 +42,14 @@ export const uploadProfil = async (req, res) => {
 
         .then((user) => {
             console.log(user.avatar);
-            //condition
-            //user.avatar = `${req.protocol}://${req.get("host")}/client/public/uploads/profil/${fileName}`,
             user.avatar = fileName;
             user.save()
             console.log(user.avatar)
-            //res.status(200).send('Avatar upload successfully');
+
         });
-    // A voir si ça fonctionne correctement 
+
     if (req.body.email === "" || req.body.password === "") {
-        // en fait là l'mage a été uploadée malgré tout donc il faut la remove
+        // en fait là l'mage a été uploadé malgré tout donc il faut la remove
         let avatarPath = fileName;
         fs.unlinkSync(avatarPath, (err) => {
             if (err) {

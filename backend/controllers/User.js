@@ -2,12 +2,11 @@ import Users from "../models/UserModel.js";
 import Posts from "../models/PostModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-//import multer from "multer";
 import { promisify } from "util";
 import stream from "stream";
 const pipeline = promisify(stream.pipeline);
 import path from "path";
-//import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import multer from "multer";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -22,14 +21,12 @@ export const allUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
 
     const user = await Users.findOne({
-
         where: { id: req.params.id },
         include: [{ model: Posts }]
     });
 
     res.send(user);
 }
-
 
 //profil image recuperation 
 export const getImgById = async (req, res) => {

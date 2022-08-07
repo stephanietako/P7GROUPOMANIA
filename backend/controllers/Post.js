@@ -89,37 +89,26 @@ export const createPost = async (req, res) => {
         usersDisliked: [],
 
     });
-    ///////////////////////// a tester
-    // if (req.fileName)
-    //     fs.unlink(' ./public/uploads/posts/' + fileName, (err) => {
-    //         if (err) {
-    //             console.log("failed to delete local image:" + err);
-    //         } else {
-    //             console.log('successfully deleted local image');
-    //         }
-    //     });
-    /////////////////////////////
+
     if (savePost) {
         res.json({ "Status": 200, "Message": savePost });
     } else {
         res.json({ "Status": 400, "Message": 'We failed to save post for some reason' });
     }
-    if (req.file.fileName)
-        fs.unlink("./client/public/uploads/posts/" + req.file.filename, (err) => {
-            if (err) {
-                console.log(req.filename);
-                res.sendFile(req.filename);
-            } else {
-                console.log('successfully deleted local image');
-                res.status(200).send('successfully deleted local image');
-            }
-        });
+    // if (req.file.fileName)
+    //     fs.unlink("./client/public/uploads/posts/" + req.file.filename, (err) => {
+    //         if (err) {
+    //             console.log(req.filename);
+    //             res.sendFile(req.filename);
+    //         } else {
+    //             console.log('successfully deleted local image');
+    //             res.status(200).send('successfully deleted local image');
+    //         }
+    //     });
 
 };
 
 //update new image post
-
-
 export const updateImg = async (req, res) => {
     try {
         console.log(__dirname);
@@ -138,49 +127,67 @@ export const updateImg = async (req, res) => {
     // uuid signifie "Universally Unique IDentifier"et désigne un standard d'identifiant généré aléatoirement et globalement unique.
     const fileName = "cover" + "-" + uuidv4() + ".jpg";
     //const fileName = name + Math.floor(Math.random() * 1000) * file.detectedFileExtension;
-
     await pipeline(
         file.stream,
         fs.createWriteStream(
             `${__dirname}/../client/public/uploads/posts/${fileName}`)
     );
-
     res.send("file uploaded as" + " " + fileName);
-    Posts.findOne({
-        where: {
-            id: req.params.id,
-        }
-    })
 
-        .then((post) => {
-            //condition
-            //user.avatar = `${req.protocol}://${req.get("host")}/client/public/uploads/profil/${fileName}`,
-            post.imageUrl = fileName;
-            post.save()
-            console.log(post.fileName)
-            //res.status(200).send('Avatar upload successfully');
-        });
+    if (req.file) {
+        Posts.findOne({
+            where: {
+                id: req.params.id,
+            }
+        })
+            .then((post) => {
+                // post.imageUrl = fileName;
+                // post.save()
+                console.log("retour de la promesse");
+                console.log(post)
 
-    // const newCover = await Posts.findOne(req.body, { where: { id: req.params.id } })
+                //recup du nom de la photo à supprimer dans la bd
+                const fileName = post.imageUrl;
+                console.log("##########filename");
+                console.log(fileName);
+                //suppression de l'image dans le serveur
+                //const filePath = path.join(__dirname, `posts/ ${fileName}`);
 
-    if (req.file);
+                const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.log("failed to delete local image:" + err);
 
-    Posts.update(req.body.imageUrl, { where: { id: req.params.id } });
-    const filePath = path.join(__dirname, '/client/public/uploads/posts/' + fileName);
-    fs.unlink("./public/uploads/posts/" + req.file.filename, (err) => {
-        if (err) {
-            console.log(req.filename);
-            console.log("failed to delete local image:" + err);
-
-        } else {
-            console.log('successfully deleted local image');
-            res.sendFile(filePath);
-        }
-    });
+                    } else {
+                        console.info(`Successfully removed file with the path of ${filePath}`);
+                    }
+                });
 
 
 
-};
+            })
+        //         .catch((error) => res.status(404).json({ error }))
+        // } else {
+        //     console.log("FALSE")
+        // }
+    }
+}
+
+
+
+//if (req.file);
+// const filePath = path.join(__dirname, '../client/public/uploads/posts/' + fileName);
+// fs.unlink(filePath, (err) => {
+//     if (err) {
+//         console.log("failed to delete local image:" + err);
+
+//     } else {
+//         console.info(`Successfully removed file with the path of ${filePath}`);
+//     }
+// });
+//Posts.update(req.body.imageUrl, { where: { id: req.params.id } })
+
+
 
 
 //profil image recuperation 
@@ -251,5 +258,6 @@ export const likePost = async (req, res) => {
         await post.increment("likes");
         await post.save();
         res.status(200).json({ "Message": `You have liked the post: #${post.id}` })
+
     };
 };
