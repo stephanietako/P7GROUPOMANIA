@@ -132,7 +132,7 @@ export const updateImg = async (req, res) => {
         fs.createWriteStream(
             `${__dirname}/../client/public/uploads/posts/${fileName}`)
     );
-    res.send("file uploaded as" + " " + fileName);
+    //res.send("file uploaded as" + " " + fileName);
 
     if (req.file) {
         Posts.findOne({
@@ -150,28 +150,49 @@ export const updateImg = async (req, res) => {
                 const fileName = post.imageUrl;
                 console.log("##########filename");
                 console.log(fileName);
+
                 //suppression de l'image dans le serveur
                 //const filePath = path.join(__dirname, `posts/ ${fileName}`);
 
-                const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
-                fs.unlink(filePath, (err) => {
-                    if (err) {
-                        console.log("failed to delete local image:" + err);
+                // const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
+                // fs.unlink(filePath, (err) => {
+                //     if (err) {
+                //         console.log("failed to delete local image:" + err);
 
-                    } else {
-                        console.info(`Successfully removed file with the path of ${filePath}`);
-                    }
-                });
-
-
+                //     } else {
+                //         console.info(`Successfully removed file with the path of ${filePath}`);
+                //     }
+                // });
 
             })
-        //         .catch((error) => res.status(404).json({ error }))
-        // } else {
-        //     console.log("FALSE")
-        // }
     }
+    //l'objet qui va être mise à jour dans la base de données
+    // s'il y a un fichier ou pas
+    const updateCover = req.file ?
+        {
+            ...req.body,
+            //imageUrl: `${fileName}`
+            imageUrl: fileName
+
+
+        } : {
+            ...req.body
+
+        }
+    console.log("SALUT JE SUIS DANS LE BODY CONTENU DU PUT ")
+    console.log(updateCover);
+
+    //mettre à jour la base de données
+    Posts.update({ ...updateCover }, { where: { id: req.params.id } })
+        //Posts.update((req.params.id), { ...updateCover })
+        .then(() => res.send("la cover a été mise à jour c'est " + " " + fileName))
+
+        //}))
+        //rappel: 404 ressource n'a pas été trouvé
+        .catch(error => res.status(404).json({ error }));
 }
+
+
 
 
 
