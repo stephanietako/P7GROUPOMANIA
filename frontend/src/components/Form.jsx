@@ -3,7 +3,11 @@ import { useForm } from 'react-hook-form';
 
 export function Form() {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+    if (data.password !== data.confPassword)
+      alert("le mot de passe n'est pas le même");
+  };
 
   // pour le regex password et confPassword minimum eight characters, at least one letter and one number:
   return (
