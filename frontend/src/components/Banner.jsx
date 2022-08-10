@@ -2,7 +2,7 @@ import logo from '../assets/logo192.png';
 import '../styles/Banner.css';
 import React from 'react';
 
-function Banner() {
+const Banner = () => {
   const title = 'Groupomania';
   return (
     <div className="groupomania-banner">
@@ -10,6 +10,6 @@ function Banner() {
       <h1 className="Groupomania">{title}</h1>
     </div>
   );
-}
+};
 
 export default Banner;
