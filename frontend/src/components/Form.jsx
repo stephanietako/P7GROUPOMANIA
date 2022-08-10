@@ -16,7 +16,7 @@ export const Form = ({ title, isLogin }) => {
       <h1>{title}</h1>
       {isLogin ? (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h1>"Se connec"</h1>
+          <h1>"Se connecter !"</h1>
           <input
             {...register('email', {
               pattern:
