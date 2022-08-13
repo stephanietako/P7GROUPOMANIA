@@ -39,10 +39,12 @@ export const getImgById = async (req, res) => {
 
 //Register
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password, confPassword, role } = req.body;
-  const avatar = req.file;
-  if (password !== confPassword)
-    return res.status(400).json({ msg: 'Please confirm your password' });
+  const { firstName, lastName, email, password } = req.body;
+  if (req.file) {
+    const avatar = req.file;
+  } else {
+    const avatar = 'default-profil.jpg';
+  }
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
   if (!emailExists) {
     const salt = await bcrypt.genSalt();
@@ -54,7 +56,7 @@ export const register = async (req, res) => {
         avatar: avatar,
         email: email,
         password: hashPassword,
-        role: role,
+        role: false,
       });
       res.json({ msg: 'Inscription réussie' });
     } catch (error) {
@@ -78,19 +80,19 @@ export const login = async (req, res) => {
 
   const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).json({ msg: 'Mot de passe erroné' });
-  const { id, firstName, lastName, avatar, email, role } = user;
+  const { id, firstName, lastName, email, role } = user;
   const accessToken = jwt.sign(
-    { id, firstName, lastName, email, avatar, role },
+    { id, firstName, lastName, email, role },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '15s',
+      expiresIn: '1m',
     }
   );
   const refreshToken = jwt.sign(
-    { id, firstName, lastName, email, avatar, role },
+    { id, firstName, lastName, email, role },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: '1d',
+      expiresIn: '30d',
     }
   );
   await Users.update(
@@ -101,11 +103,13 @@ export const login = async (req, res) => {
       },
     }
   );
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
+
+  return res.status(200).send({
+    message: "You've been login !",
+    id: id,
+    accessToken: accessToken,
+    refreshToken: refreshToken,
   });
-  res.json({ accessToken });
 };
 
 //logout

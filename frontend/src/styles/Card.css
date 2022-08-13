@@ -1,0 +1,33 @@
+.card {
+  border: solid 1px black;
+  margin-top: 20px;
+  width: 380px;
+  border-radius: 8px;
+}
+
+.card_body {
+  padding: 10px;
+}
+
+.cover {
+  width: 100%;
+}
+
+.like_btn {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.article_author {
+  border: 2px solid lightblue !important;
+}

@@ -7,11 +7,11 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Profil from './pages/Profil';
 import Post from './pages/Post';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   return (
     <div className="App">
-      <div>"Hello depuis App"</div>
       <Banner />
       <Navbar />
       <Routes>
@@ -22,6 +22,17 @@ const App = () => {
         <Route path="/post" element={<Post />} />
         {/*  <Redirect to="/" element={<Home />} /> */}
       </Routes>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

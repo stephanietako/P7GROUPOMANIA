@@ -1,14 +1,20 @@
 import React from 'react';
+import Card from './Card';
+import '../styles/Posts.css';
 
-const Posts = () => {
+const Posts = ({ allPosts, update, setUpdate }) => {
   return (
-    <div>
-      <h2>Voici la liste des postes :</h2>
-      <p>Post 1</p>
-      <p>Post 2</p>
-      <p>Post 3</p>
-      <p>Post 4</p>
-      <p>...</p>
+    <div className="posts">
+      {allPosts.map((post, index) => {
+        return (
+          <Card
+            key={`POST-${post.id}-${index}`}
+            post={post}
+            update={update}
+            setUpdate={setUpdate}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -1,0 +1,16 @@
+nav {
+  margin-top: 20px;
+}
+
+nav a {
+  padding: 8px;
+  margin-right: 5px;
+  border: solid 1px black;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+nav a:hover {
+  color: grey;
+}

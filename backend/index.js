@@ -1,13 +1,12 @@
-import express from "express";
-import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
-import cors from "cors";
+import express from 'express';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 //import path from "path";
-import helmet from "helmet";
-import multer from "multer";
-import userRouter from "./routes/userRoute.js";
-import postRouter from "./routes/postRoute.js";
-
+import helmet from 'helmet';
+import multer from 'multer';
+import userRouter from './routes/userRoute.js';
+import postRouter from './routes/postRoute.js';
 
 dotenv.config();
 
@@ -19,24 +18,23 @@ app.use(express.json());
 
 /* Mise en place reponses headers */
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, x-access-token, role, Content, Accept, Content-Type, Authorization"
-    );
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    );
-    next();
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, x-access-token, role, Content, Accept, Content-Type, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+  );
+  next();
 });
 
-app.use("/users", userRouter);
-app.use("/posts", postRouter);
+app.use('/users', userRouter);
+app.use('/posts', postRouter);
 
 app.use('/uploads', express.static('uploads'));
 
-
 app.listen(process.env.PORT, () => {
-    console.log('Server running ! Enjoy !');
+  console.log('Server running ! Enjoy !');
 });
