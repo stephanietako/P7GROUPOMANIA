@@ -212,8 +212,9 @@ export const getImgById = async (req, res) => {
 //Update post by id
 export const updatePostById = async (req, res) => {
   const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // Error to be corrected
-  // verification if its author
+  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  // Error to be corrected
+  if (dataUser == null) res.redirect('/');
   try {
     await Posts.update(req.body, { where: { id: req.params.id } });
     res.json({
@@ -227,7 +228,9 @@ export const updatePostById = async (req, res) => {
 // Delete post by id
 export const deletePostById = async (req, res) => {
   const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // Error to be corrected
+  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  // Error to be corrected
+  if (dataUser == null) res.redirect('/');
   try {
     await Posts.destroy({
       where: {
@@ -246,8 +249,9 @@ export const deletePostById = async (req, res) => {
 export const likePost = async (req, res) => {
   const postId = req.params.id;
   const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // Error to be corrected
-
+  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  // Error to be corrected
+  if (dataUser == null) res.redirect('/');
   // search the database with id (post & currentUser)
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
