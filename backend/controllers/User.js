@@ -39,7 +39,7 @@ export const getImgById = async (req, res) => {
 
 //Register
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, avatar } = req.body;
   if (req.file) {
     const avatar = req.file;
   } else {
@@ -114,6 +114,16 @@ export const login = async (req, res) => {
 
 //logout
 export const logout = async (req, res) => {
+  if (req.headers && req.headers.authorization) {
+    const refreshToken = req.headers.authorization.split(' ')[1];
+    const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    // Error to be corrected
+    if (!dataUser) {
+      return res
+        .status(401)
+        .json({ success: false, message: 'Authorization failed' });
+    }
+  }
   try {
     req.session = null;
     res.clearCookie('jwt');
@@ -121,8 +131,10 @@ export const logout = async (req, res) => {
       message: "You've been logout!",
     });
   } catch (err) {
-    this.next(err);
+    console.log(err);
   }
+  //window.localStorage.clear(); //clear all localstorage
+  //window.localStorage.removeItem('refresh_token');
 };
 
 //update
@@ -164,4 +176,13 @@ export const deleteUserById = async (req, res) => {
     .catch((err) => {
       res.status(500).send('We failed to delete for some reason');
     });
+  try {
+    req.session = null;
+    res.clearCookie('jwt');
+    return res.status(200).send({
+      message: 'All users and posts are deleted !',
+    });
+  } catch (err) {
+    this.next(err);
+  }
 };
