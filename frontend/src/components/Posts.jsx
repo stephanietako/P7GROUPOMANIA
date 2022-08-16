@@ -4,7 +4,8 @@ import '../styles/Posts.css';
 
 const Posts = ({ allPosts, update, setUpdate }) => {
   return (
-    <div className="posts">
+    <div className="posts_section">
+      <h2 className="posts_title">News Feed</h2>
       {allPosts.map((post, index) => {
         return (
           <Card

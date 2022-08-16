@@ -1,4 +1,6 @@
 .home {
   display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
+  grid-template-columns: 1.4fr 0.6fr;
+  background-color: #f8f8fa;
+  margin: 0 15px;
 }

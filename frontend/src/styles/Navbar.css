@@ -1,16 +1,52 @@
 nav {
-  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-nav a {
-  padding: 8px;
+.navlinks {
+}
+
+.navlinks a {
+  text-decoration: none;
+  font-size: 18px;
+  color: #8e8ea8;
+  opacity: 0.8;
+  padding-bottom: 36px;
+  margin-right: 20px;
+  transition: 0.2s;
+}
+
+.navlinks a:hover {
+  border-bottom: solid 4px #fd2d01;
+  color: #fd2d01;
+}
+
+.navbtns {
+  position: absolute;
+  right: 30px;
+}
+
+.navbtns a {
+  margin: 8px;
+  padding: 8px 14px;
   margin-right: 5px;
-  border: solid 1px black;
-  color: black;
+  border: solid 2px #fd2d01;
+  color: #fd2d01;
   text-decoration: none;
   cursor: pointer;
+  border-radius: 8px;
+  opacity: 0.5;
+  transition: 0.5s;
 }
 
-nav a:hover {
-  color: grey;
+.navbtns a:hover {
+  background-color: #fd2d01;
+  color: #ffffff;
+  opacity: 0.5;
+}
+
+.logo {
+  width: 250px;
+  padding: 20px 15px;
 }

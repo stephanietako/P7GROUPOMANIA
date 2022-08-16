@@ -6,45 +6,20 @@ import { promisify } from 'util';
 import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
+import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
-// all users
-export const allUsers = async (req, res) => {
-  const allUsers = await Users.findAll();
-  res.send(allUsers);
-  console.log(allUsers);
-};
-
-// one user
-export const getUserById = async (req, res) => {
-  const user = await Users.findOne({
-    where: { id: req.params.id },
-    include: [{ model: Posts }],
-  });
-
-  res.send(user);
-};
-
-//profil image recuperation
-export const getImgById = async (req, res) => {
-  const filePath = path.resolve(
-    `client/public/uploads/profil/${req.params.fileName}`
-  );
-  //console.log(filePath);
-  console.log('je suis dans get img c est ok');
-  res.sendFile(filePath);
-};
 
 //Register
 export const register = async (req, res) => {
   const { firstName, lastName, email, password, avatar } = req.body;
   if (req.file) {
-    const avatar = req.file;
+    avatar = req.file;
   } else {
-    const avatar = 'default-profil.jpg';
+    avatar = 'defaultProfil.jpg';
   }
+
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
   if (!emailExists) {
     const salt = await bcrypt.genSalt();
@@ -65,6 +40,15 @@ export const register = async (req, res) => {
   } else {
     return res.status(400).json({ msg: 'Cette adresse email existe déjà' });
   }
+};
+
+//profil image recuperation
+export const getImgById = async (req, res) => {
+  const filePath = path.resolve(
+    `client/public/uploads/profil/${req.params.fileName}`
+  );
+  console.log('je suis dans get img c est ok');
+  res.sendFile(filePath);
 };
 
 //login
@@ -133,8 +117,23 @@ export const logout = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  //window.localStorage.clear(); //clear all localstorage
-  //window.localStorage.removeItem('refresh_token');
+};
+
+// all users
+export const allUsers = async (req, res) => {
+  const allUsers = await Users.findAll();
+  res.send(allUsers);
+  console.log(allUsers);
+};
+
+// one user
+export const getUserById = async (req, res) => {
+  const user = await Users.findOne({
+    where: { id: req.params.id },
+    include: [{ model: Posts }],
+  });
+
+  res.send(user);
 };
 
 //update

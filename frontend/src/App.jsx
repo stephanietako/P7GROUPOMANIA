@@ -1,5 +1,4 @@
 import React from 'react';
-import Banner from './components/Banner';
 import Navbar from './components/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -13,7 +12,6 @@ import { ToastContainer } from 'react-toastify';
 const App = () => {
   return (
     <div className="App">
-      <Banner />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

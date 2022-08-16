@@ -36,7 +36,7 @@ const Users = db.define(
     },
     avatar: {
       type: DataTypes.STRING,
-      defaultValue: './../client/public/uplods/profil/default-profil.jpg',
+      defaultValue: 'defaultProfil.jpg',
     },
     role: {
       type: DataTypes.BOOLEAN,
@@ -60,8 +60,6 @@ const Users = db.define(
 Users.hasMany(Posts, { foreignKey: 'userId', onDelete: 'CASCADE' });
 Posts.belongsTo(Users, { foreignKey: 'userId' });
 
-// Likes.belongsTo(Users, { foreignKey: 'userId'});
-//Post.hasMany(posts, { foreignKey: 'userId'});
 await Users.sync({ alter: true });
 
 export default Users;

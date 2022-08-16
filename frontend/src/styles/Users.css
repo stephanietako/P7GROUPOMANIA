@@ -1,12 +1,17 @@
+.users_section {
+  padding: 20px 0;
+}
+
 .users {
-  border: solid 1px black;
-  width: 220px;
-  height: 350px;
+  margin-top: 20px;
+  border: solid 1px f6f6f8;
+  background-color: #ffffff;
+  width: 60%;
+  height: 30%;
   overflow-y: auto;
   scrollbar-width: thin;
   border-radius: 8px;
   padding: 10px;
-  margin-top: 150px;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -20,8 +25,8 @@
 
 .avatar {
   display: inline-block;
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   object-fit: cover;
   border-radius: 50%;
   margin-right: 5px;

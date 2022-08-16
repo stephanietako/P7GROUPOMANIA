@@ -5,6 +5,7 @@ import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { request } from 'http';
 //import multer from "multer";
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
@@ -34,28 +35,36 @@ export const uploadProfil = async (req, res) => {
     )
   );
 
-  res.send('file uploaded as' + ' ' + fileName);
-  Users.findOne({
-    where: {
-      id: req.params.id,
-    },
-  }).then((user) => {
-    console.log(user.avatar);
-    user.avatar = fileName;
-    user.save();
-    console.log(user.avatar);
-  });
+  //res.send('file uploaded as' + ' ' + fileName);
+  if (req.file) {
+    Users.findOne({
+      where: {
+        id: req.params.id,
+      },
+    }).then((user) => {
+      console.log(user.avatar);
+      user.avatar = fileName;
+      user.save();
+      console.log(user.avatar);
 
-  if (req.body.email === '' || req.body.password === '') {
-    // en fait là l'mage a été uploadé malgré tout donc il faut la remove
-    let avatarPath = fileName;
-    fs.unlinkSync(avatarPath, (err) => {
-      if (err) {
-        console.log(`Error deleting ${fileName}`);
+      const filePath = path.resolve(
+        `/client/public/uploads/profil/${fileName}`
+      );
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.info(
+            `Successfully removed file with the path of ${filePath}`
+          );
+        }
+      });
+      if (req.file) {
+        Users.update(req.body, { where: { avatar: req.body } });
+        res.send(
+          "la photo de profil a été mise à jour c'est " + ' ' + fileName
+        );
       }
     });
-    res
-      .status(403)
-      .render('./register', { err: 'Please fill all the form elements' });
   }
 };

@@ -138,8 +138,6 @@ export const updateImg = async (req, res) => {
         id: req.params.id,
       },
     }).then((post) => {
-      // post.imageUrl = fileName;
-      // post.save()
       console.log('retour de la promesse');
       console.log(post);
 
@@ -168,7 +166,6 @@ export const updateImg = async (req, res) => {
   const updateCover = req.file
     ? {
         ...req.body,
-        //imageUrl: `${fileName}`
         imageUrl: fileName,
       }
     : {
@@ -179,32 +176,16 @@ export const updateImg = async (req, res) => {
 
   //mettre à jour la base de données
   Posts.update({ ...updateCover }, { where: { id: req.params.id } })
-    //Posts.update((req.params.id), { ...updateCover })
     .then(() => res.send("la cover a été mise à jour c'est " + ' ' + fileName))
-
-    //}))
     //rappel: 404 ressource n'a pas été trouvé
     .catch((error) => res.status(404).json({ error }));
 };
 
-//if (req.file);
-// const filePath = path.join(__dirname, '../client/public/uploads/posts/' + fileName);
-// fs.unlink(filePath, (err) => {
-//     if (err) {
-//         console.log("failed to delete local image:" + err);
-
-//     } else {
-//         console.info(`Successfully removed file with the path of ${filePath}`);
-//     }
-// });
-//Posts.update(req.body.imageUrl, { where: { id: req.params.id } })
-
-//profil image recuperation
+// image recuperation
 export const getImgById = async (req, res) => {
   const filePath = path.resolve(
     `client/public/uploads/posts/${req.params.fileName}`
   );
-  //console.log(filePath);
   console.log('je suis dans get img c est ok');
   res.sendFile(filePath);
 };

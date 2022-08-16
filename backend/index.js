@@ -2,12 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-//import path from "path";
 import helmet from 'helmet';
-import multer from 'multer';
 import userRouter from './routes/userRoute.js';
 import postRouter from './routes/postRoute.js';
-
 dotenv.config();
 
 const app = express();
@@ -15,6 +12,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /* Mise en place reponses headers */
 app.use((req, res, next) => {
@@ -30,9 +28,9 @@ app.use((req, res, next) => {
   next();
 });
 
+//routes
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
-
 app.use('/uploads', express.static('uploads'));
 
 app.listen(process.env.PORT, () => {

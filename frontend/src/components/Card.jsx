@@ -16,7 +16,7 @@ const Card = ({ post, update, setUpdate }) => {
         console.error(err);
       });
   }, [userId]);
-
+  console.log(author);
   const likeBtn = () => {
     let requestOptions = {
       method: 'PUT',
@@ -36,11 +36,25 @@ const Card = ({ post, update, setUpdate }) => {
   };
 
   return (
-    <div
-      className={
-        Number(currentIdUser) === userId ? 'card article_author' : 'card'
-      }
-    >
+    <div className="card">
+      {author && (
+        <div className="author">
+          <img
+            className="card_avatar"
+            src={`http://localhost:5000/users/image/${author.avatar}`}
+            alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
+            crossOrigin="anonymous"
+          />
+          <div>
+            <p>
+              {author.firstName} {author.lastName}
+            </p>
+            <p className="create_date">
+              {new Date(author.createdAt).toDateString()}
+            </p>
+          </div>
+        </div>
+      )}
       <img
         className="cover"
         src={`http://localhost:5000/posts/image/${imageUrl}`}
@@ -49,7 +63,6 @@ const Card = ({ post, update, setUpdate }) => {
       />
       <div className="card_body">
         <p>{postMessage}</p>
-        {author && <p>{`― ${author.firstName} ${author.lastName}`}</p>}
         <div>
           <button
             disabled={Number(currentIdUser) === userId ? 'false' : ''}

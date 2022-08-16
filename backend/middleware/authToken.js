@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import Users from '../models/UserModel';
 dotenv.config();
 
 export const checkUser = (req, res, next) => {
@@ -23,7 +22,7 @@ export const checkUser = (req, res, next) => {
     console.log('No token');
   }
 };
-
+/////////////////////
 export default function authHeader() {
   const user = JSON.parse(localStorage.getItem('user'));
   if (user && user.accessToken) {
