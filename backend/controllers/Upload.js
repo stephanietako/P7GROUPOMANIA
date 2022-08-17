@@ -2,11 +2,9 @@ import Users from '../models/UserModel.js';
 import fs from 'fs';
 import { promisify } from 'util';
 import stream from 'stream';
-const pipeline = promisify(stream.pipeline);
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { request } from 'http';
-//import multer from "multer";
+const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export const uploadProfil = async (req, res) => {
@@ -47,9 +45,7 @@ export const uploadProfil = async (req, res) => {
       user.save();
       console.log(user.avatar);
 
-      const filePath = path.resolve(
-        `/client/public/uploads/profil/${fileName}`
-      );
+      const filePath = path.resolve(`client/public/uploads/profil/${fileName}`);
       fs.unlink(filePath, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);

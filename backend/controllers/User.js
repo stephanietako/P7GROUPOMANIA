@@ -101,7 +101,6 @@ export const logout = async (req, res) => {
   if (req.headers && req.headers.authorization) {
     const refreshToken = req.headers.authorization.split(' ')[1];
     const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    // Error to be corrected
     if (dataUser == null) res.redirect('/');
     if (!dataUser) {
       return res
