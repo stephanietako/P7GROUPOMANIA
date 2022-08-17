@@ -3,7 +3,6 @@ import db from '../config/Database.js';
 import Posts from './PostModel.js';
 
 const { DataTypes } = Sequelize;
-// define je crée une table
 
 const Users = db.define(
   'users',
@@ -51,11 +50,6 @@ const Users = db.define(
     refresh_token: { type: DataTypes.TEXT },
   }
 );
-
-// de base ça créer la table users si elle n'exsiste pas - ça check mais ça fait rien
-//await Users.sync();
-// alter check si les champs existent déjà et les changes si necéssaire
-//await Users.sync({ alter: true });
 
 Users.hasMany(Posts, { foreignKey: 'userId', onDelete: 'CASCADE' });
 Posts.belongsTo(Users, { foreignKey: 'userId' });

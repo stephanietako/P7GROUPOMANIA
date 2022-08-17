@@ -26,8 +26,6 @@ const Posts = db.define(
       defaultValue: 0,
     },
     usersLiked: {
-      //type: DataTypes.ARRAY(DataTypes.STRING)
-      // avec mysql on ne peut pas juste utiliser type: DataTypes.ARRAY(DataTypes.STRING) c'est faisable qu'avec postgrl
       type: DataTypes.STRING,
       defaultValue: '[]',
       get: function () {
@@ -40,8 +38,6 @@ const Posts = db.define(
   },
   {}
 );
-
-//Posts.hasMany(likes, { foreignKey: 'userId' })
 
 await Posts.sync({ alter: true });
 
