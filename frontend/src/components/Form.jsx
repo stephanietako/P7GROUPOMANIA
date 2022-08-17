@@ -1,20 +1,20 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import '../styles/Form.css';
+import { useForm } from 'react-hook-form';
+//import { accountService } from '../services/Account.services';
+import { useNavigate } from 'react-router-dom';
 
 export const Form = ({ title, isLogin }) => {
-  //console.log('isLogin:', isLogin);
   const { handleSubmit } = useForm();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
-  const [userId, setUserId] = useState();
-  //const [refresh_token, setRefresh_token] = useState();
-  //const [acces_token_token, setAccess_token] = useState();
-
+  //const [userId, setUserId] = useState();
+  const navigate = useNavigate();
   // REGISTER
   const onSubmitRegister = () => {
     //check password
@@ -59,6 +59,8 @@ export const Form = ({ title, isLogin }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        //accountService.saveToken(accessToken);
+
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
@@ -71,64 +73,22 @@ export const Form = ({ title, isLogin }) => {
           draggable: true,
           progress: undefined,
         });
-      })
-      .catch((error) => {
-        alert('An error has occurred');
+        console.log('HELLO !!!!!!!!!!!!!');
+        navigate('/', { replace: true });
+        //window.location.href = '/';
       });
+    //
   };
 
   //logout
-  useEffect(() => {
-    const userlog = localStorage.clear('');
-    if (userlog) {
-      const founduser = userlog;
-      setUserId(founduser);
-      localStorage.clear();
-    }
-  }, [userId]);
-
-  const logoutBtn = () => {
-    //options + body
-    let requestOptions = {
-      method: 'DELETE',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        //Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-      }),
-    };
-    //fetch final
-    fetch('http://localhost:5000/users/logout', requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setUserId(); // This ensures that the user state is null
-        setEmail('');
-        setPassword('');
-        //setRefresh_token('');
-        //setAccess_token('');
-
-        localStorage.removeItem('user_id');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-
-        localStorage.clear();
-
-        toast.success('You have been successfully logout', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        alert('An error has occurred');
-      });
-  };
+  // useEffect(() => {
+  //   const userlog = localStorage.clear('');
+  //   if (userlog) {
+  //     const founduser = userlog;
+  //     setUserId(founduser);
+  //     localStorage.clear();
+  //   }
+  // }, [userId]);
 
   return (
     <div className="register">
@@ -137,66 +97,68 @@ export const Form = ({ title, isLogin }) => {
         {isLogin ? (
           //form login
           <form onSubmit={handleSubmit(onSubmitLogin)}>
+            <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="text"
               value={email}
               placeholder="email"
+              id="email"
               onChange={(e) => setEmail(e.target.value)}
             />
+            <label htmlFor="Password">Password</label>
             <input
-              type="password"
+              type="text"
               value={password}
               placeholder="password"
+              id="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <input
-              className="btn btn-primary"
-              type="submit"
-              value="Connection me"
-            />
-            {/*logout*/}
-            <button id="logout-button" onClick={() => logoutBtn()}>
-              Logout
-            </button>
+            <input className="btn btn-primary" type="submit" value="Login" />
           </form>
         ) : (
           //form register
           <form onSubmit={handleSubmit(onSubmitRegister)}>
+            <label htmlFor="firstName">FirstName</label>
             <input
-              type="firstName"
+              type="text"
               value={firstName}
               placeholder="firstName"
+              id="firstName"
               onChange={(e) => setFirstName(e.target.value)}
             />
+            <label htmlFor="lastName">LastName</label>
             <input
-              type="lastName"
+              type="test"
               value={lastName}
               placeholder="lastName"
+              id="lastName"
               onChange={(e) => setLastName(e.target.value)}
             />
+            <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="test"
               value={email}
               placeholder="email"
+              id="email"
               onChange={(e) => setEmail(e.target.value)}
             />
+            <label htmlFor="password">Password</label>
             <input
-              type="password"
+              type="test"
               value={password}
               placeholder="password"
+              id="password"
               onChange={(e) => setPassword(e.target.value)}
             />
+            <label htmlFor="confPassword">Confirm Password</label>
             <input
-              type="password"
+              type="test"
               value={confPassword}
               placeholder="confPassword"
+              id="confPassword"
               onChange={(e) => setConfPassword(e.target.value)}
             />
-            <input
-              className="btn btn-primary"
-              type="submit"
-              value="Register me"
-            />
+            <input className="btn btn-primary" type="submit" value="Register" />
           </form>
         )}
       </>

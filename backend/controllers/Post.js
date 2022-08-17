@@ -9,7 +9,6 @@ const pipeline = promisify(stream.pipeline);
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-//const fs = require("fs");
 
 // Get all Posts
 export const getPosts = async (req, res) => {
@@ -107,6 +106,7 @@ export const updateImg = async (req, res) => {
   const refreshToken = req.headers.authorization.split(' ')[1];
   const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET); // Error to be corrected
   // verification if its author
+  if (dataUser == null) res.redirect('/');
   try {
     console.log(__dirname);
     if (
@@ -145,9 +145,6 @@ export const updateImg = async (req, res) => {
       const fileName = post.imageUrl;
       console.log('##########filename');
       console.log(fileName);
-
-      //suppression de l'image dans le serveur
-      //const filePath = path.join(__dirname, `posts/ ${fileName}`);
 
       const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
       fs.unlink(filePath, (err) => {
@@ -208,6 +205,8 @@ export const updatePostById = async (req, res) => {
 
 // Delete post by id
 export const deletePostById = async (req, res) => {
+  if (!req.body.role && req.body.userId == req.params.id)
+    return res.status(403).send('Access denied.');
   const refreshToken = req.headers.authorization.split(' ')[1];
   const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
   // Error to be corrected

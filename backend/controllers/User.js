@@ -15,9 +15,9 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 export const register = async (req, res) => {
   const { firstName, lastName, email, password, avatar } = req.body;
   if (req.file) {
-    avatar = req.file;
+    const avatar = req.file;
   } else {
-    avatar = 'defaultProfil.jpg';
+    const avatar = 'defaultProfil.jpg';
   }
 
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
@@ -102,6 +102,7 @@ export const logout = async (req, res) => {
     const refreshToken = req.headers.authorization.split(' ')[1];
     const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     // Error to be corrected
+    if (dataUser == null) res.redirect('/');
     if (!dataUser) {
       return res
         .status(401)
@@ -156,7 +157,8 @@ export const updateUserById = async (req, res) => {
 
 //delete
 export const deleteUserById = async (req, res) => {
-  if (!req.body.role) return res.status(403).send('Access denied.');
+  if (!req.body.role && req.body.userId == req.params.id)
+    return res.status(403).send('Access denied.');
   const user = await Users.findOne({
     where: { id: req.params.id },
     include: [{ model: Posts }],
