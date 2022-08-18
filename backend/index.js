@@ -5,6 +5,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import userRouter from './routes/userRoute.js';
 import postRouter from './routes/postRoute.js';
+
+import path from 'path';
+
 dotenv.config();
 
 const app = express();
@@ -31,8 +34,8 @@ app.use((req, res, next) => {
 //routes
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
-app.use('/uploads', express.static('uploads'));
 
+app.use('/client', express.static(path.join('./client')));
 app.listen(process.env.PORT, () => {
   console.log('Server running ! Enjoy !');
 });

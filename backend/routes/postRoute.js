@@ -1,44 +1,40 @@
-import express from "express";
-import multer from "multer";
+import express from 'express';
+import multer from 'multer';
+
 const upload = multer();
 
 import {
-    getPosts,
-    getPostById,
-    createPost,
-    updatePostById,
-    deletePostById,
-    likePost,
-    getImgById,
-    updateImg
-} from "../controllers/Post.js";
+  getPosts,
+  getPostById,
+  createPost,
+  updatePostById,
+  deletePostById,
+  likePost,
+  getImgById,
+  updateImg,
+  verifyToken,
+} from '../controllers/Post.js';
 
 // Init express router
 const router = express.Router();
 
 // Route get all products
-// récupérer tous posts de façons anthechronologique du plus récent au plus ancien)
-router.get('/', getPosts);// du plus récent au plus ancien)
+router.get('/', verifyToken, getPosts); // du plus récent au plus ancien)
 // Route get product by id
-router.get('/:id', getPostById,);
+router.get('/:id', verifyToken, getPostById);
 // Route create a new product
-router.post('/', upload.single("file"), createPost);
-// router.post('/', upload.single('file'), function (req, res) {
-//     console.log("HEYYYYYYYYYYYYYYYYYYYYYYYYYYY"); //multer fonctionne
-// });
+router.post('/', verifyToken, upload.single('file'), createPost);
 // Route update Post by id
-router.put('/:id', updatePostById);
+router.put('/:id', verifyToken, updatePostById);
 // Route delete Post by id
-router.delete('/:id', deletePostById);
+router.delete('/:id', verifyToken, deletePostById);
 // router get image by filename parametre
-router.get('/image/:fileName', getImgById);
+router.get('/image/:fileName', verifyToken, getImgById);
 ///////////
-router.put('/image/:id', upload.single("file"), updateImg);
-
+router.put('/image/:id', verifyToken, upload.single('file'), updateImg);
 
 //Route like
-router.put('/:id/likes', likePost);
-
+router.put('/:id/likes', verifyToken, likePost);
 
 // export router
 export default router;

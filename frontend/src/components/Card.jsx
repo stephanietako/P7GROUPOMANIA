@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Card.css';
+import Axios from '../service/caller.service';
 
 const Card = ({ post, update, setUpdate }) => {
   const { imageUrl, postMessage, userId, usersLiked, likes, id } = post;
@@ -7,28 +8,18 @@ const Card = ({ post, update, setUpdate }) => {
   const [author, setAuthor] = useState();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/users/${userId}`)
-      .then((response) => response.json())
+    Axios(`/users/${userId}`)
       .then((user) => {
-        setAuthor(user);
+        setAuthor(user.data);
       })
       .catch((err) => {
         console.error(err);
       });
   }, [userId]);
-  console.log(author);
-  const likeBtn = () => {
-    let requestOptions = {
-      method: 'PUT',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('refresh_token'),
-      }),
-    };
 
-    fetch(`http://localhost:5000/posts/${id}/likes`, requestOptions)
-      .then((response) => response.json())
+  const likeBtn = () => {
+    console.log('test');
+    Axios.put(`/posts/${id}/likes`)
       .then(() => {
         setUpdate(!update);
       })
@@ -41,7 +32,7 @@ const Card = ({ post, update, setUpdate }) => {
         <div className="author">
           <img
             className="card_avatar"
-            src={`http://localhost:5000/users/image/${author.avatar}`}
+            src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
             alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
             crossOrigin="anonymous"
           />
@@ -57,7 +48,7 @@ const Card = ({ post, update, setUpdate }) => {
       )}
       <img
         className="cover"
-        src={`http://localhost:5000/posts/image/${imageUrl}`}
+        src={`http://localhost:5000/client/public/uploads/posts/${imageUrl}`}
         alt="post"
         crossOrigin="anonymous"
       />
@@ -65,8 +56,7 @@ const Card = ({ post, update, setUpdate }) => {
         <p>{postMessage}</p>
         <div>
           <button
-            disabled={Number(currentIdUser) === userId ? 'false' : ''}
-            onClick={() => likeBtn()}
+            onClick={likeBtn}
             className={
               usersLiked.includes(currentIdUser)
                 ? 'red like_btn'

@@ -24,7 +24,6 @@ export const uploadProfil = async (req, res) => {
   console.log('req.file', file);
   // uuid signifie "Universally Unique IDentifier"et désigne un standard d'identifiant généré aléatoirement et globalement unique.
   const fileName = 'avatar' + '-' + uuidv4() + '.jpg';
-  //const fileName = name + Math.floor(Math.random() * 1000) * file.detectedFileExtension;
 
   await pipeline(
     file.stream,
@@ -33,7 +32,6 @@ export const uploadProfil = async (req, res) => {
     )
   );
 
-  //res.send('file uploaded as' + ' ' + fileName);
   if (req.file) {
     Users.findOne({
       where: {

@@ -3,6 +3,7 @@ import Posts from '../components/Posts';
 import Users from '../components/Users';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Home.css';
+import Axios from '../service/caller.service';
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState();
@@ -10,19 +11,18 @@ const Home = () => {
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/posts')
-      .then((response) => response.json())
+    Axios('/posts')
       .then((posts) => {
-        setAllPosts(posts);
+        setAllPosts(posts.data);
+        console.log(posts);
       })
       .catch((err) => {
         console.error(err);
       });
 
-    fetch('http://localhost:5000/users')
-      .then((response) => response.json())
+    Axios('/users')
       .then((users) => {
-        setAllUsers(users);
+        setAllUsers(users.data);
       })
       .catch((err) => {
         console.error(err);

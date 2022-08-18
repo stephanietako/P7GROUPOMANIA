@@ -24,8 +24,8 @@ label {
   cursor: pointer;
 }
 input {
-  width: 60%;
-  height: 20px;
+  width: 45%;
+  height: 50px;
   background: #e0dede;
   justify-content: center;
   display: flex;
@@ -61,7 +61,7 @@ input.btn.btn-primary {
   padding: 8px 14px;
   border: none;
   cursor: pointer;
-  width: 30%;
+  width: 20%;
   border-radius: 8px;
   opacity: 0.5;
   transition: 0.5s;

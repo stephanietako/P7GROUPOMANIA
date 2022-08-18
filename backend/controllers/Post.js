@@ -46,9 +46,6 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
-  const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-  if (dataUser == null) res.redirect('/');
   try {
     console.log(__dirname);
     if (
@@ -74,7 +71,7 @@ export const createPost = async (req, res) => {
   );
 
   let savePost = await Posts.create({
-    userId: dataUser.id,
+    userId: req.userId,
     postMessage: req.body.postMessage,
     imageUrl: req.file !== null ? fileName : '',
     likes: req.body.likes,
@@ -189,9 +186,7 @@ export const updatePostById = async (req, res) => {
 export const deletePostById = async (req, res) => {
   if (!req.body.role && req.body.userId == req.params.id)
     return res.status(403).send('Access denied.');
-  const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-  if (dataUser == null) res.redirect('/');
+
   try {
     await Posts.destroy({
       where: {
@@ -209,13 +204,10 @@ export const deletePostById = async (req, res) => {
 /////////////////// LIKES ///////////////////////////////////
 export const likePost = async (req, res) => {
   const postId = req.params.id;
-  const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-  if (dataUser == null) res.redirect('/');
 
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
-  const user = await Users.findOne({ where: { id: dataUser.id } });
+  const user = await Users.findOne({ where: { id: req.userId } });
   if (user.id === post.userId)
     return res.status(400).json({ Message: 'Cannot like your own post' });
   if (post.usersLiked.includes(user.id)) {
@@ -231,4 +223,18 @@ export const likePost = async (req, res) => {
     await post.save();
     res.status(200).json({ Message: `You have liked the post: #${post.id}` });
   }
+};
+
+export const verifyToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  console.log(token);
+  if (token == null) return res.sendStatus(401);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) return res.sendStatus(403);
+
+    req.email = decoded.email;
+    req.userId = decoded.id;
+    next();
+  });
 };

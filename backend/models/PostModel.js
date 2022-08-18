@@ -7,10 +7,6 @@ const Posts = db.define(
   {
     userId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: 'users',
-        key: 'id',
-      },
     },
     postMessage: {
       type: DataTypes.STRING,

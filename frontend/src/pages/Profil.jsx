@@ -1,7 +1,10 @@
+import FileUploaded from '../components/FileUploaded';
+
 const Profil = () => {
   return (
     <>
-      <div>Je suis dans le profil</div>
+      <div>Je suis dans mon profil</div>
+      <FileUploaded />
     </>
   );
 };

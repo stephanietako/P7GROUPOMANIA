@@ -13,11 +13,10 @@ export const Form = ({ title, isLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
-  //const [userId, setUserId] = useState();
   const navigate = useNavigate();
-  // REGISTER
+
+  // REGISTER FORM
   const onSubmitRegister = () => {
-    //check password
     if (password !== confPassword) alert("le mot de passe n'est pas le même");
     //options + body
     const requestOptions = {
@@ -59,8 +58,7 @@ export const Form = ({ title, isLogin }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        //accountService.saveToken(accessToken);
-
+        console.log('je suis la');
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
@@ -73,22 +71,10 @@ export const Form = ({ title, isLogin }) => {
           draggable: true,
           progress: undefined,
         });
-        console.log('HELLO !!!!!!!!!!!!!');
         navigate('/', { replace: true });
-        //window.location.href = '/';
       });
     //
   };
-
-  //logout
-  // useEffect(() => {
-  //   const userlog = localStorage.clear('');
-  //   if (userlog) {
-  //     const founduser = userlog;
-  //     setUserId(founduser);
-  //     localStorage.clear();
-  //   }
-  // }, [userId]);
 
   return (
     <div className="register">

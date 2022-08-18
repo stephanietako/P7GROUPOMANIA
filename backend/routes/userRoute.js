@@ -12,35 +12,23 @@ import {
   getUserById,
   updateUserById,
   getImgById,
-  //isAdmin
+  verifyToken,
 } from '../controllers/User.js';
 
 import { uploadProfil } from '../controllers/Upload.js';
 
 const router = express.Router();
 
-router.get('/', allUsers);
-router.get('/:id', getUserById);
+router.get('/', verifyToken, allUsers);
+router.get('/:id', verifyToken, getUserById);
 
 router.post('/register', register);
 router.post('/login', login);
 router.delete('/logout', logout);
-router.delete('/:id', deleteUserById);
-router.put('/:id', updateUserById);
-router.get('/image/:fileName', getImgById);
-
+router.delete('/:id', verifyToken, deleteUserById);
+router.put('/:id', verifyToken, updateUserById);
+router.get('/image/:fileName', verifyToken, getImgById);
 ////////upload
-router.post('/upload/:id', upload.single('file'), uploadProfil);
-
-// router.post('/upload', upload.single('file'), function (req, res) {
-//     console.log("HEYYYYYYYYYYYYYYYYYYYYYYYYYYY"); //multer fonctionne
-// });
-
-// router.post('/upload', upload.single('file'), function (req, res) {
-//     if (!req.file || !req.file.path) {
-//         return res.sendStatus(400);
-//     }
-//     console.log(req.file); //path: '/var/folders c est un chemin sécurisé de mac c'est le req.file
-// });
+router.post('/upload/:id', upload.single('file'), verifyToken, uploadProfil);
 
 export default router;

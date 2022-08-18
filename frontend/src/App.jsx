@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
+import FileUploaded from './components/FileUploaded';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -24,9 +25,30 @@ const App = () => {
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profil" element={<Profil />} />
-        <Route path="/post" element={<Post />} />
-        {/*  <Redirect to="/" element={<Home />} /> */}
+        <Route
+          path="/profil"
+          element={
+            <AuthGard>
+              <Profil />
+            </AuthGard>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <AuthGard>
+              <Post />
+            </AuthGard>
+          }
+        />
+        <Route
+          path="/fileUpload"
+          element={
+            <AuthGard>
+              <FileUploaded />
+            </AuthGard>
+          }
+        />
       </Routes>
       <ToastContainer
         position="top-center"
