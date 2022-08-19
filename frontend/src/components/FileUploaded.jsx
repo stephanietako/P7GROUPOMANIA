@@ -1,51 +1,71 @@
 import React from 'react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export const FileUploader = () => {
-  const [file, setFile] = useState();
-  const { id } = useParams();
+  const userId = localStorage.getItem('user_id');
+  const token = localStorage.getItem('access_token');
+  const [image, setImage] = useState({ preview: '', data: '' });
 
-  const handleChange = (e) => {
-    if (e.target.files.length !== 0) {
-      setFile(URL.createObjectURL(e.target.files[0]));
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const data = new FormData();
-    data.append('images', e.target.files[0]);
-    data.append('name', 'Test Name');
-    data.append('desc', 'Test description');
+    const formData = new FormData();
+    formData.append('file', image.data);
 
     const requestOptions = {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-      body: data,
+      body: formData,
     };
 
-    fetch(`http://localhost:5000/users/upload/${id}`, requestOptions)
+    fetch(`http://localhost:5000/users/upload/${userId}`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); //success
-        alert('OK');
+        toast.success('Your profile has been successfully changed.', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       })
       .catch((err) => {
-        console.error(err); //error
-        alert('An error occurred');
+        toast.error('An error occurred while changing your profile picture.', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
+
+  const handleFileChange = (e) => {
+    const img = {
+      preview: URL.createObjectURL(e.target.files[0]),
+      data: e.target.files[0],
+    };
+    setImage(img);
+  };
   return (
-    <form action="" onSubmit={handleChange} className="file-uploader">
-      <label htmlFor="file">Change Picture</label>
-      <>
-        <h1>Add Avatar</h1>
-        <input type="file" name="file" onChange={handleChange} />
-        <img id="imgAvatar" src={file} />
-        <br />
-        <input type="submit" value="Send" id="btn btn-primary" />
-      </>
-    </form>
+    <>
+      <h1>Change my avatar</h1>
+      {image.preview && (
+        <img src={image.preview} width="100" height="100" alt="avatar" />
+      )}
+      <hr></hr>
+      <form onSubmit={handleSubmit}>
+        <input type="file" name="file" onChange={handleFileChange}></input>
+        <button type="submit">Submit</button>
+      </form>
+    </>
   );
 };
 

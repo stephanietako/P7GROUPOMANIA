@@ -4,7 +4,7 @@ import Users from '../components/Users';
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Home.css';
 import Axios from '../service/caller.service';
-
+//import Navbar from '@/components/Navbar';
 const Home = () => {
   const [allPosts, setAllPosts] = useState();
   const [allUsers, setAllUsers] = useState();
