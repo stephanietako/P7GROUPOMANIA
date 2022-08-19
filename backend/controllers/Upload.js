@@ -8,6 +8,9 @@ const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export const uploadProfil = async (req, res) => {
+  console.log('### UPLOAD PROFIL PICTURE ###');
+  console.log(req.file);
+
   try {
     console.log(__dirname);
     if (
@@ -31,19 +34,21 @@ export const uploadProfil = async (req, res) => {
       `${__dirname}/../client/public/uploads/profil/${fileName}`
     )
   );
-
+  console.log(req.file);
   if (req.file) {
     Users.findOne({
       where: {
         id: req.params.id,
       },
     }).then((user) => {
+      const filePath = path.resolve(
+        `client/public/uploads/profil/${user.avatar}`
+      );
       console.log(user.avatar);
       user.avatar = fileName;
       user.save();
       console.log(user.avatar);
 
-      const filePath = path.resolve(`client/public/uploads/profil/${fileName}`);
       fs.unlink(filePath, (err) => {
         if (err) {
           console.log('failed to delete local image:' + err);
@@ -55,9 +60,9 @@ export const uploadProfil = async (req, res) => {
       });
       if (req.file) {
         Users.update(req.body, { where: { avatar: req.body } });
-        res.send(
-          "la photo de profil a été mise à jour c'est " + ' ' + fileName
-        );
+        res.send({
+          message: `La photo ${fileName} a été mise à jour.`,
+        });
       }
     });
   }
