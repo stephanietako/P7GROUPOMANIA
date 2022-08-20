@@ -17,7 +17,6 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* Mise en place reponses headers */
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
@@ -31,10 +30,8 @@ app.use((req, res, next) => {
   next();
 });
 
-//routes
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
-
 app.use('/client', express.static(path.join('./client')));
 app.listen(process.env.PORT, () => {
   console.log('Server running ! Enjoy !');

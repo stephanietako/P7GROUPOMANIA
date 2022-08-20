@@ -12,7 +12,7 @@
 
 .create_date {
   font-size: 12px;
-  color: #8e8ea8;
+  color: var(--tertiary-color);
 }
 
 .cover {

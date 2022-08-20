@@ -1,7 +1,43 @@
-img #logo .App-logo {
+:root {
+  --primary-color: #fd2d01;
+  --secondary-color: #ffd7d7;
+  --tertiary-color: #4e5166;
+}
+
+body {
   display: block;
-  text-indent: -9999px;
-  width: 100px;
-  height: 82px;
-  background-size: 100px 82px;
+  background-color: var(--secondary-color);
+  padding: 40px;
+}
+
+.options_buttons {
+  float: right;
+}
+
+/* My Profil */
+.avatar_profil {
+  height: 150px;
+  margin: 10px 0;
+}
+
+.separation_profile_edit {
+  margin-top: 25px;
+  border: none;
+  border-top: 3px double #333;
+  color: #333;
+  overflow: visible;
+  text-align: center;
+  height: 5px;
+}
+
+.separation_profile_edit:after {
+  background: var(--secondary-color);
+  content: 'Edit my profile';
+  padding: 0 4px;
+  position: relative;
+  top: -13px;
+}
+
+.delete_profil_btn {
+  color: red;
 }

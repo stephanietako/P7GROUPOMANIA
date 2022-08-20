@@ -46,6 +46,7 @@ export const getPostById = async (req, res) => {
 
 // Create a new post
 export const createPost = async (req, res) => {
+  //if (req.file) {
   try {
     console.log(__dirname);
     if (
@@ -69,15 +70,14 @@ export const createPost = async (req, res) => {
       `${__dirname}/../client/public/uploads/posts/${fileName}`
     )
   );
+  //}
 
   let savePost = await Posts.create({
-    userId: req.userId,
+    userId: req.body.userId,
     postMessage: req.body.postMessage,
     imageUrl: req.file !== null ? fileName : '',
-    likes: req.body.likes,
-    dislikes: req.body.dislikes,
+    likes: 0,
     usersLiked: [],
-    usersDisliked: [],
   });
 
   if (savePost) {
@@ -124,13 +124,7 @@ export const updateImg = async (req, res) => {
         id: req.params.id,
       },
     }).then((post) => {
-      console.log('retour de la promesse');
-      console.log(post);
-
       const fileName = post.imageUrl;
-      console.log('##########filename');
-      console.log(fileName);
-
       const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
       fs.unlink(filePath, (err) => {
         if (err) {
@@ -160,7 +154,6 @@ export const updateImg = async (req, res) => {
 
 // image recuperation
 export const getImgById = async (req, res) => {
-  console.log('SALUT !!!!!!!!!!!!!!!!!');
   const filePath = path.resolve(
     `client/public/uploads/posts/${req.params.fileName}`
   );
@@ -204,7 +197,6 @@ export const deletePostById = async (req, res) => {
 /////////////////// LIKES ///////////////////////////////////
 export const likePost = async (req, res) => {
   const postId = req.params.id;
-
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
   const user = await Users.findOne({ where: { id: req.userId } });
@@ -226,7 +218,7 @@ export const likePost = async (req, res) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   console.log(token);
   if (token == null) return res.sendStatus(401);

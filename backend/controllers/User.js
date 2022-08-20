@@ -6,9 +6,7 @@ import { promisify } from 'util';
 import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
-import fs from 'fs';
-import { v4 as uuidv4 } from 'uuid';
-import multer from 'multer';
+
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 //Register
@@ -47,7 +45,6 @@ export const getImgById = async (req, res) => {
   const filePath = path.resolve(
     `client/public/uploads/profil/${req.params.fileName}`
   );
-  console.log('je suis dans get img c est ok');
   res.sendFile(filePath);
 };
 
@@ -58,7 +55,6 @@ export const login = async (req, res) => {
       email: req.body.email,
     },
   });
-  console.log(user);
   if (user === null)
     return res.status(404).json({ msg: "L'adresse email n'existe pas" });
 
@@ -123,7 +119,6 @@ export const logout = async (req, res) => {
 export const allUsers = async (req, res) => {
   const allUsers = await Users.findAll();
   res.send(allUsers);
-  console.log(allUsers);
 };
 
 // one user

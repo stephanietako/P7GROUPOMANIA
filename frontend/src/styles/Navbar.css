@@ -9,13 +9,13 @@ nav {
   font-size: 18px;
   color: #8e8ea8;
   opacity: 0.8;
-  padding-bottom: 36px;
+  padding-top: 36px;
   margin-right: 20px;
   transition: 0.2s;
 }
 
 .navlinks a:hover {
-  border-bottom: solid 4px #fd2d01;
+  border-top: solid 4px #fd2d01;
   color: #fd2d01;
 }
 

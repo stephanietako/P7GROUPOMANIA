@@ -8,9 +8,6 @@ const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export const uploadProfil = async (req, res) => {
-  console.log('### UPLOAD PROFIL PICTURE ###');
-  console.log(req.file);
-
   try {
     console.log(__dirname);
     if (
@@ -61,7 +58,7 @@ export const uploadProfil = async (req, res) => {
       if (req.file) {
         Users.update(req.body, { where: { avatar: req.body } });
         res.send({
-          message: `La photo ${fileName} a été mise à jour.`,
+          message: `Picture ${fileName} updated.`,
         });
       }
     });

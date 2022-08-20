@@ -9,15 +9,10 @@ body {
   font-family: 'Lato', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--secondary-color);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-root {
-  --primary-color: #fd2d01;
-  --secondary-color: #ffd7d7;
-  --tertiary-color: #4e5166;
 }

@@ -1,12 +1,14 @@
-img #logo {
-  display: block;
-  text-indent: -9999px;
-  width: 100px;
-  height: 82px;
-  background-size: 100px 82px;
+.app_header {
+  padding: 20px;
+  width: 280px;
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.App-header {
-  border-bottom: solid 1px grey;
-  text-align: center;
+.app_logo {
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 100%;
 }
