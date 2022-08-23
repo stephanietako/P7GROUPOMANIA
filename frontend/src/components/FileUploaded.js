@@ -63,6 +63,7 @@ export const FileUploader = () => {
       )}
 
       <form onSubmit={handleSubmit}>
+        <input type="file" name="file" onChange={handleFileChange}></input>
         <button type="submit">Submit</button>
       </form>
     </>

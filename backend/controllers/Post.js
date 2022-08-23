@@ -103,10 +103,11 @@ export const updateImg = async (req, res) => {
       !req.file.detectedMimeType == 'image/jpeg'
     )
       throw Error('invalid file');
-    if (req.file.size > 2818128) throw Error('max size');
+    //if (req.file.size > 2818128) throw Error('max size');
   } catch (error) {
     console.log(error);
   }
+
   let file = req.file;
   console.log('req.file', file);
   // uuid "Universally Unique IDentifier"

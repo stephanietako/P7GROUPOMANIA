@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import FileUploaded from '@/components/FileUploaded';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+/////////////
 const Profil = () => {
   const [dataUser, setDataUser] = useState();
   const token = localStorage.getItem('access_token');
@@ -14,7 +14,7 @@ const Profil = () => {
       Authorization: `Bearer ${token}`,
     }),
   };
-
+  /////////////////////// SETDATAUSER
   useEffect(() => {
     const getDataUser = async () => {
       fetch(`http://localhost:5000/users/${userId}`, requestOptions)
@@ -28,9 +28,8 @@ const Profil = () => {
     };
     getDataUser();
   }, [userId]);
-
+  ///////////////////DELETE ACCOUNT ////////////////////
   const deleteAccount = () => {
-    console.log('############## DLEZTE');
     const confirmation = window.confirm(
       'Do you really want to delete your account? (No recovery possible)'
     );
