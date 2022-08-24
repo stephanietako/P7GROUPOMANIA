@@ -1,7 +1,7 @@
 import Posts from '../models/PostModel.js';
 import Users from '../models/UserModel.js';
 import jwt from 'jsonwebtoken';
-import fs from 'fs';
+import fs, { access } from 'fs';
 import { promisify } from 'util';
 import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
@@ -55,7 +55,7 @@ export const createPost = async (req, res) => {
       !req.file.detectedMimeType == 'image/jpeg'
     )
       throw Error('invalid file');
-    if (req.file.size > 2818128) throw Error('max size');
+    // if (req.file.size > 2818128) throw Error('max size');
   } catch (error) {
     console.log(error);
   }
@@ -161,10 +161,10 @@ export const getImgById = async (req, res) => {
   res.sendFile(filePath);
 };
 
-//Update post by id
+//Update new post by id
 export const updatePostById = async (req, res) => {
-  const refreshToken = req.headers.authorization.split(' ')[1];
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  const accessToken = req.headers.authorization.split(' ')[1];
+  const dataUser = jwt.verify(access, process.env.ACCESS_TOKEN_SECRET);
   if (dataUser == null) res.redirect('/');
   try {
     await Posts.update(req.body, { where: { id: req.params.id } });

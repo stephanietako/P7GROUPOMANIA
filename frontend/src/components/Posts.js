@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from './Card';
-import '@/styles/Posts.css';
+import '../styles/Posts.css';
 
 const Posts = ({ allPosts, update, setUpdate }) => {
   return (

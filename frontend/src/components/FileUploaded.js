@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export const FileUploader = () => {
   const userId = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
   const [image, setImage] = useState({ preview: '', data: '' });
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +25,7 @@ export const FileUploader = () => {
 
     fetch(`http://localhost:5000/users/upload/${userId}`, requestOptions)
       .then((response) => response.json())
-      .then((data) => {
+      .then(function () {
         toast.success('Your profile has been successfully changed.', {
           position: 'top-center',
           autoClose: 3000,
@@ -33,6 +35,7 @@ export const FileUploader = () => {
           draggable: true,
           progress: undefined,
         });
+        navigate('/', { replace: true });
       })
       .catch((err) => {
         toast.error('An error occurred while changing your profile picture.', {

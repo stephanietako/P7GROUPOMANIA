@@ -14,6 +14,8 @@ import {
   verifyToken,
 } from '../controllers/User.js';
 
+import { refreshToken } from '../controllers/RefreshToken.js';
+
 import { uploadProfil } from '../controllers/Upload.js';
 
 const router = express.Router();
@@ -29,4 +31,5 @@ router.put('/:id', verifyToken, updateUserById);
 router.get('/image/:fileName', verifyToken, getImgById);
 router.post('/upload/:id', upload.single('file'), verifyToken, uploadProfil);
 
+router.get('/token', refreshToken);
 export default router;

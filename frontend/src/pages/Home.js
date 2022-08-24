@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import Posts from '@/components/Posts';
-import Users from '@/components/Users';
+import Posts from '../components/Posts';
+import Users from '../components/Users';
 import 'react-toastify/dist/ReactToastify.css';
-import '@/styles/Home.css';
+import '../styles/Home.css';
 
 const Home = () => {
   const [allPosts, setAllPosts] = useState();

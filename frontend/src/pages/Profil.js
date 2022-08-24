@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import FileUploaded from '@/components/FileUploaded';
+import FileUploaded from '../components/FileUploaded';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 /////////////

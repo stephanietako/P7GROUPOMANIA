@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import FileUploaded from '@/FileUploaded';
+import FileUploaded from '../FileUploaded';
 
 export const Form = (profil) => {
   const [firstName, setfirstName] = useState('');

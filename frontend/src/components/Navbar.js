@@ -1,12 +1,58 @@
-import '@/styles/Navbar.css';
+import '../styles/Navbar.css';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 
 const Navbar = () => {
+  useEffect(() => {
+    refreshToken();
+  });
+
   const [userId, setUserId] = useState();
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [imageUrl, setImgUrl] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('');
+  const [token, setToken] = useState('');
+  const [expire, setExpire] = useState('');
   const navigate = useNavigate();
+
+  const refreshToken = async () => {
+    const response = {
+      method: 'GET',
+      headers: { 'Content-Type': 'apllication/json' },
+      body: JSON.stringify({
+        token: token,
+        userId: userId,
+        firstName: firstName,
+        lastName: lastName,
+        imgUrl: imageUrl,
+        email: email,
+        role: role,
+        expire: expire,
+      }),
+    };
+
+    try {
+      await fetch('http://localhost:5000/users/token');
+      setToken(response.data.accessToken);
+      const decoded = jwt_decode(response.data.accessToken);
+      setUserId(decoded.userId);
+      setFirstName(decoded.nom);
+      setLastName(decoded.prenom);
+      setImgUrl(decoded.userImg);
+      setEmail(decoded.email);
+      setRole(decoded.isAdmin);
+      setExpire(decoded.exp);
+    } catch (error) {
+      if (error.response) {
+        navigate('/', { replace: true });
+      }
+    }
+  };
 
   const logoutBtn = () => {
     let requestOptions = {
@@ -50,6 +96,18 @@ const Navbar = () => {
         });
       });
   };
+
+  function parseJwt(token) {
+    if (!token) {
+      return;
+    }
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
+  }
+
+  const user = parseJwt(token);
+  console.log(user);
 
   return (
     <nav>

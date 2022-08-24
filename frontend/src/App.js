@@ -1,17 +1,17 @@
 import React from 'react';
-import Layout from '@/pages/Layout';
-import FileUploaded from '@/components/FileUploaded';
+import Layout from './pages/Layout';
+import FileUploaded from './components/FileUploaded';
 import { Routes, Route } from 'react-router-dom';
-import Home from '@/pages/Home';
-import Register from '@/pages/Register';
-import Login from '@/pages/Login';
-import Profil from '@/pages/Profil';
-import EditPost from '@/pages/EditPost';
-import Post from '@/pages/Post';
+import Home from './pages/Home';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Profil from './pages/Profil';
+import EditPost from './pages/EditPost';
+import Post from './pages/Post';
 import { ToastContainer } from 'react-toastify';
 import AuthGard from './helpers/AuthGard';
-import Error from '@/_utils/Error';
-import '@/styles/App.css';
+import Error from './_utils/Error';
+import './styles/App.css';
 
 const App = () => {
   return (

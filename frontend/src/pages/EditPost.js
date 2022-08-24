@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
@@ -48,11 +49,28 @@ const EditPost = () => {
     fetch('http://localhost:5000/posts/', requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        toast.success('You have been successfully Post', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         navigate('/');
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((error) => {
         // toast error
+        toast.error('An error has occurred', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '@/styles/Card.css';
+import '../styles/Card.css';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
