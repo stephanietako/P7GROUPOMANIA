@@ -12,7 +12,24 @@ export const Form = ({ title, isLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
+  //const [data, setData] = useState('');
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   // 👇️ Check if NOT undefined or null
+  //   // (using loose not equals)
+  //   if (password !== undefined) {
+  //     console.log('✅ variable is NOT undefined or null');
+  //   }
+
+  //   // 👇️ Check if undefined or null
+  //   // (using loose equals)
+  //   if (password === undefined) {
+  //     console.log('✅ variable is undefined or null');
+  //   } else {
+  //     console.log('⛔️ variable is NOT undefined or null');
+  //   }
+  // }, [password]);
 
   // REGISTER FORM
   const onSubmitRegister = () => {
@@ -56,20 +73,32 @@ export const Form = ({ title, isLogin }) => {
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
-        toast.success('You have been successfully connected', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate('/', { replace: true });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert('Password not valid');
+        if (data.id && data.accessToken && data.refreshToken) {
+          toast.success('You have been successfully connected', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate('/', { replace: true });
+        } else {
+          console.log('INVALID PASSWORD');
+          //if (data === undefined) {
+          toast.success('Invalid password do it again', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate('/login', { replace: true });
+          //}
+        }
       });
   };
 
