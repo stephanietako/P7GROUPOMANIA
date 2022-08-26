@@ -6,18 +6,12 @@ import { promisify } from 'util';
 import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
-
+import { verifyToken } from '../utils/verifyToken.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-//Register
+// Create user
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password, avatar } = req.body;
-  if (req.file) {
-    const avatar = req.file;
-  } else {
-    const avatar = 'defaultProfil.jpg';
-  }
-
+  const { firstName, lastName, email, password } = req.body;
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
   if (!emailExists) {
     const salt = await bcrypt.genSalt();
@@ -26,30 +20,40 @@ export const register = async (req, res) => {
       await Users.create({
         firstName: firstName,
         lastName: lastName,
-        avatar: avatar,
+        avatar: 'defaultProfil.jpg',
         email: email,
         password: hashPassword,
         role: false,
       });
       res.json({ msg: 'Inscription réussie' });
     } catch (error) {
-      console.log(error);
+      return res
+        .status(400)
+        .json({ message: `nous n'avons pu creer votre compte utilisateur` });
     }
   } else {
-    return res.status(400).json({ msg: 'Cette adresse email existe déjà' });
+    return res.status(400).json({ message: 'Cette adresse email existe déjà' });
   }
 };
 
-//profil image recuperation
-export const getImgById = async (req, res) => {
-  const filePath = path.resolve(
-    `client/public/uploads/profil/${req.params.fileName}`
-  );
-  res.sendFile(filePath);
+export const updateUser = async (req, res) => {
+  try {
+    if (!req.body.role && req.body.userId == req.params.id)
+      return res.status(403).send('Access denied.');
+    await Users.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json({
+      message: 'User update',
+    });
+  } catch (err) {
+    return res.status(500).send('You are not allowed to update user');
+  }
 };
 
-//login
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   const user = await Users.findOne({
     where: {
       email: req.body.email,
@@ -59,13 +63,13 @@ export const login = async (req, res) => {
     return res.status(404).json({ msg: "L'adresse email n'existe pas" });
 
   const match = await bcrypt.compare(req.body.password, user.password);
-  if (!match) return res.status(400).json({ msg: 'Mot de passe erroné' });
+  if (!match) return res.status(400).json({ message: 'Password not valid' });
   const { id, firstName, lastName, email, role } = user;
   const accessToken = jwt.sign(
     { id, firstName, lastName, email, role },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '1h',
+      expiresIn: '2h',
     }
   );
   const refreshToken = jwt.sign(
@@ -92,17 +96,18 @@ export const login = async (req, res) => {
   });
 };
 
-//logout
 export const logout = async (req, res) => {
   if (req.headers && req.headers.authorization) {
     const refreshToken = req.headers.authorization.split(' ')[1];
     const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    if (dataUser == null) res.redirect('/');
+    //if (dataUser == null) res.redirect('/');
     if (!dataUser) {
       return res
         .status(401)
         .json({ success: false, message: 'Authorization failed' });
     }
+    req.response = req.email;
+    if (dataUser == null) res.redirect('/');
   }
   try {
     req.session = null;
@@ -115,14 +120,12 @@ export const logout = async (req, res) => {
   }
 };
 
-// all users
 export const allUsers = async (req, res) => {
   const allUsers = await Users.findAll();
   res.send(allUsers);
 };
 
-// one user
-export const getUserById = async (req, res) => {
+export const oneUser = async (req, res) => {
   const user = await Users.findOne({
     where: { id: req.params.id },
     include: [{ model: Posts }],
@@ -131,26 +134,7 @@ export const getUserById = async (req, res) => {
   res.send(user);
 };
 
-//update
-export const updateUserById = async (req, res) => {
-  try {
-    if (!req.body.role && req.body.userId == req.params.id)
-      return res.status(403).send('Access denied.');
-    await Users.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.json({
-      message: 'User update',
-    });
-  } catch (err) {
-    return res.status(500).send('You are not allowed to update user');
-  }
-};
-
-//delete
-export const deleteUserById = async (req, res) => {
+export const deleteUser = async (req, res) => {
   if (!req.body.role && req.body.userId == req.params.id)
     return res.status(403).send('Access denied.');
   const user = await Users.findOne({
@@ -182,13 +166,10 @@ export const deleteUserById = async (req, res) => {
   }
 };
 
-export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(403);
-    req.email = decoded.email;
-    next();
-  });
+// Profil image recuperation
+export const getImg = async (req, res) => {
+  const filePath = path.resolve(
+    `client/public/uploads/profil/${req.params.fileName}`
+  );
+  res.sendFile(filePath);
 };

@@ -66,8 +66,11 @@ export const Form = ({ title, isLogin }) => {
           progress: undefined,
         });
         navigate('/', { replace: true });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Password not valid');
       });
-    //
   };
 
   return (

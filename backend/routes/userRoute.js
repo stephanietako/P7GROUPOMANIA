@@ -2,34 +2,33 @@ import express from 'express';
 import multer from 'multer';
 const upload = multer();
 
+import { uploadProfil } from '../controllers/Upload.js';
+import { verifyToken } from '../utils/verifyToken.js';
 import {
-  allUsers,
   register,
+  updateUser,
   login,
   logout,
-  deleteUserById,
-  getUserById,
-  updateUserById,
-  getImgById,
-  verifyToken,
+  allUsers,
+  oneUser,
+  deleteUser,
+  getImg,
 } from '../controllers/User.js';
 
-import { refreshToken } from '../controllers/RefreshToken.js';
-
-import { uploadProfil } from '../controllers/Upload.js';
-
 const router = express.Router();
-
-router.get('/', verifyToken, allUsers);
-router.get('/:id', getUserById);
-
+// Users logged
 router.post('/register', register);
 router.post('/login', login);
 router.delete('/logout', logout);
-router.delete('/:id', verifyToken, deleteUserById);
-router.put('/:id', verifyToken, updateUserById);
-router.get('/image/:fileName', verifyToken, getImgById);
+
+router.get('/:id', oneUser);
+router.get('/', verifyToken, allUsers);
+router.put('/:id', verifyToken, upload.single('file'), updateUser);
+router.delete('/:id', verifyToken, deleteUser);
+
+router.get('/image/:fileName', verifyToken, getImg);
+
+// A modifier
 router.post('/upload/:id', upload.single('file'), verifyToken, uploadProfil);
 
-router.get('/token', refreshToken);
 export default router;

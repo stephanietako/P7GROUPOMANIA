@@ -37,19 +37,20 @@ const EditPost = () => {
     formData.append('file', image.data);
     formData.append('userId', userId);
     formData.append('postMessage', postMessage);
-
+    // teste avec les consoles log pour voir pourquoi le body est vide
     const requestOptions = {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
       },
       body: formData,
     };
+    console.log(requestOptions.body);
 
-    fetch('http://localhost:5000/posts/', requestOptions)
+    fetch(`http://localhost:5000/posts/${id}`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        toast.success('You have been successfully Post', {
+        toast.success('You have been successfully New Post', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: true,

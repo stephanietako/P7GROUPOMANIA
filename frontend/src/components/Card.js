@@ -123,7 +123,7 @@ const Card = ({ post, update, setUpdate }) => {
         <div>
           <button
             onClick={likeBtn}
-            disabled={Number(currentIdUser) === userId ? 'false' : ''}
+            disabled={Number(currentIdUser) === userId ? true : false}
             className={
               usersLiked.includes(currentIdUser)
                 ? 'red like_btn'

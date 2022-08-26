@@ -1,29 +1,30 @@
 import express from 'express';
 import multer from 'multer';
-
 const upload = multer();
 
+import { verifyToken } from '../utils/verifyToken.js';
 import {
-  getPosts,
-  getPostById,
+  allPosts,
+  onePost,
   createPost,
-  updatePostById,
-  deletePostById,
+  updatePost,
+  deletePost,
   likePost,
-  getImgById,
-  updateImg,
-  verifyToken,
+  getImg,
 } from '../controllers/Post.js';
 
 const router = express.Router();
 
-router.get('/', verifyToken, getPosts);
-router.get('/:id', verifyToken, getPostById);
+router.get('/', verifyToken, allPosts);
+router.get('/:id', verifyToken, onePost);
 router.post('/', verifyToken, upload.single('file'), createPost);
-router.put('/:id', verifyToken, updatePostById);
-router.delete('/:id', verifyToken, deletePostById);
-router.get('/image/:fileName', verifyToken, getImgById);
-router.put('/image/:id', verifyToken, upload.single('file'), updateImg);
+////se caler sur celle-là
+router.put('/:id', verifyToken, updatePost);
+//////////////////////////
+router.delete('/:id', verifyToken, deletePost);
+router.get('/image/:fileName', verifyToken, getImg);
+// A modifier ou supprimer
+//router.put('/image/:id', verifyToken, upload.single('file'), updateImg);
 router.put('/:id/likes', verifyToken, likePost);
 
 export default router;

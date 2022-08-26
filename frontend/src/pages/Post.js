@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-
+//////NEW POST Page
 const Post = () => {
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
