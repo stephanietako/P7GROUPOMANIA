@@ -12,26 +12,8 @@ export const Form = ({ title, isLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
-  //const [data, setData] = useState('');
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   // 👇️ Check if NOT undefined or null
-  //   // (using loose not equals)
-  //   if (password !== undefined) {
-  //     console.log('✅ variable is NOT undefined or null');
-  //   }
-
-  //   // 👇️ Check if undefined or null
-  //   // (using loose equals)
-  //   if (password === undefined) {
-  //     console.log('✅ variable is undefined or null');
-  //   } else {
-  //     console.log('⛔️ variable is NOT undefined or null');
-  //   }
-  // }, [password]);
-
-  // REGISTER FORM
   const onSubmitRegister = () => {
     if (password !== confPassword) alert("le mot de passe n'est pas le même");
     const requestOptions = {
@@ -56,7 +38,6 @@ export const Form = ({ title, isLogin }) => {
       });
   };
 
-  //LOGIN
   const onSubmitLogin = () => {
     const requestOptions = {
       method: 'POST',
@@ -74,6 +55,7 @@ export const Form = ({ title, isLogin }) => {
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
         if (data.id && data.accessToken && data.refreshToken) {
+          console.log('VALID PASSWORD');
           toast.success('You have been successfully connected', {
             position: 'top-center',
             autoClose: 3000,
@@ -86,8 +68,7 @@ export const Form = ({ title, isLogin }) => {
           navigate('/', { replace: true });
         } else {
           console.log('INVALID PASSWORD');
-          //if (data === undefined) {
-          toast.success('Invalid password do it again', {
+          toast.success('Invalid email adress or password do it again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
@@ -97,7 +78,6 @@ export const Form = ({ title, isLogin }) => {
             progress: undefined,
           });
           navigate('/login', { replace: true });
-          //}
         }
       });
   };
@@ -128,7 +108,6 @@ export const Form = ({ title, isLogin }) => {
             <input className="btn btn-primary" type="submit" value="Login" />
           </form>
         ) : (
-          //form register
           <form onSubmit={handleSubmit(onSubmitRegister)}>
             <label htmlFor="firstName">FirstName</label>
             <input

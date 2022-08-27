@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 const upload = multer();
 
-import { uploadProfil } from '../controllers/Upload.js';
+//import { avatar } from '../controllers/User.js';
 import { verifyToken } from '../utils/verifyToken.js';
 import {
   register,
@@ -13,6 +13,7 @@ import {
   oneUser,
   deleteUser,
   getImg,
+  avatar,
 } from '../controllers/User.js';
 
 const router = express.Router();
@@ -29,6 +30,6 @@ router.delete('/:id', verifyToken, deleteUser);
 router.get('/image/:fileName', verifyToken, getImg);
 
 // A modifier
-router.post('/upload/:id', upload.single('file'), verifyToken, uploadProfil);
+router.post('/avatar/:id', upload.single('file'), verifyToken, avatar);
 
 export default router;

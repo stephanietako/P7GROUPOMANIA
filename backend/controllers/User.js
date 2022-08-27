@@ -1,5 +1,7 @@
 import Users from '../models/UserModel.js';
 import Posts from '../models/PostModel.js';
+import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
@@ -35,24 +37,6 @@ export const register = async (req, res) => {
     return res.status(400).json({ message: 'Cette adresse email existe déjà' });
   }
 };
-
-export const updateUser = async (req, res) => {
-  try {
-    if (!req.body.role && req.body.userId == req.params.id)
-      return res.status(403).send('Access denied.');
-    await Users.update(req.body, {
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.json({
-      message: 'User update',
-    });
-  } catch (err) {
-    return res.status(500).send('You are not allowed to update user');
-  }
-};
-
 export const login = async (req, res, next) => {
   const user = await Users.findOne({
     where: {
@@ -120,6 +104,23 @@ export const logout = async (req, res) => {
   }
 };
 
+export const updateUser = async (req, res) => {
+  try {
+    if (!req.body.role && req.body.userId == req.params.id)
+      return res.status(403).send('Access denied.');
+    await Users.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json({
+      message: 'User update',
+    });
+  } catch (err) {
+    return res.status(500).send('You are not allowed to update user');
+  }
+};
+
 export const allUsers = async (req, res) => {
   const allUsers = await Users.findAll();
   res.send(allUsers);
@@ -165,7 +166,58 @@ export const deleteUser = async (req, res) => {
     this.next(err);
   }
 };
+//avatar
+export const avatar = async (req, res) => {
+  try {
+    const upload = uploadImage(fileName);
+    console.log('HELLO IMAGE');
+    console.log(upload);
+  } catch (error) {
+    console.log(error);
+  }
+  let file = req.file;
+  console.log('req.file', file);
+  const fileName = 'avatar' + '-' + uuidv4();
+  console.log(fileName);
+  await pipeline(
+    file.stream,
+    fs.createWriteStream(
+      `${__dirname}/../client/public/uploads/profil/${fileName}`
+    )
+  );
+  console.log(req.file);
+  if (req.file) {
+    Users.findOne({
+      where: {
+        id: req.params.id,
+      },
+    }).then((user) => {
+      const filePath = path.resolve(
+        `client/public/uploads/profil/${user.avatar}`
+      );
+      console.log(user.avatar);
+      user.avatar = fileName;
+      user.save();
+      console.log(user.avatar);
 
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log('failed to delete local image:' + err);
+        } else {
+          console.info(
+            `Successfully removed file with the path of ${filePath}`
+          );
+        }
+      });
+      if (req.file) {
+        Users.update(req.body, { where: { avatar: req.body } });
+        res.send({
+          message: `Picture ${fileName} updated.`,
+        });
+      }
+    });
+  }
+};
 // Profil image recuperation
 export const getImg = async (req, res) => {
   const filePath = path.resolve(

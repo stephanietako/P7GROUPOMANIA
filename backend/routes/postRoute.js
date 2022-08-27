@@ -12,6 +12,7 @@ import {
   likePost,
   getImg,
 } from '../controllers/Post.js';
+import { uploadImage } from '../utils/uploadImage.js';
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.put('/:id', verifyToken, updatePost);
 router.delete('/:id', verifyToken, deletePost);
 router.get('/image/:fileName', verifyToken, getImg);
 // A modifier ou supprimer
-//router.put('/image/:id', verifyToken, upload.single('file'), updateImg);
+router.put('/image/:id', verifyToken, upload.single('file'), uploadImage);
 router.put('/:id/likes', verifyToken, likePost);
 
 export default router;

@@ -9,28 +9,23 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { decodeToken } from '../utils/decodeToken.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
+import { uploadImage } from '../utils/uploadImage.js';
 
 export const createPost = async (req, res) => {
   const userData = decodeToken(req.headers.authorization);
   console.log(userData);
+
   try {
-    console.log(__dirname);
-    if (
-      !req.file.detectedMimeType == 'image/jpg' ||
-      !req.file.detectedMimeType == 'image/png' ||
-      !req.file.detectedMimeType == 'image/jpeg'
-    )
-      throw Error('invalid file');
-    // A modifier
-    // if (req.file.size > 2818128) throw Error('max size');
+    const upload = uploadImage(fileName);
+    console.log('HELLO IMAGE');
+    console.log(upload);
   } catch (error) {
     console.log(error);
   }
-
   let file = req.file;
-  const fileName = 'cover' + '-' + uuidv4() + '.jpg';
+  console.log('req.file', file);
+  const fileName = 'cover' + '-' + uuidv4();
   console.log(fileName);
-
   await pipeline(
     file.stream,
     fs.createWriteStream(

@@ -23,7 +23,7 @@ export const FileUploader = () => {
       body: formData,
     };
 
-    fetch(`http://localhost:5000/users/upload/${userId}`, requestOptions)
+    fetch(`http://localhost:5000/users/avatar/${userId}`, requestOptions)
       .then((response) => response.json())
       .then(function () {
         toast.success('Your profile has been successfully changed.', {

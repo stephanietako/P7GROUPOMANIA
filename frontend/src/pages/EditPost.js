@@ -62,7 +62,6 @@ const EditPost = () => {
         navigate('/');
       })
       .catch((error) => {
-        // toast error
         toast.error('An error has occurred', {
           position: 'top-center',
           autoClose: 3000,
