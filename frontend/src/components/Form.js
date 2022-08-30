@@ -30,11 +30,27 @@ export const Form = ({ title, isLogin }) => {
     fetch('http://localhost:5000/users/register', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        alert('Your account has been successfully created');
+        toast.success('Your account has been successfully created', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate('/login');
       })
       .catch((err) => {
-        console.error(err);
-        alert('An error occurred while creating your account');
+        toast.error('An error occurred while creating your account', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
 
@@ -55,7 +71,6 @@ export const Form = ({ title, isLogin }) => {
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
         if (data.id && data.accessToken && data.refreshToken) {
-          console.log('VALID PASSWORD');
           toast.success('You have been successfully connected', {
             position: 'top-center',
             autoClose: 3000,
@@ -67,8 +82,7 @@ export const Form = ({ title, isLogin }) => {
           });
           navigate('/', { replace: true });
         } else {
-          console.log('INVALID PASSWORD');
-          toast.success('Invalid email adress or password do it again', {
+          toast.error('Invalid email adress or password do it again', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,

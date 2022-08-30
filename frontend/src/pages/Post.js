@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-//////NEW POST Page
+
+//////NEW POST Page pour créer un nouveau post
 const Post = () => {
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -31,7 +32,7 @@ const Post = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert('Pas Post');
+        alert('Error !');
       });
   };
 

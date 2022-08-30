@@ -13,26 +13,7 @@ import { uploadImage } from '../utils/uploadImage.js';
 
 export const createPost = async (req, res) => {
   const userData = decodeToken(req.headers.authorization);
-  console.log(userData);
-
-  try {
-    const upload = uploadImage(fileName);
-    console.log('HELLO IMAGE');
-    console.log(upload);
-  } catch (error) {
-    console.log(error);
-  }
-  let file = req.file;
-  console.log('req.file', file);
-  const fileName = 'cover' + '-' + uuidv4();
-  console.log(fileName);
-  await pipeline(
-    file.stream,
-    fs.createWriteStream(
-      `${__dirname}/../client/public/uploads/posts/${fileName}`
-    )
-  );
-
+  const fileName = await uploadImage(req.file, 'cover', 'posts');
   let savePost = await Posts.create({
     userId: req.body.userId,
     postMessage: req.body.postMessage,
@@ -85,13 +66,38 @@ export const allPosts = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
+  const userData = decodeToken(req.headers.authorization);
+  //Condition a revoir pas correcte
+  if (!req.body.role && userData.id == req.params.id)
+    return res.status(403).send('Access denied.');
+  const currentPost = await Posts.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+  let updatedData = { postMessage: req.body.postMessage };
+
+  if (req.file) {
+    const fileName = await uploadImage(
+      req.file,
+      'cover',
+      'posts',
+      currentPost.imageUrl
+    );
+    updatedData = { postMessage: req.body.postMessage, imageUrl: fileName };
+  }
+
   try {
-    await Posts.update(req.body, { where: { id: req.params.id } });
-    res.json({
-      message: 'Post Updated',
+    await Posts.update(updatedData, {
+      where: { id: req.params.id },
+    });
+    return res.status(200).send({
+      message: 'Post updated !',
     });
   } catch (err) {
-    return res.status(500).send('We failed to update post for some reason');
+    return res.status(500).send({
+      message: 'We failed to update your post for some reason...',
+    });
   }
 };
 
@@ -113,26 +119,15 @@ export const deletePost = async (req, res) => {
   }
 };
 
-export const updateImg = async (req, res) => {
-  ////////////verifyToken
-  const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
+// c est update post cover
+export const cover = async (req, res) => {
+  const userData = decodeToken(req.headers.authorization);
   try {
-    console.log(__dirname);
-    if (
-      !req.file.detectedMimeType == 'image/jpg' ||
-      !req.file.detectedMimeType == 'image/png' ||
-      !req.file.detectedMimeType == 'image/jpeg'
-    )
-      throw Error('invalid file');
-    //if (req.file.size > 2818128) throw Error('max size');
+    const upload = uploadImage(fileName);
   } catch (error) {
     console.log(error);
   }
-
   let file = req.file;
-  console.log('req.file', file);
-  // uuid "Universally Unique IDentifier"
   const fileName = 'cover' + '-' + uuidv4() + '.jpg';
   await pipeline(
     file.stream,
@@ -149,9 +144,9 @@ export const updateImg = async (req, res) => {
     }).then((post) => {
       const fileName = post.imageUrl;
       const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log('failed to delete local image:' + err);
+      fs.unlink(filePath, (error) => {
+        if (error) {
+          console.log('failed to delete local image:' + error);
         } else {
           console.info(
             `Successfully removed file with the path of ${filePath}`
@@ -175,21 +170,33 @@ export const updateImg = async (req, res) => {
     .catch((error) => res.status(404).json({ error }));
 };
 // Image recuperation
-export const getImg = async (req, res) => {
-  const filePath = path.resolve(
-    `client/public/uploads/posts/${req.params.fileName}`
-  );
-  res.sendFile(filePath);
+
+export const getCover = async (req, res) => {
+  const userData = decodeToken(req.headers.authorization);
+  try {
+    const filePath = path.resolve(
+      `client/public/uploads/posts/${req.params.fileName}`
+    );
+    res.sendFile(filePath);
+
+    await Posts.update(req.body, { where: { img: req.params.imageUrl } });
+    res.json({
+      message: 'Post Updated',
+    });
+  } catch (err) {
+    return res.status(500).send('We failed to update post for some reason');
+  }
 };
 
 /////////////////// LIKES ///////////////////////////////////
 export const likePost = async (req, res) => {
+  const userData = decodeToken(req.headers.authorization);
   const postId = req.params.id;
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
-  const user = await Users.findOne({ where: { id: req.userId } });
+  const user = await Users.findOne({ where: { id: userData.id } });
   if (user.id === post.userId)
-    return res.status(400).json({ Message: 'Cannot like your own post' });
+    return res.status(400).json({ message: 'Cannot like your own post' });
   if (post.usersLiked.includes(user.id)) {
     post.usersLiked = post.usersLiked.filter((userId) => userId != user.id);
     await post.decrement('likes');
@@ -201,6 +208,6 @@ export const likePost = async (req, res) => {
     post.usersLiked = [...post.usersLiked, user.id];
     await post.increment('likes');
     await post.save();
-    res.status(200).json({ Message: `You have liked the post: #${post.id}` });
+    res.status(200).json({ message: `You have liked the post: #${post.id}` });
   }
 };

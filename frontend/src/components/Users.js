@@ -3,7 +3,7 @@ import '../styles/Users.css';
 const Users = ({ allUsers }) => {
   return (
     <div className="users_section">
-      <h2 className="users_title">The Groupomaniacs</h2>
+      <h2 className="users_title">New Groupomaniacs</h2>
       <div className="users">
         <ul>
           {allUsers.map((user, index) => {

@@ -9,6 +9,7 @@ const Posts = ({ allPosts, update, setUpdate }) => {
       {allPosts.map((post, index) => {
         return (
           <Card
+            // LISTE DES POSTS
             key={`POST-${post.id}-${index}`}
             post={post}
             update={update}

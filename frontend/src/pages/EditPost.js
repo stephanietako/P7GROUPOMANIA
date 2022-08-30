@@ -9,35 +9,37 @@ const EditPost = () => {
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
   const [postMessage, setPostMessage] = useState('');
-  const userId = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
-  const [image, setImage] = useState({ preview: '', data: '' });
+  const [imageUrl, setImageUrl] = useState({ preview: '', data: '' });
   const [currentPost, setCurrentPost] = useState();
 
-  let requestOptions = {
-    headers: new Headers({
-      Authorization: `Bearer ${token}`,
-    }),
-  };
-
   useEffect(() => {
-    fetch(`http://localhost:5000/posts/${id}`, requestOptions)
-      .then((response) => response.json())
-      .then((post) => {
-        setCurrentPost(post);
-        setPostMessage(post.postMessage);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [id]);
+    const requestOptions = {
+      headers: new Headers({
+        Authorization: `Bearer ${token}`,
+      }),
+    };
+
+    const getDataPost = async () => {
+      fetch(`http://localhost:5000/posts/${id}`, requestOptions)
+        .then((response) => response.json())
+        .then((post) => {
+          setCurrentPost(post);
+          setPostMessage(post.postMessage);
+          setImageUrl(post.imageUrl);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+    getDataPost();
+  }, [id, token]);
 
   const onSubmitPost = () => {
     const formData = new FormData();
-    formData.append('file', image.data);
-    formData.append('userId', userId);
+    if (typeof imageUrl === 'object') formData.append('file', imageUrl.data);
     formData.append('postMessage', postMessage);
-    // teste avec les consoles log pour voir pourquoi le body est vide
+
     const requestOptions = {
       method: 'PUT',
       headers: {
@@ -45,12 +47,13 @@ const EditPost = () => {
       },
       body: formData,
     };
-    console.log(requestOptions.body);
 
     fetch(`http://localhost:5000/posts/${id}`, requestOptions)
-      .then((response) => response.json())
+      .then((response) => {
+        response.json();
+      })
       .then((data) => {
-        toast.success('You have been successfully New Post', {
+        toast.success('You have been successfully edit your post', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: true,
@@ -71,6 +74,7 @@ const EditPost = () => {
           draggable: true,
           progress: undefined,
         });
+        //navigate('/editPost/${id}');
       });
   };
 
@@ -79,15 +83,16 @@ const EditPost = () => {
       preview: URL.createObjectURL(e.target.files[0]),
       data: e.target.files[0],
     };
-    setImage(img);
+    setImageUrl(img);
   };
-
   return (
     <>
       {currentPost && (
         <>
           <h1>Edit my post</h1>
           <form onSubmit={handleSubmit(onSubmitPost)}>
+            {/* le message */}
+
             <label htmlFor="post">Post's content:</label>
             <input
               type="textarea"
@@ -95,6 +100,7 @@ const EditPost = () => {
               id="post"
               onChange={(e) => setPostMessage(e.target.value)}
             />
+            {/* l image */}
             <label htmlFor="post">Cover's post:</label>
             <img
               className="avatar_profil"
@@ -102,11 +108,17 @@ const EditPost = () => {
               alt={`Post cover of ID ${currentPost.id}`}
               crossOrigin="anonymous"
             />
-            <input type="file" name="file" onChange={handleFileChange}></input>
+            {/* submit les changements dans le post */}
             <input
-              className="btn btn-primary"
+              type="file"
+              name="file"
+              onChange={handleFileChange}
+              accept="image/gif, image/jpeg, image/jpg"
+            ></input>
+            <input
+              className="button_change_message"
               type="submit"
-              value="Edit it !"
+              value="Edit your message !"
             />
           </form>
         </>

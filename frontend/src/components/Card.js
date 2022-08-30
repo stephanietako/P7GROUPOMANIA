@@ -20,7 +20,7 @@ const Card = ({ post, update, setUpdate }) => {
         console.error(err);
       });
   }, [userId]);
-
+  ///////////// BOUTON LIKE
   const likeBtn = () => {
     let requestOptions = {
       method: 'PUT',
@@ -47,11 +47,14 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
-
+  // EDIT UN POST
+  ///////////////////////////////////////////
   const editPost = (id) => {
-    navigate(`/edit-post/${id}`);
+    navigate(`/editPost/${id}`);
   };
 
+  // DELETE UN POST
+  /////////////////////////////////////////
   const deletePost = (id) => {
     const confirmation = window.confirm(
       'Are you sure you want to delete your post ?'
@@ -91,7 +94,7 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
-
+  //////////////////
   return (
     <div className="card">
       {author && (

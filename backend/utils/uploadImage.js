@@ -6,9 +6,26 @@ import { v4 as uuidv4 } from 'uuid';
 const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-export const uploadImage = async (file, startFileName, folderName) => {
+export const uploadImage = async (
+  file,
+  startFileName,
+  folderName,
+  originalFileName
+) => {
+  if (originalFileName && originalFileName !== 'defaultProfil.jpg') {
+    const filePath = path.resolve(
+      `client/public/uploads/${folderName}/${originalFileName}`
+    );
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.log('failed to delete local image:' + err);
+      } else {
+        console.info(`Successfully removed file with the path of ${filePath}`);
+      }
+    });
+  }
+
   try {
-    console.log(__dirname);
     if (
       !file.detectedMimeType == 'image/jpg' ||
       !file.detectedMimeType == 'image/png' ||
@@ -17,11 +34,10 @@ export const uploadImage = async (file, startFileName, folderName) => {
       throw Error('invalid file');
     //if (req.file.size > 2818128) throw Error('max size');
   } catch (error) {
-    console.log(error);
+    return { message: 'We failed to update your image for some reason...' };
   }
 
-  // uuid "Universally Unique IDentifier"
-  const fileName = startFileName + '-' + uuidv4() + 'jpg';
+  const fileName = startFileName + '-' + uuidv4() + '.jpg';
 
   await pipeline(
     file.stream,

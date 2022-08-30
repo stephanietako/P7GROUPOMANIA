@@ -1,6 +1,5 @@
 import React from 'react';
 import Layout from './pages/Layout';
-import FileUploaded from './components/FileUploaded';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -44,15 +43,7 @@ const App = () => {
               </AuthGard>
             }
           />
-          <Route
-            path="/fileUpload"
-            element={
-              <AuthGard>
-                <FileUploaded />
-              </AuthGard>
-            }
-          />
-          <Route path="/edit-post/:id" element={<EditPost />} />
+          <Route path="/editPost/:id" element={<EditPost />} />
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

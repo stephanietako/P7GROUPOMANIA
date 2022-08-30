@@ -1,15 +1,21 @@
-import Users from '../models/UserModel.js';
-import Posts from '../models/PostModel.js';
-import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
+import path from 'path';
+import stream from 'stream';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
-import stream from 'stream';
+import { v4 as uuidv4 } from 'uuid';
 const pipeline = promisify(stream.pipeline);
-import path from 'path';
-import { verifyToken } from '../utils/verifyToken.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Utils
+import { verifyToken } from '../utils/verifyToken.js';
+import { decodeToken } from '../utils/decodeToken.js';
+import { uploadImage } from '../utils/uploadImage.js';
+
+// Models
+import Users from '../models/UserModel.js';
+import Posts from '../models/PostModel.js';
 
 // Create user
 export const register = async (req, res) => {
@@ -27,14 +33,16 @@ export const register = async (req, res) => {
         password: hashPassword,
         role: false,
       });
-      res.json({ msg: 'Inscription réussie' });
+      return res.status(200).json({ message: `Successful registration` });
     } catch (error) {
       return res
         .status(400)
-        .json({ message: `nous n'avons pu creer votre compte utilisateur` });
+        .json({ message: `The user account could not be created` });
     }
   } else {
-    return res.status(400).json({ message: 'Cette adresse email existe déjà' });
+    return res
+      .status(400)
+      .json({ message: 'This email address already exists' });
   }
 };
 export const login = async (req, res, next) => {
@@ -44,7 +52,9 @@ export const login = async (req, res, next) => {
     },
   });
   if (user === null)
-    return res.status(404).json({ msg: "L'adresse email n'existe pas" });
+    return res
+      .status(404)
+      .json({ message: 'The email address does not exist' });
 
   const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).json({ message: 'Password not valid' });
@@ -99,16 +109,36 @@ export const logout = async (req, res) => {
     return res.status(200).send({
       message: "You've been logout!",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 };
 
 export const updateUser = async (req, res) => {
+  const userData = decodeToken(req.headers.authorization);
+  //Condition a revoir pas correcte
+  if (!req.body.role && req.body.userId == req.params.id)
+    return res.status(403).send('Access denied.');
+  const currentUser = await Users.findOne({
+    where: {
+      id: userData.id,
+    },
+  });
+
+  let updatedData = req.body;
+
+  if (req.file) {
+    const fileName = await uploadImage(
+      req.file,
+      'avatar',
+      'profil',
+      currentUser.avatar
+    );
+    updatedData = { ...req.body, avatar: fileName };
+  }
+
   try {
-    if (!req.body.role && req.body.userId == req.params.id)
-      return res.status(403).send('Access denied.');
-    await Users.update(req.body, {
+    await Users.update(updatedData, {
       where: {
         id: req.params.id,
       },
@@ -117,7 +147,7 @@ export const updateUser = async (req, res) => {
       message: 'User update',
     });
   } catch (err) {
-    return res.status(500).send('You are not allowed to update user');
+    return res.status(500).send('We failed to update post for some reason');
   }
 };
 
@@ -166,59 +196,7 @@ export const deleteUser = async (req, res) => {
     this.next(err);
   }
 };
-//avatar
-export const avatar = async (req, res) => {
-  try {
-    const upload = uploadImage(fileName);
-    console.log('HELLO IMAGE');
-    console.log(upload);
-  } catch (error) {
-    console.log(error);
-  }
-  let file = req.file;
-  console.log('req.file', file);
-  const fileName = 'avatar' + '-' + uuidv4();
-  console.log(fileName);
-  await pipeline(
-    file.stream,
-    fs.createWriteStream(
-      `${__dirname}/../client/public/uploads/profil/${fileName}`
-    )
-  );
-  console.log(req.file);
-  if (req.file) {
-    Users.findOne({
-      where: {
-        id: req.params.id,
-      },
-    }).then((user) => {
-      const filePath = path.resolve(
-        `client/public/uploads/profil/${user.avatar}`
-      );
-      console.log(user.avatar);
-      user.avatar = fileName;
-      user.save();
-      console.log(user.avatar);
 
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log('failed to delete local image:' + err);
-        } else {
-          console.info(
-            `Successfully removed file with the path of ${filePath}`
-          );
-        }
-      });
-      if (req.file) {
-        Users.update(req.body, { where: { avatar: req.body } });
-        res.send({
-          message: `Picture ${fileName} updated.`,
-        });
-      }
-    });
-  }
-};
-// Profil image recuperation
 export const getImg = async (req, res) => {
   const filePath = path.resolve(
     `client/public/uploads/profil/${req.params.fileName}`

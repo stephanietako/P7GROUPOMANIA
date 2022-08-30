@@ -7,7 +7,6 @@
   border: solid 1px f6f6f8;
   background-color: #ffffff;
   width: 60%;
-  height: 30%;
   overflow-y: auto;
   scrollbar-width: thin;
   border-radius: 8px;
@@ -15,6 +14,7 @@
   position: -webkit-sticky;
   position: sticky;
   top: 0;
+  max-height: 95vh;
 }
 
 .user {

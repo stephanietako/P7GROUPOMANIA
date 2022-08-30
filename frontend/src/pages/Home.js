@@ -10,6 +10,12 @@ const Home = () => {
   const [update, setUpdate] = useState(false);
   const token = localStorage.getItem('access_token');
 
+  /*
+  setInterval(() => {
+    setUpdate(!update);
+  }, 30000);
+  */
+
   let requestOptions = {
     headers: new Headers({
       Authorization: `Bearer ${token}`,
@@ -29,7 +35,7 @@ const Home = () => {
     fetch('http://localhost:5000/users', requestOptions)
       .then((response) => response.json())
       .then((users) => {
-        setAllUsers(users);
+        setAllUsers(users.reverse());
       })
       .catch((err) => {
         console.error(err);
