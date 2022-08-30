@@ -4,12 +4,10 @@ import stream from 'stream';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
-import { v4 as uuidv4 } from 'uuid';
 const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // Utils
-import { verifyToken } from '../utils/verifyToken.js';
 import { decodeToken } from '../utils/decodeToken.js';
 import { uploadImage } from '../utils/uploadImage.js';
 
@@ -174,9 +172,11 @@ export const deleteUser = async (req, res) => {
   });
 
   user.posts.map((post) => {
-    Posts.destroy({
-      where: { id: post.id },
-    });
+    if (Posts) {
+      Posts.destroy({
+        where: { id: post.id },
+      });
+    }
   });
   user
     .destroy()

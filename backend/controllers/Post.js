@@ -68,7 +68,7 @@ export const allPosts = async (req, res) => {
 export const updatePost = async (req, res) => {
   const userData = decodeToken(req.headers.authorization);
   //Condition a revoir pas correcte
-  if (!req.body.role && userData.id == req.params.id)
+  if (!userData.id == req.params.id)
     return res.status(403).send('Access denied.');
   const currentPost = await Posts.findOne({
     where: {
