@@ -190,7 +190,7 @@ export const likePost = async (req, res) => {
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
   const user = await Users.findOne({ where: { id: req.params.id } });
-  if (req.params.id === post.userId)
+  if (user === post.userId)
     return res.status(400).json({ message: 'Cannot like your own post' });
   if (post.usersLiked.includes(req.params.id)) {
     post.usersLiked = post.usersLiked.filter(
