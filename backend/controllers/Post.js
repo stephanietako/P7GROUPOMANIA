@@ -202,10 +202,12 @@ export const likePost = async (req, res) => {
     res
       .status(200)
       .json({ Message: `You have disliked the post: #${post.id}` });
+    console.log('je suis dans decrement');
   } else {
     post.usersLiked = [...post.usersLiked, req.params.id];
     await post.increment('likes');
     await post.save();
     res.status(200).json({ message: `You have liked the post: #${post.id}` });
+    console.log('je suis dans increment');
   }
 };
