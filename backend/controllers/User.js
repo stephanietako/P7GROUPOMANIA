@@ -8,12 +8,12 @@ const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 // Utils
-import { decodeToken } from '../utils/decodeToken.js';
 import { uploadImage } from '../utils/uploadImage.js';
 
 // Models
 import Users from '../models/UserModel.js';
 import Posts from '../models/PostModel.js';
+//import verifyToken from '../middleware/verifyToken.js';
 
 // Create user
 export const register = async (req, res) => {
@@ -43,6 +43,7 @@ export const register = async (req, res) => {
       .json({ message: 'This email address already exists' });
   }
 };
+
 export const login = async (req, res, next) => {
   const user = await Users.findOne({
     where: {
@@ -56,21 +57,17 @@ export const login = async (req, res, next) => {
 
   const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).json({ message: 'Password not valid' });
-  const { id, firstName, lastName, email, role } = user;
+  const { id, firstName, email } = user;
   const accessToken = jwt.sign(
-    { id, firstName, lastName, email, role },
+    { id, firstName, email },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: '2h',
+      expiresIn: '1h',
     }
   );
-  const refreshToken = jwt.sign(
-    { id, firstName, lastName, email, role },
-    process.env.REFRESH_TOKEN_SECRET,
-    {
-      expiresIn: '30d',
-    }
-  );
+  const refreshToken = jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: '2h',
+  });
   await Users.update(
     { refresh_token: refreshToken },
     {
@@ -89,18 +86,18 @@ export const login = async (req, res, next) => {
 };
 
 export const logout = async (req, res) => {
-  if (req.headers && req.headers.authorization) {
-    const refreshToken = req.headers.authorization.split(' ')[1];
-    const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    //if (dataUser == null) res.redirect('/');
-    if (!dataUser) {
-      return res
-        .status(401)
-        .json({ success: false, message: 'Authorization failed' });
-    }
-    req.response = req.email;
-    if (dataUser == null) res.redirect('/');
-  }
+  // if (req.headers && req.headers.authorization) {
+  //   const refreshToken = req.headers.authorization.split(' ')[1];
+  //   const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+  //   //if (dataUser == null) res.redirect('/');
+  //   if (!dataUser) {
+  //     return res
+  //       .status(401)
+  //       .json({ success: false, message: 'Authorization failed' });
+  //   }
+  //   req.response = req.email;
+  //   if (dataUser == null) res.redirect('/');
+  // }
   try {
     req.session = null;
     res.clearCookie('jwt');
@@ -113,13 +110,12 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   //Condition a revoir pas correcte
   if (!req.body.role && req.body.userId == req.params.id)
     return res.status(403).send('Access denied.');
   const currentUser = await Users.findOne({
     where: {
-      id: userData.id,
+      id: id,
     },
   });
 
@@ -163,7 +159,7 @@ export const oneUser = async (req, res) => {
   res.send(user);
 };
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res, next) => {
   if (!req.body.role && req.body.userId == req.params.id)
     return res.status(403).send('Access denied.');
   const user = await Users.findOne({
@@ -178,15 +174,17 @@ export const deleteUser = async (req, res) => {
       });
     }
   });
-  user
-    .destroy()
-    .then(() => {
-      res.status(200).send('Removed Successfully');
-    })
-    .catch((err) => {
-      res.status(500).send('We failed to delete for some reason');
-    });
+  // user
+  //   .destroy()
+  //   .then(() => {
+  //     res.status(200).send('Removed Successfully');
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).send('We failed to delete for some reason');
+  //   });
+
   try {
+    user.destroy();
     req.session = null;
     res.clearCookie('jwt');
     return res.status(200).send({

@@ -2,7 +2,8 @@ import express from 'express';
 import multer from 'multer';
 const upload = multer();
 
-import { verifyToken } from '../utils/verifyToken.js';
+import { verifyToken } from '../middleware/verifyToken.js';
+import refreshToken from '../controllers/RefreshToken.js';
 import {
   register,
   updateUser,
@@ -19,6 +20,7 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 router.delete('/logout', logout);
+router.get('/refreshToken', refreshToken);
 router.get('/:id', oneUser);
 router.get('/', verifyToken, allUsers);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);

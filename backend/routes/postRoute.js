@@ -2,7 +2,9 @@ import express from 'express';
 import multer from 'multer';
 const upload = multer();
 
-import { verifyToken } from '../utils/verifyToken.js';
+import { verifyToken } from '../middleware/verifyToken.js';
+//import refreshToken from '../controllers/RefreshToken.js';
+
 import {
   allPosts,
   onePost,
@@ -13,10 +15,10 @@ import {
   getCover,
   cover,
 } from '../controllers/Post.js';
-//import { uploadImage } from '../utils/uploadImage.js';
 
 const router = express.Router();
 
+//router.get('/refreshToken', refreshToken);
 router.get('/', verifyToken, allPosts);
 router.get('/:id', verifyToken, onePost);
 

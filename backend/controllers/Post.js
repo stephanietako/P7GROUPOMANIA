@@ -1,18 +1,18 @@
 import Posts from '../models/PostModel.js';
 import Users from '../models/UserModel.js';
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { promisify } from 'util';
 import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { decodeToken } from '../utils/decodeToken.js';
+//import { decodeToken } from '../utils/decodeToken.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 import { uploadImage } from '../utils/uploadImage.js';
+import verifyToken from '../middleware/verifyToken.js';
 
 export const createPost = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   const fileName = await uploadImage(req.file, 'cover', 'posts');
   let savePost = await Posts.create({
     userId: req.body.userId,
@@ -66,10 +66,8 @@ export const allPosts = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   //Condition a revoir pas correcte
-  if (!userData.id == req.params.id)
-    return res.status(403).send('Access denied.');
+  if (!Users.id == req.params.id) return res.status(403).send('Access denied.');
   const currentPost = await Posts.findOne({
     where: {
       id: req.params.id,
@@ -121,7 +119,6 @@ export const deletePost = async (req, res) => {
 
 // c est update post cover
 export const cover = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   try {
     const upload = uploadImage(fileName);
   } catch (error) {
@@ -172,7 +169,6 @@ export const cover = async (req, res) => {
 // Image recuperation
 
 export const getCover = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   try {
     const filePath = path.resolve(
       `client/public/uploads/posts/${req.params.fileName}`
@@ -190,22 +186,23 @@ export const getCover = async (req, res) => {
 
 /////////////////// LIKES ///////////////////////////////////
 export const likePost = async (req, res) => {
-  const userData = decodeToken(req.headers.authorization);
   const postId = req.params.id;
   const post = await Posts.findOne({ where: { id: postId } });
   if (post === null) return res.status(404).send('Post not found');
-  const user = await Users.findOne({ where: { id: userData.id } });
-  if (user.id === post.userId)
+  const user = await Users.findOne({ where: { id: req.params.id } });
+  if (req.params.id === post.userId)
     return res.status(400).json({ message: 'Cannot like your own post' });
-  if (post.usersLiked.includes(user.id)) {
-    post.usersLiked = post.usersLiked.filter((userId) => userId != user.id);
+  if (post.usersLiked.includes(req.params.id)) {
+    post.usersLiked = post.usersLiked.filter(
+      (userId) => userId != req.params.id
+    );
     await post.decrement('likes');
     await post.save();
     res
       .status(200)
       .json({ Message: `You have disliked the post: #${post.id}` });
   } else {
-    post.usersLiked = [...post.usersLiked, user.id];
+    post.usersLiked = [...post.usersLiked, req.params.id];
     await post.increment('likes');
     await post.save();
     res.status(200).json({ message: `You have liked the post: #${post.id}` });
