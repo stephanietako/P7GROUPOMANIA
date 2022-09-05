@@ -111,11 +111,11 @@ export const logout = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   //Condition a revoir pas correcte
-  if (!req.body.role && req.body.userId == req.params.id)
-    return res.status(403).send('Access denied.');
+  //if (req.body.userId == req.params.id)
+  //return res.status(403).send('Access denied.');
   const currentUser = await Users.findOne({
     where: {
-      id: id,
+      id: req.params.id,
     },
   });
 

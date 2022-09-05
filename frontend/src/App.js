@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from './pages/Layout';
+import Layout from './components/Layout';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -16,7 +16,7 @@ const App = () => {
   return (
     <div className="App">
       <Routes>
-        <Route element={<Layout />}>
+        <Route path="/" element={<Layout />}>
           <Route
             path="/"
             element={

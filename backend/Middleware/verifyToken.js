@@ -11,6 +11,7 @@ export const verifyToken = async (req, res, next) => {
     req.user = decoded.id;
     req.user = decoded.firstName;
     req.user = decoded.email;
+    req.user = decoded.role;
     next();
   });
 };

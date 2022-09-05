@@ -20,7 +20,8 @@ export const refreshToken = async (req, res) => {
           error ||
           user.id !== decoded.id ||
           user.firstName !== decoded.firstName ||
-          user.email !== decoded.email
+          user.email !== decoded.email ||
+          user.role !== decoded.role
         )
           return res.sendStatus(403);
         const accessToken = jwt.sign(
