@@ -1,0 +1,13 @@
+#admin {
+  display: flex;
+}
+
+.SideMenu {
+  flex-grow: 1;
+  border-right: solid 2px blue;
+}
+
+#admin_body {
+  flex-grow: 6;
+  padding-left: 15px;
+}

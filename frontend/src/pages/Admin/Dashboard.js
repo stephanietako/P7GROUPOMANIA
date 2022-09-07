@@ -4,7 +4,7 @@ import { Outlet } from 'react-router';
 const Dashboard = () => {
   return (
     <div className="Dashboard">
-      SALUT !!!!
+      SALUT DASHBOARD !!!!
       <Outlet />
     </div>
   );

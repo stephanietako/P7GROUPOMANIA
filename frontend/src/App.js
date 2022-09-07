@@ -13,7 +13,6 @@ import './styles/App.css';
 import { hasAuthenticated } from './services/AuthApi';
 import Auth from './contexts/Auth';
 import AdminRouter from './pages/Admin/AdminRouter';
-import { Dashboard } from './pages/Admin';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
