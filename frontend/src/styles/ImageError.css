@@ -1,0 +1,10 @@
+.error {
+  border: 2px solid black;
+  padding: 25px;
+}
+
+.error_img {
+  background-repeat: no-repeat;
+  height: 31.25rem;
+  width: 100%;
+}

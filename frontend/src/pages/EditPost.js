@@ -74,7 +74,6 @@ const EditPost = () => {
           draggable: true,
           progress: undefined,
         });
-        //navigate('/editPost/${id}');
       });
   };
 
@@ -102,6 +101,7 @@ const EditPost = () => {
             />
             {/* l image */}
             <label htmlFor="post">Cover's post:</label>
+
             <img
               className="avatar_profil"
               src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imageUrl}`}

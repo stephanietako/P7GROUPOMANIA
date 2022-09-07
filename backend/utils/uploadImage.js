@@ -12,7 +12,7 @@ export const uploadImage = async (
   folderName,
   originalFileName
 ) => {
-  if (originalFileName && originalFileName !== 'defaultProfil.jpg') {
+  if (originalFileName !== 'avatar-defaultProfil.jpg') {
     const filePath = path.resolve(
       `client/public/uploads/${folderName}/${originalFileName}`
     );
@@ -32,12 +32,11 @@ export const uploadImage = async (
       !file.detectedMimeType == 'image/jpeg'
     )
       throw Error('invalid file');
-    //if (req.file.size > 2818128) throw Error('max size');
   } catch (error) {
     return { message: 'We failed to update your image for some reason...' };
   }
 
-  const fileName = startFileName + '-' + uuidv4() + '.jpg';
+  const fileName = startFileName + '-' + uuidv4();
 
   await pipeline(
     file.stream,

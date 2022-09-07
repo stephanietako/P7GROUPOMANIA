@@ -17,14 +17,15 @@ import {
 
 const router = express.Router();
 
+router.get('/refreshToken', refreshToken);
 router.post('/register', register);
 router.post('/login', login);
 router.delete('/logout', logout);
-router.get('/refreshToken', refreshToken);
-router.get('/:id', oneUser);
+
 router.get('/', verifyToken, allUsers);
+router.get('/:id', oneUser);
+router.get('/image/:fileName', verifyToken, getImg);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);
 router.delete('/:id', verifyToken, deleteUser);
-router.get('/image/:fileName', verifyToken, getImg);
 
 export default router;

@@ -188,7 +188,7 @@ export const likePost = async (req, res) => {
   if (post === null) return res.status(404).send('Post not found');
   const user = await Users.findOne({ where: { id: req.params.id } });
   if (user === post.userId)
-    res.status(200).json({ message: 'Like or unliked process' });
+    res.status(200).json({ message: 'Like or unliked post process' });
   console.log('like ou unlike operationnel');
   if (post.usersLiked.includes(req.params.id)) {
     post.usersLiked = post.usersLiked.filter(

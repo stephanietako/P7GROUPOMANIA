@@ -5,13 +5,14 @@ import '../styles/Form.css';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-export const Form = ({ title, isLogin }) => {
+export const Form = ({ title, isLogin, user }) => {
   const { handleSubmit } = useForm();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
+  //const [role, setRole] = useState({ role: 'false' });
   const navigate = useNavigate();
 
   const onSubmitRegister = () => {
@@ -29,29 +30,39 @@ export const Form = ({ title, isLogin }) => {
 
     fetch('http://localhost:5000/users/register', requestOptions)
       .then((response) => response.json())
-      .then((data) => {
-        toast.success('Your account has been successfully created', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate('/login');
+      .then(() => {
+        if (
+          firstName &&
+          lastName &&
+          email &&
+          password &&
+          confPassword !== null
+        ) {
+          toast.success('Your account has been successfully created', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          console.log(' PROBLEMES !!!!');
+        }
+
+        navigate('/register');
       })
-      .catch((err) => {
-        toast.error('An error occurred while creating your account', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
+      .catch((error) => console.error(error));
+    toast.error('An error occurred while creating your account', {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   const onSubmitLogin = () => {
@@ -67,9 +78,14 @@ export const Form = ({ title, isLogin }) => {
     fetch('http://localhost:5000/users/login', requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        // if (role === true) {
+        //   setRole(data);
+        // }
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
+        localStorage.setItem('user_role', data.role);
+
         if (data.id && data.accessToken && data.refreshToken) {
           toast.success('You have been successfully connected', {
             position: 'top-center',
@@ -122,6 +138,7 @@ export const Form = ({ title, isLogin }) => {
             <input className="btn btn-primary" type="submit" value="Login" />
           </form>
         ) : (
+          // Register
           <form onSubmit={handleSubmit(onSubmitRegister)}>
             <label htmlFor="firstName">FirstName</label>
             <input

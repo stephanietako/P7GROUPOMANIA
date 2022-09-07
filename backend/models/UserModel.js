@@ -35,7 +35,7 @@ const Users = db.define(
     },
     avatar: {
       type: DataTypes.STRING,
-      defaultValue: 'defaultProfil.jpg',
+      defaultValue: 'avatar-defaultProfil.jpg',
     },
     role: {
       type: DataTypes.BOOLEAN,

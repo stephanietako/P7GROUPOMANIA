@@ -8,8 +8,7 @@ const Card = ({ post, update, setUpdate }) => {
   const { imageUrl, postMessage, userId, usersLiked, likes, id } = post;
   const currentIdUser = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
-  //const [author, setAuthor] = useState();
-  const [author, setAuthor] = useState({ role: 'false' });
+  const [author, setAuthor] = useState();
 
   useEffect(() => {
     fetch(`http://localhost:5000/users/${userId}`)
@@ -21,6 +20,7 @@ const Card = ({ post, update, setUpdate }) => {
         console.error(err);
       });
   }, [userId]);
+
   ///////////// BOUTON LIKE
   const likeBtn = () => {
     let requestOptions = {
@@ -36,8 +36,8 @@ const Card = ({ post, update, setUpdate }) => {
       .then(() => {
         setUpdate(!update);
       })
-      .catch((error) => {
-        toast.error('Your like could not be applied', {
+      .catch((message) => {
+        toast.message('Your like could not be applied', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: true,
@@ -48,6 +48,7 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
+
   // EDIT UN POST
   ///////////////////////////////////////////
   const editPost = (id) => {
@@ -95,26 +96,28 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
+
   //////////////////
   return (
     <div className="card">
-      <div className="author">
-        <img
-          className="card_avatar"
-          src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
-          alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
-          crossOrigin="anonymous"
-        />
-        <div>
-          <p>
-            {author.firstName} {author.lastName}
-          </p>
-          <p className="create_date">
-            {new Date(author.createdAt).toDateString()}
-          </p>
+      {author && (
+        <div className="author">
+          <img
+            className="card_avatar"
+            src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
+            alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
+            crossOrigin="anonymous"
+          />
+          <div>
+            <p>
+              {author.firstName} {author.lastName}
+            </p>
+            <p className="create_date">
+              {new Date(author.createdAt).toDateString()}
+            </p>
+          </div>
         </div>
-      </div>
-
+      )}
       <img
         className="cover"
         src={`http://localhost:5000/client/public/uploads/posts/${imageUrl}`}
@@ -144,27 +147,9 @@ const Card = ({ post, update, setUpdate }) => {
           ) : (
             <></>
           )}
-          {/* ....... */}
-          {/* <div className="options_buttons">
-            {author.role === true && Number(currentIdUser) === !userId ? (
-              <button onClick={() => editPost()}>Edit</button>
-            ) : author.userId ? (
-              <button onClick={() => editPost()}>Edit</button>
-            ) : (
-              ''
-            )}
-            {author.role === true && Number(currentIdUser) === !userId ? (
-              <button onClick={() => deletePost()}>Delete</button>
-            ) : author.userId ? (
-              <button onClick={() => deletePost()}>Delete</button>
-            ) : (
-              ''
-            )}
-          </div> */}
         </div>
       </div>
     </div>
   );
 };
-
 export default Card;

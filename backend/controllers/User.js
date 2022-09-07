@@ -13,9 +13,8 @@ import { uploadImage } from '../utils/uploadImage.js';
 // Models
 import Users from '../models/UserModel.js';
 import Posts from '../models/PostModel.js';
-//import verifyToken from '../middleware/verifyToken.js';
 
-// Create user
+// Auth User and Registration
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
@@ -26,7 +25,7 @@ export const register = async (req, res) => {
       await Users.create({
         firstName: firstName,
         lastName: lastName,
-        avatar: 'defaultProfil.jpg',
+        avatar: 'avatar-defaultProfil.jpg',
         email: email,
         password: hashPassword,
         role: false,
@@ -57,9 +56,9 @@ export const login = async (req, res, next) => {
 
   const match = await bcrypt.compare(req.body.password, user.password);
   if (!match) return res.status(400).json({ message: 'Password not valid' });
-  const { id, firstName, email } = user;
+  const { id, firstName, email, role } = user;
   const accessToken = jwt.sign(
-    { id, firstName, email },
+    { id, firstName, email, role },
     process.env.ACCESS_TOKEN_SECRET,
     {
       expiresIn: '1h',
@@ -80,24 +79,13 @@ export const login = async (req, res, next) => {
   return res.status(200).send({
     message: "You've been login !",
     id: id,
+    role: role,
     accessToken: accessToken,
     refreshToken: refreshToken,
   });
 };
 
 export const logout = async (req, res) => {
-  // if (req.headers && req.headers.authorization) {
-  //   const refreshToken = req.headers.authorization.split(' ')[1];
-  //   const dataUser = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-  //   //if (dataUser == null) res.redirect('/');
-  //   if (!dataUser) {
-  //     return res
-  //       .status(401)
-  //       .json({ success: false, message: 'Authorization failed' });
-  //   }
-  //   req.response = req.email;
-  //   if (dataUser == null) res.redirect('/');
-  // }
   try {
     req.session = null;
     res.clearCookie('jwt');
@@ -110,9 +98,6 @@ export const logout = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  //Condition a revoir pas correcte
-  //if (req.body.userId == req.params.id)
-  //return res.status(403).send('Access denied.');
   const currentUser = await Users.findOne({
     where: {
       id: req.params.id,
@@ -128,7 +113,7 @@ export const updateUser = async (req, res) => {
       'profil',
       currentUser.avatar
     );
-    updatedData = { ...req.body, avatar: fileName };
+    updatedData = { ...req.body, profil: fileName };
   }
 
   try {
@@ -141,7 +126,7 @@ export const updateUser = async (req, res) => {
       message: 'User update',
     });
   } catch (err) {
-    return res.status(500).send('We failed to update post for some reason');
+    return res.status(500).send('We failed to update for some reason');
   }
 };
 
@@ -174,14 +159,6 @@ export const deleteUser = async (req, res, next) => {
       });
     }
   });
-  // user
-  //   .destroy()
-  //   .then(() => {
-  //     res.status(200).send('Removed Successfully');
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send('We failed to delete for some reason');
-  //   });
 
   try {
     user.destroy();
@@ -195,7 +172,8 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getImg = async (req, res) => {
+export const getImg = (req, res) => {
+  console.log(fileName);
   const filePath = path.resolve(
     `client/public/uploads/profil/${req.params.fileName}`
   );

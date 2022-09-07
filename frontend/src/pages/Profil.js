@@ -13,6 +13,7 @@ const Profil = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const requestOptions = {
@@ -30,6 +31,7 @@ const Profil = () => {
           setFirstName(user.firstName);
           setLastName(user.lastName);
           setEmail(user.email);
+          setRole(user.role);
         })
         .catch((err) => {
           console.error(err);
@@ -44,6 +46,7 @@ const Profil = () => {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('email', email);
+    formData.append('role', role);
 
     const requestOptions = {
       method: 'PUT',
@@ -110,6 +113,7 @@ const Profil = () => {
         localStorage.removeItem('user_id');
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('role');
         localStorage.clear();
         toast.success('Your account has been successfully deleted.', {
           position: 'top-center',
