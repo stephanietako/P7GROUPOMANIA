@@ -78,9 +78,6 @@ export const Form = ({ title, isLogin, user }) => {
     fetch('http://localhost:5000/users/login', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        // if (role === true) {
-        //   setRole(data);
-        // }
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);

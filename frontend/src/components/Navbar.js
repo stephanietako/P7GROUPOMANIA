@@ -1,11 +1,14 @@
+//import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+//import Auth from '../contexts/Auth';
 
 // Styles
 import '../styles/Navbar.css';
 
 const Navbar = () => {
+  //const { isAuthenticated } = useContext(Auth);
   const userId = localStorage.getItem('user_id');
   const navigate = useNavigate();
 

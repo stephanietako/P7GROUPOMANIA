@@ -22,7 +22,7 @@ const ProtectedRoutes = () => {
   const { auth } = useAuth();
 
   if (userRole === 'true') {
-    setUserRole('true');
+    setUserRole();
     return auth ? <Outlet /> : <Navigate to="/admin" />;
   } else {
     return auth ? <Outlet /> : <Navigate to="/" />;
