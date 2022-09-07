@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.admin_header {
+  text-align: center;
+  line-height: 50px;
+  background-color: gainsboro;
+}
 .SideMenu {
   flex-grow: 1;
   border-right: solid 2px blue;
