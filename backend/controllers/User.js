@@ -79,7 +79,6 @@ export const login = async (req, res, next) => {
   return res.status(200).send({
     message: "You've been login !",
     id: id,
-    role: role,
     accessToken: accessToken,
     refreshToken: refreshToken,
   });

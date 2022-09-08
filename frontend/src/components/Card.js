@@ -97,6 +97,18 @@ const Card = ({ post, update, setUpdate }) => {
       });
   };
 
+  function parseJwt(token) {
+    if (!token) {
+      return;
+    }
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+
+    return JSON.parse(window.atob(base64));
+  }
+  const user = parseJwt(token);
+  const userRole = user.role;
+  console.log(userRole);
   //////////////////
   return (
     <div className="card">
@@ -127,26 +139,71 @@ const Card = ({ post, update, setUpdate }) => {
       <div className="card_body">
         <p>{postMessage}</p>
         <div>
-          <button
-            onClick={likeBtn}
-            disabled={Number(currentIdUser) === userId ? true : false}
-            className={
-              usersLiked.includes(currentIdUser)
-                ? 'red like_btn'
-                : 'black like_btn'
-            }
-          >
-            ♥
-          </button>{' '}
-          {likes}
           {Number(currentIdUser) === userId ? (
-            <div className="options_buttons">
-              <button onClick={() => editPost(id)}>Edit</button>{' '}
-              <button onClick={() => deletePost(id)}>Delete</button>{' '}
-            </div>
+            ''
           ) : (
-            <></>
+            <button
+              type="button"
+              className={
+                usersLiked.includes(currentIdUser)
+                  ? 'red like_btn'
+                  : 'black like_btn'
+              }
+              onClick={likeBtn}
+            >
+              ♥ {likes}
+            </button>
           )}
+
+          <div className="options_buttons">
+            {userRole === true ? (
+              <button
+                type="button"
+                className="button is-pulled-right is-danger is-outlined"
+                onClick={() => {
+                  editPost(id);
+                }}
+              >
+                Modifier
+              </button>
+            ) : Number(currentIdUser) === userId ? (
+              <button
+                type="button"
+                className="button is-pulled-right is-danger is-outlined"
+                onClick={() => {
+                  editPost(id);
+                }}
+              >
+                Modifier
+              </button>
+            ) : (
+              ''
+            )}
+
+            {userRole === true ? (
+              <button
+                type="button"
+                className="button is-pulled-right is-danger is-outlined"
+                onClick={() => {
+                  deletePost(id);
+                }}
+              >
+                Supprimer
+              </button>
+            ) : Number(currentIdUser) === userId ? (
+              <button
+                type="button"
+                className="button is-pulled-right is-danger is-outlined"
+                onClick={() => {
+                  deletePost(id);
+                }}
+              >
+                Supprimer
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
         </div>
       </div>
     </div>

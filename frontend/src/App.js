@@ -12,7 +12,6 @@ import AuthGard from './helpers/AuthGard';
 import './styles/App.css';
 import { hasAuthenticated } from './services/AuthApi';
 import Auth from './contexts/Auth';
-import AdminRouter from './pages/Admin/AdminRouter';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(hasAuthenticated());
@@ -49,7 +48,6 @@ const App = () => {
             />
             <Route path="/editPost/:id" element={<EditPost />} />
           </Route>
-          <Route path="/admin/*" element={<AdminRouter />} />
         </Routes>
 
         <ToastContainer
