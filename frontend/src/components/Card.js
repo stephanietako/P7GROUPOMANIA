@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Card = ({ post, update, setUpdate }) => {
   const navigate = useNavigate();
-  const { imageUrl, postMessage, userId, usersLiked, likes, id } = post;
+  const { imagePost, postMessage, userId, usersLiked, likes, id } = post;
   const currentIdUser = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
   const [author, setAuthor] = useState();
@@ -132,7 +132,7 @@ const Card = ({ post, update, setUpdate }) => {
       )}
       <img
         className="cover"
-        src={`http://localhost:5000/client/public/uploads/posts/${imageUrl}`}
+        src={`http://localhost:5000/client/public/uploads/posts/${imagePost}`}
         alt="post"
         crossOrigin="anonymous"
       />

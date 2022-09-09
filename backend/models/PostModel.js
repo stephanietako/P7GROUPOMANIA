@@ -13,7 +13,7 @@ const Posts = db.define(
       required: true,
       maxlength: 500,
     },
-    imageUrl: {
+    imagePost: {
       type: DataTypes.STRING,
       required: true,
     },

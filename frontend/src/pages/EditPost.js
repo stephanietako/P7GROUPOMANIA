@@ -10,7 +10,7 @@ const EditPost = () => {
   const { handleSubmit } = useForm();
   const [postMessage, setPostMessage] = useState('');
   const token = localStorage.getItem('access_token');
-  const [imageUrl, setImageUrl] = useState({ preview: '', data: '' });
+  const [imagePost, setImagePost] = useState({ preview: '', data: '' });
   const [currentPost, setCurrentPost] = useState();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const EditPost = () => {
         .then((post) => {
           setCurrentPost(post);
           setPostMessage(post.postMessage);
-          setImageUrl(post.imageUrl);
+          setImagePost(post.imagePost);
         })
         .catch((err) => {
           console.error(err);
@@ -37,7 +37,7 @@ const EditPost = () => {
 
   const onSubmitPost = () => {
     const formData = new FormData();
-    if (typeof imageUrl === 'object') formData.append('file', imageUrl.data);
+    if (typeof imagePost === 'object') formData.append('file', imagePost.data);
     formData.append('postMessage', postMessage);
 
     const requestOptions = {
@@ -82,7 +82,7 @@ const EditPost = () => {
       preview: URL.createObjectURL(e.target.files[0]),
       data: e.target.files[0],
     };
-    setImageUrl(img);
+    setImagePost(img);
   };
   return (
     <>
@@ -91,7 +91,6 @@ const EditPost = () => {
           <h1>Edit my post</h1>
           <form onSubmit={handleSubmit(onSubmitPost)}>
             {/* le message */}
-
             <label htmlFor="post">Post's content:</label>
             <input
               type="textarea"
@@ -104,7 +103,7 @@ const EditPost = () => {
 
             <img
               className="avatar_profil"
-              src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imageUrl}`}
+              src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imagePost}`}
               alt={`Post cover of ID ${currentPost.id}`}
               crossOrigin="anonymous"
             />

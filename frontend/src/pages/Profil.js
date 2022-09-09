@@ -166,7 +166,7 @@ const Profil = () => {
         <input type="submit" value="Edit your account !" />
       </form>
       <button className="delete_profil_btn" onClick={deleteAccount}>
-        Delete my account
+        Delete account
       </button>
     </div>
   );

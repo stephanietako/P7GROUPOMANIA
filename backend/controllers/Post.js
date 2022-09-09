@@ -17,7 +17,7 @@ export const createPost = async (req, res) => {
   let savePost = await Posts.create({
     userId: req.body.userId,
     postMessage: req.body.postMessage,
-    imageUrl: req.file !== null ? fileName : '',
+    imagePost: req.file !== null ? fileName : '',
     likes: 0,
     usersLiked: [],
   });
@@ -80,9 +80,9 @@ export const updatePost = async (req, res) => {
       req.file,
       'cover',
       'posts',
-      currentPost.imageUrl
+      currentPost.imagePost
     );
-    updatedData = { postMessage: req.body.postMessage, imageUrl: fileName };
+    updatedData = { postMessage: req.body.postMessage, imagePost: fileName };
   }
 
   try {
@@ -136,7 +136,7 @@ export const cover = async (req, res) => {
         id: req.params.id,
       },
     }).then((post) => {
-      const fileName = post.imageUrl;
+      const fileName = post.imagePost;
       const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
       fs.unlink(filePath, (error) => {
         if (error) {
@@ -153,7 +153,7 @@ export const cover = async (req, res) => {
   const updateCover = req.file
     ? {
         ...req.body,
-        imageUrl: fileName,
+        imagePost: fileName,
       }
     : {
         ...req.body,
@@ -172,7 +172,7 @@ export const getCover = async (req, res) => {
     );
     res.sendFile(filePath);
 
-    await Posts.update(req.body, { where: { img: req.params.imageUrl } });
+    await Posts.update(req.body, { where: { img: req.params.imagePost } });
     res.json({
       message: 'Post Updated',
     });

@@ -8,7 +8,6 @@ const Post = () => {
   const { handleSubmit } = useForm();
   const [postMessage, setPostMessage] = useState('');
   const userId = localStorage.getItem('user_id');
-  const role = localStorage.getItem('user_role');
   const token = localStorage.getItem('access_token');
   const [image, setImage] = useState({ preview: '', data: '' });
 
@@ -17,7 +16,7 @@ const Post = () => {
     formData.append('file', image.data);
     formData.append('userId', userId);
     formData.append('postMessage', postMessage);
-    formData.append('role', role);
+    //formData.append('role', role);
 
     const requestOptions = {
       method: 'POST',

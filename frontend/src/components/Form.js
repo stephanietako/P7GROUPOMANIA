@@ -12,11 +12,10 @@ export const Form = ({ title, isLogin, user }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
-  //const [role, setRole] = useState({ role: 'false' });
   const navigate = useNavigate();
 
   const onSubmitRegister = () => {
-    if (password !== confPassword) alert("le mot de passe n'est pas le même");
+    if (password !== confPassword) alert('Invalid password please try again');
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -47,22 +46,22 @@ export const Form = ({ title, isLogin, user }) => {
             draggable: true,
             progress: undefined,
           });
-        } else {
-          console.log(' PROBLEMES !!!!');
         }
-
         navigate('/register');
       })
       .catch((error) => console.error(error));
-    toast.error('An error occurred while creating your account', {
-      position: 'top-center',
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    toast.error(
+      'An error occurred while creating your account please try again',
+      {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
   };
 
   const onSubmitLogin = () => {
@@ -81,7 +80,6 @@ export const Form = ({ title, isLogin, user }) => {
         localStorage.setItem('user_id', data.id);
         localStorage.setItem('access_token', data.accessToken);
         localStorage.setItem('refresh_token', data.refreshToken);
-        localStorage.setItem('user_role', data.role);
 
         if (data.id && data.accessToken && data.refreshToken) {
           toast.success('You have been successfully connected', {
@@ -95,7 +93,7 @@ export const Form = ({ title, isLogin, user }) => {
           });
           navigate('/', { replace: true });
         } else {
-          toast.error('Invalid email adress or password do it again', {
+          toast.error('Invalid email adress or password', {
             position: 'top-center',
             autoClose: 3000,
             hideProgressBar: true,
