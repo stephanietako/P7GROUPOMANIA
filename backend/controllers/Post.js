@@ -66,15 +66,15 @@ export const allPosts = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
-  //Condition a revoir pas correcte
   if (!Users.id == req.params.id) return res.status(403).send('Access denied.');
+  ////////// UPDATE LE POST MESSAGE
   const currentPost = await Posts.findOne({
     where: {
       id: req.params.id,
     },
   });
   let updatedData = { postMessage: req.body.postMessage };
-
+  ////////////// UPDATE LA COVER DU POST
   if (req.file) {
     const fileName = await uploadImage(
       req.file,
@@ -82,9 +82,9 @@ export const updatePost = async (req, res) => {
       'posts',
       currentPost.imagePost
     );
-    updatedData = { postMessage: req.body.postMessage, imagePost: fileName };
+    updatedData = { imagePost: fileName };
   }
-
+  ////////////////////////////////////
   try {
     await Posts.update(updatedData, {
       where: { id: req.params.id },
@@ -111,73 +111,6 @@ export const deletePost = async (req, res) => {
     });
   } catch (err) {
     return res.status(500).send('We failed to delete post for some reason');
-  }
-};
-
-// c est update post cover
-export const cover = async (req, res) => {
-  try {
-    const upload = uploadImage(fileName);
-  } catch (error) {
-    console.log(error);
-  }
-  let file = req.file;
-  const fileName = 'cover' + '-' + uuidv4() + '.jpg';
-  await pipeline(
-    file.stream,
-    fs.createWriteStream(
-      `${__dirname}/../client/public/uploads/posts/${fileName}`
-    )
-  );
-
-  if (req.file) {
-    Posts.findOne({
-      where: {
-        id: req.params.id,
-      },
-    }).then((post) => {
-      const fileName = post.imagePost;
-      const filePath = path.resolve(`client/public/uploads/posts/${fileName}`);
-      fs.unlink(filePath, (error) => {
-        if (error) {
-          console.log('failed to delete local image:' + error);
-        } else {
-          console.info(
-            `Successfully removed file with the path of ${filePath}`
-          );
-        }
-      });
-    });
-  }
-
-  const updateCover = req.file
-    ? {
-        ...req.body,
-        imagePost: fileName,
-      }
-    : {
-        ...req.body,
-      };
-
-  Posts.update({ ...updateCover }, { where: { id: req.params.id } })
-    .then(() => res.send("la cover a été mise à jour c'est " + ' ' + fileName))
-    .catch((error) => res.status(404).json({ error }));
-};
-// Image recuperation
-
-export const getCover = async (req, res) => {
-  try {
-    const filePath = path.resolve(
-      `client/public/uploads/posts/${req.params.fileName}`
-    );
-    res.sendFile(filePath);
-
-    await Posts.update(req.body, { where: { img: req.params.imagePost } });
-    res.json({
-      message: 'Post Updated',
-    });
-  } catch (err) {
-    return res.status(500).send('We failed to update post for some reason');
   }
 };
 

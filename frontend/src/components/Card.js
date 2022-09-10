@@ -8,7 +8,7 @@ const Card = ({ post, update, setUpdate }) => {
   const { imagePost, postMessage, userId, usersLiked, likes, id } = post;
   const currentIdUser = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
-  const [author, setAuthor] = useState(' ');
+  const [author, setAuthor] = useState();
 
   useEffect(() => {
     fetch(`http://localhost:5000/users/${userId}`)

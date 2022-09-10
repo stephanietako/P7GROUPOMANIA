@@ -84,7 +84,32 @@ const Profil = () => {
         });
       });
   };
+  ////////////////////////////////
+  // const handleFileChange = (event) => {
+  //   setAvatar(URL.createObjectURL(event.target.files[0]));
+  // };
+  //   const requestOptions = {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     body: formData,
+  //   };
 
+  //   fetch(`http://localhost:5000/users/image/avatar${avatar.data}`, requestOptions)
+  //     .then((response) => {
+  //       response.json();
+  //     })
+  //     .then((data) => {
+  //      console.log(data)
+  //       navigate('/');
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //     });
+  // };
+
+  /////////////////////////////////////////////
   const handleFileChange = (e) => {
     const img = {
       preview: URL.createObjectURL(e.target.files[0]),
@@ -113,7 +138,7 @@ const Profil = () => {
         localStorage.removeItem('user_id');
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        localStorage.removeItem('role');
+        //localStorage.removeItem('role');
         localStorage.clear();
         toast.success('Your account has been successfully deleted.', {
           position: 'top-center',
@@ -163,7 +188,8 @@ const Profil = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <input type="file" name="file" onChange={handleFileChange}></input>
+
+        <input type="file" name="fileName" onChange={handleFileChange}></input>
         <input type="submit" value="Edit your account !" />
       </form>
       <button className="delete_profil_btn" onClick={deleteAccount}>

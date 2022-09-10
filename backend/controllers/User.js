@@ -102,7 +102,11 @@ export const updateUser = async (req, res) => {
       id: req.params.id,
     },
   });
-  let updatedData = req.body;
+  let updatedData = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  };
   if (req.file) {
     const fileName = await uploadImage(
       req.file,
@@ -112,7 +116,6 @@ export const updateUser = async (req, res) => {
     );
     updatedData = { ...req.body, avatar: fileName };
   }
-
   try {
     await Users.update(updatedData, {
       where: {
@@ -123,7 +126,9 @@ export const updateUser = async (req, res) => {
       message: 'User update',
     });
   } catch (err) {
-    return res.status(500).send('We failed to update for some reason');
+    return res
+      .status(500)
+      .send({ message: 'We failed to update for some reason' });
   }
 };
 
@@ -137,7 +142,6 @@ export const oneUser = async (req, res) => {
     where: { id: req.params.id },
     include: [{ model: Posts }],
   });
-
   res.send(user);
 };
 
@@ -169,10 +173,9 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getImg = (req, res) => {
-  console.log(fileName);
-  const filePath = path.resolve(
-    `./client/public/uploads/profil/${req.params.fileName}`
-  );
-  res.sendFile(filePath);
-};
+// export const getImg = (req, res) => {
+//   //console.log(fileName);
+//   const filePath = path.join(`./client/public/uploads/profil/${fileName}`);
+
+//   res.sendFile(filePath);
+// };
