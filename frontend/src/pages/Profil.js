@@ -9,11 +9,11 @@ const Profil = () => {
   const userId = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
   const [dataUser, setDataUser] = useState();
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState({ preview: '', data: '' });
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState('');
+  //const [role, setRole] = useState('');
 
   useEffect(() => {
     const requestOptions = {
@@ -31,7 +31,7 @@ const Profil = () => {
           setFirstName(user.firstName);
           setLastName(user.lastName);
           setEmail(user.email);
-          setRole(user.role);
+          //setRole(user.role);
         })
         .catch((err) => {
           console.error(err);
@@ -46,7 +46,7 @@ const Profil = () => {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('email', email);
-    formData.append('role', role);
+    //formData.append('role', role);
 
     const requestOptions = {
       method: 'PUT',
@@ -130,6 +130,7 @@ const Profil = () => {
 
   return (
     <div className="user_profil">
+      PAGE PROFIL
       {dataUser && (
         <>
           <h1>My profil</h1>

@@ -102,9 +102,7 @@ export const updateUser = async (req, res) => {
       id: req.params.id,
     },
   });
-
   let updatedData = req.body;
-
   if (req.file) {
     const fileName = await uploadImage(
       req.file,
@@ -112,7 +110,7 @@ export const updateUser = async (req, res) => {
       'profil',
       currentUser.avatar
     );
-    updatedData = { ...req.body, profil: fileName };
+    updatedData = { ...req.body, avatar: fileName };
   }
 
   try {
@@ -174,7 +172,7 @@ export const deleteUser = async (req, res, next) => {
 export const getImg = (req, res) => {
   console.log(fileName);
   const filePath = path.resolve(
-    `client/public/uploads/profil/${req.params.fileName}`
+    `./client/public/uploads/profil/${req.params.fileName}`
   );
   res.sendFile(filePath);
 };

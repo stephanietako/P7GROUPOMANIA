@@ -12,25 +12,25 @@ const Users = db.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: 'User must have firstName' },
-        notEmpty: { msg: 'firstName must not be empty' },
+        notNull: { message: 'User must have firstName' },
+        notEmpty: { message: 'firstName must not be empty' },
       },
     },
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: 'User must have lastName' },
-        notEmpty: { msg: 'lastName must not be empty' },
+        notNull: { message: 'User must have lastName' },
+        notEmpty: { message: 'lastName must not be empty' },
       },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: { msg: 'User must have a email' },
-        notEmpty: { msg: 'email must not be empty' },
-        isEmail: { msg: 'Must be a valid email adress' },
+        notNull: { message: 'User must have a email' },
+        notEmpty: { message: 'email must not be empty' },
+        isEmail: { message: 'Must be a valid email adress' },
       },
     },
     avatar: {

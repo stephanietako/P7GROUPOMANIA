@@ -8,7 +8,7 @@ const Card = ({ post, update, setUpdate }) => {
   const { imagePost, postMessage, userId, usersLiked, likes, id } = post;
   const currentIdUser = localStorage.getItem('user_id');
   const token = localStorage.getItem('access_token');
-  const [author, setAuthor] = useState();
+  const [author, setAuthor] = useState(' ');
 
   useEffect(() => {
     fetch(`http://localhost:5000/users/${userId}`)
@@ -108,8 +108,8 @@ const Card = ({ post, update, setUpdate }) => {
   }
   const user = parseJwt(token);
   const userRole = user.role;
-  console.log(userRole);
-  //////////////////
+  //console.log(userRole);
+
   return (
     <div className="card">
       {author && (
@@ -159,7 +159,7 @@ const Card = ({ post, update, setUpdate }) => {
             {userRole === true ? (
               <button
                 type="button"
-                className="button is-pulled-right is-danger is-outlined"
+                className="button_edit_post"
                 onClick={() => {
                   editPost(id);
                 }}
@@ -169,7 +169,7 @@ const Card = ({ post, update, setUpdate }) => {
             ) : Number(currentIdUser) === userId ? (
               <button
                 type="button"
-                className="button is-pulled-right is-danger is-outlined"
+                className="button_edit_post"
                 onClick={() => {
                   editPost(id);
                 }}
@@ -183,7 +183,7 @@ const Card = ({ post, update, setUpdate }) => {
             {userRole === true ? (
               <button
                 type="button"
-                className="button is-pulled-right is-danger is-outlined"
+                className="button_delete_post"
                 onClick={() => {
                   deletePost(id);
                 }}
@@ -193,7 +193,7 @@ const Card = ({ post, update, setUpdate }) => {
             ) : Number(currentIdUser) === userId ? (
               <button
                 type="button"
-                className="button is-pulled-right is-danger is-outlined"
+                className="button_delete_post"
                 onClick={() => {
                   deletePost(id);
                 }}
