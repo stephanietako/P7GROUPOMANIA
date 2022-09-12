@@ -25,16 +25,16 @@ export const uploadImage = async (
     });
   }
 
-  try {
-    if (
-      !file.detectedMimeType == 'image/jpg' ||
-      !file.detectedMimeType == 'image/png' ||
-      !file.detectedMimeType == 'image/jpeg'
-    )
-      throw Error('invalid file');
-  } catch (error) {
-    return { message: 'We failed to update your image for some reason...' };
-  }
+  // if (
+  //   file.detectedFileExtension == '.jpg' ||
+  //   file.detectedFileExtension == '.png' ||
+  //   file.detectedFileExtension == '.jpeg' ||
+  //   file.detectedFileExtension == '.gif'
+  // ) {
+  //   console.log('OK !!!!!');
+  // } else {
+  //   console.log('PROBLEME !!!!!');
+  // }
 
   const fileName = startFileName + '-' + uuidv4();
 
@@ -44,5 +44,6 @@ export const uploadImage = async (
       `${__dirname}/../client/public/uploads/${folderName}/${fileName}`
     )
   );
+
   return fileName;
 };

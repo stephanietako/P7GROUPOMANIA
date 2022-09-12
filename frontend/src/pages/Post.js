@@ -57,7 +57,12 @@ const Post = () => {
           onChange={(e) => setPostMessage(e.target.value)}
         />
         <label htmlFor="post">Cover's post:</label>
-        <input type="file" name="file" onChange={handleFileChange}></input>
+        <input
+          type="file"
+          name="file"
+          onChange={handleFileChange}
+          accept=".gif, .jpeg, .jpg"
+        ></input>
         <input className="btn btn-primary" type="submit" value="Post it !" />
       </form>
     </>

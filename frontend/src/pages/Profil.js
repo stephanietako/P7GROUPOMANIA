@@ -73,7 +73,7 @@ const Profil = () => {
         navigate('/');
       })
       .catch((error) => {
-        toast.error('An error has occurred', {
+        toast.error('An error has occurred to upload your image', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: true,
@@ -189,7 +189,12 @@ const Profil = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input type="file" name="fileName" onChange={handleFileChange}></input>
+        <input
+          type="file"
+          name="file"
+          onChange={handleFileChange}
+          accept=".gif, .jpeg, .jpg"
+        ></input>
         <input type="submit" value="Edit your account !" />
       </form>
       <button className="delete_profil_btn" onClick={deleteAccount}>

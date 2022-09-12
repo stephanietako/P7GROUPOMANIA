@@ -112,7 +112,7 @@ const EditPost = () => {
               type="file"
               name="file"
               onChange={handleFileChange}
-              accept="image/gif, image/jpeg, image/jpg"
+              accept=".gif, .jpeg, .jpg"
             ></input>
             <input
               className="button_change_message"
