@@ -24,7 +24,16 @@ export const uploadImage = async (
       }
     });
   }
-
+  // try {
+  //   if (
+  //     !file.detectedFileExtension  == '.jpg' ||
+  //     !file.detectedFileExtension  == '.png' ||
+  //     !file.detectedFileExtension  == '.jpeg'
+  //   )
+  //     throw Error('invalid file');
+  // } catch (error) {
+  //   return { message: 'We failed to update your image for some reason...' };
+  // }
   // if (
   //   file.detectedFileExtension == '.jpg' ||
   //   file.detectedFileExtension == '.png' ||
