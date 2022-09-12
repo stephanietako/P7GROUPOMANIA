@@ -96,7 +96,7 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
-
+  // User's role control inside jwt
   function parseJwt(token) {
     if (!token) {
       return;
@@ -108,7 +108,6 @@ const Card = ({ post, update, setUpdate }) => {
   }
   const user = parseJwt(token);
   const userRole = user.role;
-  //console.log(userRole);
 
   return (
     <div className="card">
@@ -116,7 +115,8 @@ const Card = ({ post, update, setUpdate }) => {
         <div className="author">
           <img
             className="card_avatar"
-            src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
+            // src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
+            src={`http://localhost:5000/users/image/${author.avatar}`}
             alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
             crossOrigin="anonymous"
           />
@@ -156,7 +156,7 @@ const Card = ({ post, update, setUpdate }) => {
           )}
 
           <div className="options_buttons">
-            {userRole === true ? (
+            {userRole ? (
               <button
                 type="button"
                 className="button_edit_post"
@@ -180,7 +180,7 @@ const Card = ({ post, update, setUpdate }) => {
               ''
             )}
 
-            {userRole === true ? (
+            {userRole ? (
               <button
                 type="button"
                 className="button_delete_post"

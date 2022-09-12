@@ -12,7 +12,7 @@ import {
   allUsers,
   oneUser,
   deleteUser,
-  //getImg,
+  getImg,
 } from '../controllers/User.js';
 
 const router = express.Router();
@@ -24,7 +24,7 @@ router.delete('/logout', logout);
 
 router.get('/', verifyToken, allUsers);
 router.get('/:id', oneUser);
-//router.get('/image/:fileName', verifyToken, getImg);
+router.get('/image/:fileName', verifyToken, getImg);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);
 router.delete('/:id', verifyToken, deleteUser);
 

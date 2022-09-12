@@ -50,22 +50,32 @@ const EditPost = () => {
 
     fetch(`http://localhost:5000/posts/${id}`, requestOptions)
       .then((response) => {
-        response.json();
-      })
-      .then((data) => {
-        toast.success('You have been successfully edit your post', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        navigate('/');
+        const { ok, statusText } = response;
+        if (ok) {
+          toast.success('You have been successfully edit your post !', {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          navigate('/');
+        } else {
+          toast.error(statusText, {
+            position: 'top-center',
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
       })
       .catch((error) => {
-        toast.error('An error has occurred', {
+        toast.error('An error has occurred !', {
           position: 'top-center',
           autoClose: 3000,
           hideProgressBar: true,

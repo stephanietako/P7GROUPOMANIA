@@ -5,8 +5,6 @@ export const refreshToken = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.sendStatus(401);
-    // 401, la ré-authentification ne changera rien. L'accès est définitivement interdit et est lié à la logique de l'application, par exemple manque d'une permission d'accès à une ressource.
-    //console.log(refreshToken);
     const user = await Users.findAll({
       where: { refresh_token: refreshToken },
     });

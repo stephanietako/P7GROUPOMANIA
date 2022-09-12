@@ -41,3 +41,7 @@ body {
 .delete_profil_btn {
   color: red;
 }
+
+.button_change_message {
+  cursor: pointer;
+}

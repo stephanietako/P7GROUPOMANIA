@@ -7,13 +7,15 @@ import stream from 'stream';
 const pipeline = promisify(stream.pipeline);
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-//import { decodeToken } from '../utils/decodeToken.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 import { uploadImage } from '../utils/uploadImage.js';
-import verifyToken from '../middleware/verifyToken.js';
 
 export const createPost = async (req, res) => {
   const fileName = await uploadImage(req.file, 'cover', 'posts');
+  if (fileName === false)
+    return res
+      .status(406)
+      .send({ message: 'This image format is not recognized !' });
   let savePost = await Posts.create({
     userId: req.body.userId,
     postMessage: req.body.postMessage,
@@ -82,9 +84,13 @@ export const updatePost = async (req, res) => {
       'posts',
       currentPost.imagePost
     );
+    if (fileName === false)
+      return res
+        .status(406)
+        .send({ message: 'This image format is not recognized !' });
     updatedData = { imagePost: fileName };
   }
-  ////////////////////////////////////
+
   try {
     await Posts.update(updatedData, {
       where: { id: req.params.id },
@@ -110,19 +116,20 @@ export const deletePost = async (req, res) => {
       message: 'Post Deleted',
     });
   } catch (err) {
-    return res.status(500).send('We failed to delete post for some reason');
+    return res
+      .status(500)
+      .send({ message: 'We failed to delete post for some reason' });
   }
 };
 
-/////////////////// LIKES ///////////////////////////////////
+// LIKES
 export const likePost = async (req, res) => {
   const postId = req.params.id;
   const post = await Posts.findOne({ where: { id: postId } });
-  if (post === null) return res.status(404).send('Post not found');
+  if (post === null) return res.status(404).send({ message: 'Post not found' });
   const user = await Users.findOne({ where: { id: req.params.id } });
   if (user === post.userId)
     res.status(200).json({ message: 'Like or unliked post process' });
-  console.log('like ou unlike operationnel');
   if (post.usersLiked.includes(req.params.id)) {
     post.usersLiked = post.usersLiked.filter(
       (userId) => userId != req.params.id
@@ -132,12 +139,10 @@ export const likePost = async (req, res) => {
     res
       .status(200)
       .json({ Message: `You have disliked the post: #${post.id}` });
-    console.log('je suis dans decrement');
   } else {
     post.usersLiked = [...post.usersLiked, req.params.id];
     await post.increment('likes');
     await post.save();
     res.status(200).json({ message: `You have liked the post: #${post.id}` });
-    console.log('je suis dans increment');
   }
 };

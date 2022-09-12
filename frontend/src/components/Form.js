@@ -47,7 +47,7 @@ export const Form = ({ title, isLogin, user }) => {
             progress: undefined,
           });
         }
-        navigate('/register');
+        navigate('/login');
       })
       .catch((error) => console.error(error));
     toast.error(

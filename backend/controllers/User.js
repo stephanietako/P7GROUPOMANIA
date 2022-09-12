@@ -6,15 +6,12 @@ import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 const pipeline = promisify(stream.pipeline);
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
 // Utils
 import { uploadImage } from '../utils/uploadImage.js';
-
 // Models
 import Users from '../models/UserModel.js';
 import Posts from '../models/PostModel.js';
 
-// Auth User and Registration
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
   const emailExists = await Users.findOne({ where: { email: req.body.email } });
@@ -175,7 +172,18 @@ export const deleteUser = async (req, res, next) => {
 
 // export const getImg = (req, res) => {
 //   //console.log(fileName);
-//   const filePath = path.join(`./client/public/uploads/profil/${fileName}`);
+//   const filePath = path.resolve(
+//     `./client/public/uploads/profil/${req.fileName}`
+//   );
 
 //   res.sendFile(filePath);
 // };
+export const getImg = async (req, res) => {
+  const filePath = path.resolve(
+    `client/public/uploads/profil/${req.params.fileName}`
+  );
+  console.log(filePath);
+  //console.log(filePath);
+  console.log('je suis dans get img c est ok');
+  res.sendFile(filePath);
+};
