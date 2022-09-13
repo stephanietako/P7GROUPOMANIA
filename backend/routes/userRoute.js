@@ -23,8 +23,8 @@ router.post('/login', login);
 router.delete('/logout', logout);
 
 router.get('/', verifyToken, allUsers);
-router.get('/:id', oneUser);
-router.get('/image/:fileName', verifyToken, getImg);
+router.get('/:id', verifyToken, oneUser);
+router.get('/image/:fileName', getImg);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);
 router.delete('/:id', verifyToken, deleteUser);
 

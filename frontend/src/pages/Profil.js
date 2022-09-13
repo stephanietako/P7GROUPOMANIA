@@ -13,7 +13,6 @@ const Profil = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  //const [role, setRole] = useState('');
 
   useEffect(() => {
     const requestOptions = {
@@ -31,7 +30,6 @@ const Profil = () => {
           setFirstName(user.firstName);
           setLastName(user.lastName);
           setEmail(user.email);
-          //setRole(user.role);
         })
         .catch((err) => {
           console.error(err);
@@ -46,7 +44,6 @@ const Profil = () => {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('email', email);
-    //formData.append('role', role);
 
     const requestOptions = {
       method: 'PUT',
@@ -84,32 +81,7 @@ const Profil = () => {
         });
       });
   };
-  ////////////////////////////////
-  // const handleFileChange = (event) => {
-  //   setAvatar(URL.createObjectURL(event.target.files[0]));
-  // };
-  //   const requestOptions = {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     body: formData,
-  //   };
 
-  //   fetch(`http://localhost:5000/users/image/avatar${avatar.data}`, requestOptions)
-  //     .then((response) => {
-  //       response.json();
-  //     })
-  //     .then((data) => {
-  //      console.log(data)
-  //       navigate('/');
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     });
-  // };
-
-  /////////////////////////////////////////////
   const handleFileChange = (e) => {
     const img = {
       preview: URL.createObjectURL(e.target.files[0]),
@@ -161,7 +133,8 @@ const Profil = () => {
           <h1>My profil</h1>
           <img
             className="avatar_profil"
-            src={`http://localhost:5000/client/public/uploads/profil/${dataUser.avatar}`}
+            src={`http://localhost:5000/users/image/${dataUser.avatar}`}
+            //src={`http://localhost:5000/client/public/uploads/profil/${dataUser.avatar}`}
             alt={`Profil avatar of ${dataUser.firstName} ${dataUser.lastName}`}
             crossOrigin="anonymous"
           />

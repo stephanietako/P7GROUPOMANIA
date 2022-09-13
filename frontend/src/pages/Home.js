@@ -40,7 +40,7 @@ const Home = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [update]);
+  });
 
   return (
     <div className="home">

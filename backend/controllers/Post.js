@@ -146,3 +146,17 @@ export const likePost = async (req, res) => {
     res.status(200).json({ message: `You have liked the post: #${post.id}` });
   }
 };
+
+export const getCover = async (req, res) => {
+  // const post = await Posts.findOne({
+  //   where: { id: req.params.id },
+  // });
+
+  const filePath = path.resolve(
+    `client/public/uploads/posts/${req.params.fileName}`
+  );
+  console.log(filePath);
+  //console.log(filePath);
+  console.log('je suis dans get img c est ok');
+  res.sendFile(filePath);
+};

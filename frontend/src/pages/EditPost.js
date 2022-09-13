@@ -113,7 +113,8 @@ const EditPost = () => {
 
             <img
               className="avatar_profil"
-              src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imagePost}`}
+              src={`http://localhost:5000/posts/image/${currentPost.imagePost}`}
+              // src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imagePost}`}
               alt={`Post cover of ID ${currentPost.id}`}
               crossOrigin="anonymous"
             />

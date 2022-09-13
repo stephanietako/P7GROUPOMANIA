@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-//////NEW POST Page pour créer un nouveau post
+////// CREATE POST
 const Post = () => {
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -16,7 +16,6 @@ const Post = () => {
     formData.append('file', image.data);
     formData.append('userId', userId);
     formData.append('postMessage', postMessage);
-    //formData.append('role', role);
 
     const requestOptions = {
       method: 'POST',

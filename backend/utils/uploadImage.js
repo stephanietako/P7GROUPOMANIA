@@ -37,7 +37,7 @@ export const uploadImage = async (
       });
     }
 
-    const fileName = startFileName + '-' + uuidv4();
+    const fileName = startFileName + '-' + uuidv4() + '.jpg';
 
     await pipeline(
       file.stream,

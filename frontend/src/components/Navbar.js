@@ -22,7 +22,6 @@ const Navbar = () => {
     fetch('http://localhost:5000/users/logout', requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        // Setup LocalStorage
         localStorage.removeItem('user_id');
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
