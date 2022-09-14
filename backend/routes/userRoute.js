@@ -12,6 +12,7 @@ import {
   allUsers,
   oneUser,
   deleteUser,
+  profilUser,
   //getImg,
 } from '../controllers/User.js';
 
@@ -24,6 +25,7 @@ router.delete('/logout', logout);
 
 router.get('/', verifyToken, allUsers);
 router.get('/:id', verifyToken, oneUser);
+router.post('/:id', verifyToken, profilUser);
 //router.get('/image/:fileName', getImg);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);
 router.delete('/:id', verifyToken, deleteUser);
