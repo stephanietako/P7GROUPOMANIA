@@ -1,43 +1,37 @@
 import React from 'react';
 import { useState } from 'react';
 
-const BioText = () => {
-  const token = localStorage.getItem('access_token');
-  const userId = localStorage.getItem('user_id');
+const BioText = (e) => {
+  const id = localStorage.getItem('user_id');
   const [bio, setBio] = useState('');
+  const token = localStorage.getItem('access_token');
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const userBio = { bio };
 
-    const requestOptions = {
+    fetch(`http://localhost:5000/users/${id}`, {
       method: 'POST',
       headers: new Headers({
         Authorization: `Bearer ${token}`,
       }),
-      body: JSON.stringify({
-        userBio: userBio,
-      }),
-    };
-    fetch(`http://localhost:5000/users/${userId}`, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        setBio(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      body: JSON.stringify(userBio),
+    }).then(() => {
+      console.log('new bio added');
+    });
   };
+
   return (
     <div className="bio_text">
+      <p>{bio}</p>
       <form onSubmit={handleSubmit}>
-        <p>{bio}</p>
+        <label>User's Bio:</label>
         <input
           type="text"
           required
           value={bio}
           onChange={(e) => setBio(e.target.value)}
         />
-        <label>User's Bio:</label>
         <button>Print Value</button>
       </form>
     </div>
