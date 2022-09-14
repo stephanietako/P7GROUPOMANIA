@@ -103,6 +103,7 @@ export const updateUser = async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
+    bio: req.body.bio,
   };
   if (req.file) {
     const fileName = await uploadImage(
@@ -170,30 +171,6 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const profilUser = async (req, res, next) => {
-  await Users.findOne({
-    where: {
-      id: req.params.id,
-    },
-  });
-  let postData = {
-    bio: req.body.bio,
-  };
-  try {
-    await Users.update(postData, {
-      where: {
-        id: req.params.bio,
-      },
-    });
-    res.json({
-      message: 'Success !',
-    });
-  } catch (err) {
-    return res.status(500).send({
-      message: 'We failed to post your profil for some reason',
-    });
-  }
-};
 // export const getImg = async (req, res) => {
 //   const filePath = path.resolve(
 //     `client/public/uploads/profil/${req.params.fileName}`

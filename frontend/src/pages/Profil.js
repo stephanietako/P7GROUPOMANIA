@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import BioText from '../components/Bio';
 
 const Profil = () => {
   const navigate = useNavigate();
@@ -14,6 +13,7 @@ const Profil = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [bio, setBio] = useState('');
 
   useEffect(() => {
     const requestOptions = {
@@ -31,6 +31,7 @@ const Profil = () => {
           setFirstName(user.firstName);
           setLastName(user.lastName);
           setEmail(user.email);
+          setBio(user.bio === null ? '' : user.bio);
         })
         .catch((err) => {
           console.error(err);
@@ -45,6 +46,7 @@ const Profil = () => {
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('email', email);
+    formData.append('bio', bio);
 
     const requestOptions = {
       method: 'PUT',
@@ -130,8 +132,6 @@ const Profil = () => {
       {dataUser && (
         <>
           <h1>My profil</h1>
-          <p>bio</p>
-          <BioText />
           <img
             className="avatar_profil"
             //src={`http://localhost:5000/users/image/${dataUser.avatar}`}
@@ -142,6 +142,7 @@ const Profil = () => {
           <h4>
             {dataUser.firstName} {dataUser.lastName}
           </h4>
+          <p>Bio:</p>
           <p>{dataUser.bio}</p>
         </>
       )}
@@ -157,12 +158,12 @@ const Profil = () => {
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
+        <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
         <input
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-
         <input
           type="file"
           name="file"

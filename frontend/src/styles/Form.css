@@ -23,7 +23,8 @@ label {
   font-weight: bold;
   cursor: pointer;
 }
-input {
+input,
+textarea {
   width: 45%;
   height: 50px;
   background: #e0dede;
@@ -34,7 +35,9 @@ input {
   border: none;
   outline: none;
   border-radius: 5px;
+  resize: none;
 }
+
 button {
   margin: 8px;
   padding: 8px 14px;

@@ -49,7 +49,7 @@ const Post = () => {
       <form onSubmit={handleSubmit(onSubmitPost)}>
         <label htmlFor="post">Post's content:</label>
         <input
-          type="textarea"
+          type="text"
           value={postMessage}
           placeholder="Create your post here !"
           id="post"
