@@ -21,6 +21,7 @@
   list-style-type: none;
   margin-left: -20px;
   margin-top: 18px;
+  padding: 15px;
 }
 
 .avatar {
@@ -30,5 +31,4 @@
   object-fit: cover;
   border-radius: 50%;
   margin-right: 5px;
-  margin-bottom: -10px;
 }

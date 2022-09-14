@@ -31,7 +31,6 @@ app.use((req, res, next) => {
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/client', express.static(path.join('./client')));
-// app.use('/image', express.static(path.join('./image')));
 
 app.listen(process.env.PORT, () => {
   console.log('Server running ! Enjoy !');

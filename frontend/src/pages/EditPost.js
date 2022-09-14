@@ -33,7 +33,7 @@ const EditPost = () => {
         });
     };
     getDataPost();
-  }, [id, token]);
+  }, [token]);
 
   const onSubmitPost = () => {
     const formData = new FormData();
