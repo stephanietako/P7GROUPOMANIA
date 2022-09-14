@@ -12,7 +12,7 @@ import {
   updatePost,
   deletePost,
   likePost,
-  getCover,
+  //getCover,
 } from '../controllers/Post.js';
 
 const router = express.Router();
@@ -20,7 +20,7 @@ const router = express.Router();
 router.get('/refreshToken', refreshToken);
 router.get('/', verifyToken, allPosts);
 router.get('/:id', verifyToken, onePost);
-router.get('/image/:fileName', getCover);
+//router.get('/image/:fileName', getCover);
 router.post('/', verifyToken, upload.single('file'), createPost);
 router.put('/:id', verifyToken, upload.single('file'), updatePost);
 router.put('/:id/likes', verifyToken, likePost);

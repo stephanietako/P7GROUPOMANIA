@@ -44,7 +44,7 @@ const Users = db.define(
     password: { type: DataTypes.STRING, allowNull: false },
     bio: {
       type: DataTypes.STRING,
-      defaultValue:
+      efaultValue:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam impedit aliquam consequuntur odio amet eum accusamus explicabo corporis, est magni. ',
     },
     refresh_token: { type: DataTypes.TEXT },

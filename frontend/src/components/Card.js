@@ -119,8 +119,8 @@ const Card = ({ post, update, setUpdate }) => {
         <div className="author">
           <img
             className="card_avatar"
-            //src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
-            src={`http://localhost:5000/users/image/${author.avatar}`}
+            src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
+            //src={`http://localhost:5000/users/image/${author.avatar}`}
             alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
             crossOrigin="anonymous"
           />
@@ -136,8 +136,8 @@ const Card = ({ post, update, setUpdate }) => {
       )}
       <img
         className="cover"
-        src={`http://localhost:5000/posts/image/${imagePost}`}
-        // src={`http://localhost:5000/client/public/uploads/posts/${imagePost}`}
+        //src={`http://localhost:5000/posts/image/${imagePost}`}
+        src={`http://localhost:5000/client/public/uploads/posts/${imagePost}`}
         alt="post"
         crossOrigin="anonymous"
       />

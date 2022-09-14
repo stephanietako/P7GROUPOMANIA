@@ -16,8 +16,8 @@ const Users = ({ allUsers }) => {
               <li className="user" key={`USER-${user.id}-${index}`}>
                 <img
                   className="avatar"
-                  src={`http://localhost:5000/users/image/${user.avatar}`}
-                  //src={`http://localhost:5000/client/public/uploads/profil/${user.avatar}`}
+                  //src={`http://localhost:5000/users/image/${user.avatar}`}
+                  src={`http://localhost:5000/client/public/uploads/profil/${user.avatar}`}
                   alt={`Profil avatar of ${user.firstName} ${user.lastName}`}
                   crossOrigin="anonymous"
                 />

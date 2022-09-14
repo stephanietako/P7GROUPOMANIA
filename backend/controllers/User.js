@@ -170,12 +170,9 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getImg = async (req, res) => {
-  const filePath = path.resolve(
-    `client/public/uploads/profil/${req.params.fileName}`
-  );
-  console.log(filePath);
-  //console.log(filePath);
-  console.log('je suis dans get img c est ok');
-  res.sendFile(filePath);
-};
+// export const getImg = async (req, res) => {
+//   const filePath = path.resolve(
+//     `client/public/uploads/profil/${req.params.fileName}`
+//   );
+//   res.sendFile(filePath);
+// };
