@@ -12,7 +12,6 @@ import {
   allUsers,
   oneUser,
   deleteUser,
-  //getImg,
 } from '../controllers/User.js';
 
 const router = express.Router();
@@ -25,7 +24,6 @@ router.delete('/logout', logout);
 router.get('/', verifyToken, allUsers);
 router.get('/:id', verifyToken, oneUser);
 
-//router.get('/image/:fileName', getImg);
 router.put('/:id', verifyToken, upload.single('file'), updateUser);
 router.delete('/:id', verifyToken, deleteUser);
 
