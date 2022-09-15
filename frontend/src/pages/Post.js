@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-////// CREATE POST
 const Post = () => {
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -46,24 +45,26 @@ const Post = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmitPost)}>
-        <label htmlFor="post">Post's content:</label>
-        <input
-          type="text"
-          value={postMessage}
-          placeholder="Create your post here !"
-          id="post"
-          onChange={(e) => setPostMessage(e.target.value)}
-        />
-        <label htmlFor="post">Cover's post:</label>
-        <input
-          type="file"
-          name="file"
-          onChange={handleFileChange}
-          accept=".gif, .jpeg, .jpg"
-        ></input>
-        <input className="btn btn-primary" type="submit" value="Post it !" />
-      </form>
+      <div className="create_post">
+        <form onSubmit={handleSubmit(onSubmitPost)}>
+          <label htmlFor="post">Post's content:</label>
+          <input
+            type="text"
+            value={postMessage}
+            placeholder="Create your post here !"
+            id="post"
+            onChange={(e) => setPostMessage(e.target.value)}
+          />
+          <label htmlFor="post">Cover's post:</label>
+          <input
+            type="file"
+            name="file"
+            onChange={handleFileChange}
+            accept=".gif, .jpeg, .jpg"
+          ></input>
+          <input className="btn btn-primary" type="submit" value="Post it !" />
+        </form>
+      </div>
     </>
   );
 };

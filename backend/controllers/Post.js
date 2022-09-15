@@ -1,6 +1,5 @@
 import Posts from '../models/PostModel.js';
 import Users from '../models/UserModel.js';
-//import jwt from 'jsonwebtoken';
 import fs from 'fs';
 import { promisify } from 'util';
 import stream from 'stream';
@@ -69,14 +68,12 @@ export const allPosts = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   if (!Users.id == req.params.id) return res.status(403).send('Access denied.');
-  ////////// UPDATE LE POST MESSAGE
   const currentPost = await Posts.findOne({
     where: {
       id: req.params.id,
     },
   });
   let updatedData = { postMessage: req.body.postMessage };
-  ////////////// UPDATE LA COVER DU POST
   if (req.file) {
     const fileName = await uploadImage(
       req.file,
@@ -129,7 +126,7 @@ export const likePost = async (req, res) => {
   if (post === null) return res.status(404).send({ message: 'Post not found' });
   const user = await Users.findOne({ where: { id: req.params.id } });
   if (user === post.userId)
-    res.status(200).json({ message: 'Like or unliked post process' });
+    res.status(200).json({ message: 'Like/unliked post process' });
   if (post.usersLiked.includes(req.params.id)) {
     post.usersLiked = post.usersLiked.filter(
       (userId) => userId != req.params.id
@@ -146,14 +143,3 @@ export const likePost = async (req, res) => {
     res.status(200).json({ message: `You have liked the post: #${post.id}` });
   }
 };
-
-// export const getCover = async (req, res) => {
-//   // const post = await Posts.findOne({
-//   //   where: { id: req.params.id },
-//   // });
-
-//   const filePath = path.resolve(
-//     `client/public/uploads/posts/${req.params.fileName}`
-//   );
-//   res.sendFile(filePath);
-// };

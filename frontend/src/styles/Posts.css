@@ -1,11 +1,19 @@
 .posts_section {
-  margin: 0 40px;
+  margin: 19px 24px;
   display: grid;
-  place-items: end;
+  place-items: center;
   padding: 20px 0;
+  border: solid 2px grey;
+  border-radius: 17px 17px;
 }
 
 .posts_title {
   position: relative;
-  left: -55%;
+}
+
+.create_post {
+  border: solid 2px grey;
+  margin: 19px 24px;
+  padding: 20px 0;
+  border-radius: 17px 17px;
 }

@@ -2,8 +2,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
-// Styles
 import '../styles/Navbar.css';
 
 const Navbar = () => {

@@ -14,12 +14,6 @@ body {
   float: right;
 }
 
-/* My Profil */
-.avatar_profil {
-  height: 150px;
-  margin: 10px 0;
-}
-
 .separation_profile_edit {
   margin-top: 25px;
   border: none;

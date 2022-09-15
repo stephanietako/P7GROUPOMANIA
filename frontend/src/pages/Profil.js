@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import '../styles/Profil.css';
 
 const Profil = () => {
   const navigate = useNavigate();
@@ -134,7 +135,6 @@ const Profil = () => {
           <h1>My profil</h1>
           <img
             className="avatar_profil"
-            //src={`http://localhost:5000/users/image/${dataUser.avatar}`}
             src={`http://localhost:5000/client/public/uploads/profil/${dataUser.avatar}`}
             alt={`Profil avatar of ${dataUser.firstName} ${dataUser.lastName}`}
             crossOrigin="anonymous"
@@ -170,7 +170,11 @@ const Profil = () => {
           onChange={handleFileChange}
           accept=".gif, .jpeg, .jpg"
         ></input>
-        <input type="submit" value="Edit your account !" />
+        <input
+          className="btn btn-primary"
+          type="submit"
+          value="Edit your account !"
+        />
       </form>
       <button className="delete_profil_btn" onClick={deleteAccount}>
         Delete account

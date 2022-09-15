@@ -7,16 +7,16 @@ const Users = ({ allUsers }) => {
       <div className="users">
         <ul>
           {allUsers.map((user, index) => {
-            let names = `${user.firstName} ${user.lastName}`;
+            let names = `${user.firstName} ${user.lastName} 
+            / ${user.bio}`;
 
-            if (names.length > 14) {
-              names = names.substring(0, 13) + '...';
+            if (names.length > 75) {
+              names = names.substring(0, 20) + '...';
             }
             return (
               <li className="user" key={`USER-${user.id}-${index}`}>
                 <img
                   className="avatar"
-                  //src={`http://localhost:5000/users/image/${user.avatar}`}
                   src={`http://localhost:5000/client/public/uploads/profil/${user.avatar}`}
                   alt={`Profil avatar of ${user.firstName} ${user.lastName}`}
                   crossOrigin="anonymous"

@@ -1,0 +1,16 @@
+.user_profil {
+  border: solid 2px grey;
+  border-radius: 17px 17px;
+  margin: 20rem 0 20rem;
+  padding: 40px;
+  margin: 0rem 10rem 0rem;
+  padding: 40px;
+}
+
+.avatar_profil {
+  border-radius: 73px;
+  height: 180px;
+  margin: 10px 0;
+  margin: 10px 0;
+  border-radius: 81px;
+}

@@ -5,4 +5,7 @@
   margin: 0 25px 25px 25px;
   padding: 0;
   border: solid 3px grey;
+  border-radius: 14px;
+  padding-bottom: 9px;
+  padding-top: 2px;
 }

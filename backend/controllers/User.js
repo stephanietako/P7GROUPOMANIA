@@ -4,13 +4,11 @@ import stream from 'stream';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
-const pipeline = promisify(stream.pipeline);
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-// Utils
 import { uploadImage } from '../utils/uploadImage.js';
-// Models
 import Users from '../models/UserModel.js';
 import Posts from '../models/PostModel.js';
+const pipeline = promisify(stream.pipeline);
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -170,10 +168,3 @@ export const deleteUser = async (req, res, next) => {
     this.next(err);
   }
 };
-
-// export const getImg = async (req, res) => {
-//   const filePath = path.resolve(
-//     `client/public/uploads/profil/${req.params.fileName}`
-//   );
-//   res.sendFile(filePath);
-// };

@@ -1,6 +1,6 @@
 .app_header {
   padding: 20px;
-  width: 280px;
+  width: 20rem;
   display: grid;
   margin-left: auto;
   margin-right: auto;
@@ -9,6 +9,8 @@
 .app_logo {
   height: 80px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: -9%;
   width: 100%;
+  border-radius: 17px 17px;
+  border: solid 2px grey;
 }

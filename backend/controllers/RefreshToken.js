@@ -9,7 +9,6 @@ export const refreshToken = async (req, res) => {
       where: { refresh_token: refreshToken },
     });
     if (!user[0]) return res.sendStatus(403);
-    // 403, Forbidden indique qu'un serveur comprend la requête mais refuse de l'autoriser.
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,

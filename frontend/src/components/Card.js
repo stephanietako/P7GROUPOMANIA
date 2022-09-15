@@ -29,7 +29,6 @@ const Card = ({ post, update, setUpdate }) => {
     getDataPost();
   }, [userId, token]);
 
-  ///////////// BOUTON LIKE
   const likeBtn = () => {
     let requestOptions = {
       method: 'PUT',
@@ -100,7 +99,7 @@ const Card = ({ post, update, setUpdate }) => {
         });
       });
   };
-  // User's role control inside jwt
+  // Extract user role from jwt
   function parseJwt(token) {
     if (!token) {
       return;
@@ -120,7 +119,6 @@ const Card = ({ post, update, setUpdate }) => {
           <img
             className="card_avatar"
             src={`http://localhost:5000/client/public/uploads/profil/${author.avatar}`}
-            //src={`http://localhost:5000/users/image/${author.avatar}`}
             alt={`Profil avatar of ${author.firstName} ${author.lastName}`}
             crossOrigin="anonymous"
           />
@@ -136,7 +134,6 @@ const Card = ({ post, update, setUpdate }) => {
       )}
       <img
         className="cover"
-        //src={`http://localhost:5000/posts/image/${imagePost}`}
         src={`http://localhost:5000/client/public/uploads/posts/${imagePost}`}
         alt="post"
         crossOrigin="anonymous"
@@ -159,7 +156,6 @@ const Card = ({ post, update, setUpdate }) => {
               ♥ {likes}
             </button>
           )}
-
           <div className="options_buttons">
             {userRole ? (
               <button

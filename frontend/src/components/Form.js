@@ -112,7 +112,7 @@ export const Form = ({ title, isLogin, user }) => {
       <>
         <h1>{title}</h1>
         {isLogin ? (
-          //form login
+          // Form login
           <form onSubmit={handleSubmit(onSubmitLogin)}>
             <label htmlFor="email">Email</label>
             <input

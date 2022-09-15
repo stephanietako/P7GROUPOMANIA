@@ -100,7 +100,7 @@ const EditPost = () => {
         <>
           <h1>Edit my post</h1>
           <form onSubmit={handleSubmit(onSubmitPost)}>
-            {/* le message */}
+            {/* Message */}
             <label htmlFor="post">Post's content:</label>
             <input
               type="text"
@@ -108,17 +108,14 @@ const EditPost = () => {
               id="post"
               onChange={(e) => setPostMessage(e.target.value)}
             />
-            {/* l image */}
+            {/* Image */}
             <label htmlFor="post">Cover's post:</label>
-
             <img
               className="avatar_profil"
-              //src={`http://localhost:5000/posts/image/${currentPost.imagePost}`}
               src={`http://localhost:5000/client/public/uploads/posts/${currentPost.imagePost}`}
               alt={`Post cover of ID ${currentPost.id}`}
               crossOrigin="anonymous"
             />
-            {/* submit les changements dans le post */}
             <input
               type="file"
               name="file"
@@ -126,7 +123,7 @@ const EditPost = () => {
               accept=".gif, .jpeg, .jpg"
             ></input>
             <input
-              className="button_change_message"
+              className="btn.btn-primary"
               type="submit"
               value="Edit your message !"
             />

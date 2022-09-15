@@ -34,7 +34,7 @@ textarea {
   padding: 10px;
   border: none;
   outline: none;
-  border-radius: 5px;
+  border-radius: 20px;
   resize: none;
 }
 
@@ -58,16 +58,17 @@ button:hover {
 }
 
 input.btn.btn-primary {
-  background-color: yellow;
+  background-color: grey;
   color: black;
   height: 4em;
   padding: 8px 14px;
   border: none;
   cursor: pointer;
-  width: 20%;
-  border-radius: 8px;
+  width: 12rem;
+  border-radius: 30px;
   opacity: 0.5;
   transition: 0.5s;
+  font-size: 15px;
 }
 
 input.btn.btn-primary:hover {
