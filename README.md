@@ -15,20 +15,31 @@ npm start
 
 ---
 
+Créer un fichier .env dans le backend en lui attribuant les variables d'environnements suivantes :
+ACCESS_TOKEN_SECRET =
+REFRESH_TOKEN_SECRET =
+DATABASE_ACCESS_NAME =
+DATABASE_ACCESS_USER =
+DATABASE_ACCESS_PASSWORD =
+DATABASEPORT =
+
+Créer un fichier .env dans le backend en lui attribuant les variables d'environnements suivantes :
+REACT_APP_SECRET_KEY_TOKEN=825y8i3hnfjmsbv7gwajbl7fobqrjfvbs7gbfj2q3bgh8f42
+
+---
+
 Infos additionnelles :
 
 ## Front
 
 npx react-create-app
 Development ouvrir avec :
-http://localhost:3000 (vue du navigateur)
 
 ## Back
 
 Express
 Node js
 Development ouvrir avec :
-Open http://localhost:5000 (vue du navigateur)
 
 ## Base de données
 
