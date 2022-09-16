@@ -4,14 +4,17 @@ Présentation du projet :
 Réalisation d'un reseau social d'entreprise.
 
 Pour lancer le projet:
-Installer les dépendances en front et en en back avec la commande :
-npm install
 
-Lancer le serveur de développement avec la commande :
-nodemon server (port 5000)
+- Installer les dépendances en front et en en back avec la commande :
+  npm install
 
-Dans le dossier Frontend lancer React avec la commande :
-npm start
+- Pour le backend exécuter la comande : cd backend (afin de vous positionner sur le dossier)
+  Puis lancer le serveur de développement avec la commande :
+  npm start
+
+- Pour le frontend exécuter la commande : cd frontend (afin de vous positionner sur le dossier)
+  Puis lancer React avec la commande :
+  npm start
 
 ---
 
@@ -23,8 +26,8 @@ DATABASE_ACCESS_USER =
 DATABASE_ACCESS_PASSWORD =
 DATABASEPORT =
 
-Créer un fichier .env dans le backend en lui attribuant les variables d'environnements suivantes :
-REACT_APP_SECRET_KEY_TOKEN=825y8i3hnfjmsbv7gwajbl7fobqrjfvbs7gbfj2q3bgh8f42
+Créer un fichier .env dans le frontend en lui attribuant la variable d'environnement suivantes :
+REACT_APP_SECRET_KEY_TOKEN=
 
 ---
 
