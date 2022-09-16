@@ -31,19 +31,6 @@ REACT_APP_SECRET_KEY_TOKEN=
 
 ---
 
-Infos additionnelles :
-
-## Front
-
-npx react-create-app
-Development ouvrir avec :
-
-## Back
-
-Express
-Node js
-Development ouvrir avec :
-
 ## Base de données
 
 BDD:
